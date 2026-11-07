@@ -1,1178 +1,289 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HR Portal — Kiến trúc Bảng lương &amp; KPI (Configurable)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Portal — Compensation Demo</title>
 <style>
-:root {
-  --bg: #f7f8fa;
-  --surface: #ffffff;
-  --surface-2: #f1f3f6;
-  --surface-code: #1e1e2e;
-  --ink: #1a1d23;
-  --ink-secondary: #4a5568;
-  --muted: #718096;
-  --accent: #2563eb;
-  --accent-600: #1d4ed8;
-  --accent-soft: rgba(37,99,235,0.08);
-  --accent-weak: rgba(37,99,235,0.04);
-  --success: #059669;
-  --success-soft: rgba(5,150,105,0.08);
-  --warning: #d97706;
-  --warning-soft: rgba(217,119,6,0.08);
-  --danger: #dc2626;
-  --danger-soft: rgba(220,38,38,0.08);
-  --line: rgba(0,0,0,0.07);
-  --line-strong: rgba(0,0,0,0.12);
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 20px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 2px 8px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.06);
-  --font: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --step-0: clamp(0.95rem, 0.92rem + 0.2vw, 1.05rem);
-  --step-1: clamp(1.1rem, 1.05rem + 0.3vw, 1.25rem);
-  --step-2: clamp(1.35rem, 1.2rem + 0.7vw, 1.75rem);
-  --step-3: clamp(1.7rem, 1.4rem + 1.5vw, 2.6rem);
-  --step-4: clamp(2.2rem, 1.7rem + 2.5vw, 3.8rem);
+:root{
+ --navy:#14243a;--navy2:#1d3553;--blue:#3978d6;--blue2:#eaf2ff;
+ --ink:#1d2939;--muted:#667085;--line:#e7ebf1;--bg:#f5f7fb;--white:#fff;
+ --green:#16845b;--greenbg:#e8f7f0;--orange:#b96a13;--orangebg:#fff4e5;
+ --red:#c43d4b;--redbg:#fff0f1;--shadow:0 8px 24px rgba(19,39,66,.06);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d25;
-    --surface-2: #22262e;
-    --surface-code: #16161e;
-    --ink: #f1f5f9;
-    --ink-secondary: #94a3b8;
-    --muted: #64748b;
-    --accent: #60a5fa;
-    --accent-600: #3b82f6;
-    --accent-soft: rgba(96,165,250,0.12);
-    --accent-weak: rgba(96,165,250,0.05);
-    --line: rgba(255,255,255,0.07);
-    --line-strong: rgba(255,255,255,0.12);
-  }
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font);
-  font-size: var(--step-0);
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-}
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(247,248,250,0.9);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--line);
-}
-@media (prefers-color-scheme: dark) { .site-header { background: rgba(15,17,23,0.9); } }
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 800;
-  font-size: var(--step-1);
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  text-decoration: none;
-}
-.logo-mark {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
-  color: #fff; display: grid; place-items: center;
-  font-size: 15px; font-weight: 800; flex: none;
-}
-.nav-links {
-  display: flex; gap: 6px; list-style: none; flex-wrap: wrap;
-}
-.nav-links a {
-  display: block; padding: 7px 14px; border-radius: var(--radius-sm);
-  color: var(--ink-secondary); font-size: 0.85rem; font-weight: 600;
-  text-decoration: none; transition: all 0.18s;
-}
-.nav-links a:hover, .nav-links a.active {
-  background: var(--accent-soft); color: var(--accent);
-}
-.hero {
-  position: relative; overflow: hidden;
-  background: linear-gradient(150deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
-  color: #fff; padding: clamp(48px, 8vw, 100px) 24px; text-align: center;
-}
-.hero::before {
-  content: ""; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 20%, transparent 70%);
-  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 20%, transparent 70%);
-  pointer-events: none;
-}
-.hero-inner { position: relative; z-index: 1; max-width: 850px; margin: 0 auto; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 16px; border-radius: 99px;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
-  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; margin-bottom: 20px;
-}
-.hero h1 {
-  font-size: var(--step-4); font-weight: 800; line-height: 1.1;
-  letter-spacing: -0.035em; margin-bottom: 18px;
-}
-.hero p {
-  font-size: var(--step-1); opacity: 0.88;
-  max-width: 650px; margin: 0 auto 32px; line-height: 1.6;
-}
-main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
-section { margin-bottom: 56px; }
-.section-header { margin-bottom: 28px; }
-.section-number {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--accent); color: #fff;
-  font-size: 0.8rem; font-weight: 800; margin-bottom: 10px;
-}
-h2 {
-  font-size: var(--step-3); font-weight: 800;
-  letter-spacing: -0.03em; line-height: 1.2;
-  margin-bottom: 10px; color: var(--ink);
-}
-h3 {
-  font-size: var(--step-2); font-weight: 700;
-  letter-spacing: -0.02em; line-height: 1.3;
-  margin: 36px 0 14px; color: var(--ink);
-}
-h4 {
-  font-size: var(--step-1); font-weight: 700;
-  margin: 24px 0 10px; color: var(--ink);
-}
-.lead {
-  font-size: var(--step-1); color: var(--ink-secondary);
-  line-height: 1.7; max-width: 72ch;
-}
-.card {
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius-lg); padding: 28px;
-  box-shadow: var(--shadow-sm); margin-bottom: 20px;
-}
-.card-accent { border-left: 4px solid var(--accent); }
-.card-success { border-left-color: var(--success); }
-.card-warning { border-left-color: var(--warning); }
-.card-danger { border-left-color: var(--danger); }
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-.table-wrap {
-  overflow-x: auto; border-radius: var(--radius);
-  border: 1px solid var(--line); margin: 20px 0;
-}
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line); }
-th {
-  background: var(--accent-soft); color: var(--accent-600);
-  font-weight: 700; font-size: 0.78rem;
-  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
-}
-tr:hover td { background: var(--accent-weak); }
-tbody tr:last-child td { border-bottom: 0; }
-.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
-.tag {
-  display: inline-flex; align-items: center;
-  padding: 3px 10px; border-radius: 99px;
-  font-size: 0.75rem; font-weight: 700;
-}
-.tag-blue { background: var(--accent-soft); color: var(--accent); }
-.tag-green { background: var(--success-soft); color: var(--success); }
-.tag-orange { background: var(--warning-soft); color: var(--warning); }
-.tag-red { background: var(--danger-soft); color: var(--danger); }
-.callout {
-  display: flex; gap: 14px; padding: 18px 22px;
-  border-radius: var(--radius); margin: 20px 0; font-size: 0.92rem;
-}
-.callout-icon {
-  width: 28px; height: 28px; border-radius: 8px;
-  display: grid; place-items: center; font-weight: 800;
-  flex: none; font-size: 0.85rem;
-}
-.callout-info {
-  background: var(--accent-soft);
-  border: 1px solid color-mix(in oklab, var(--accent) 20%, transparent);
-}
-.callout-info .callout-icon { background: var(--accent); color: #fff; }
-.callout-success {
-  background: var(--success-soft);
-  border: 1px solid color-mix(in oklab, var(--success) 20%, transparent);
-}
-.callout-success .callout-icon { background: var(--success); color: #fff; }
-.callout-warning {
-  background: var(--warning-soft);
-  border: 1px solid color-mix(in oklab, var(--warning) 20%, transparent);
-}
-.callout-warning .callout-icon { background: var(--warning); color: #fff; }
-.code-block {
-  background: var(--surface-code);
-  color: #cdd6f4;
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  margin: 16px 0;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  line-height: 1.8;
-  overflow-x: auto;
-}
-.code-block .comment { color: #6c7086; font-style: italic; }
-.code-block .keyword { color: #cba6f7; }
-.code-block .string { color: #a6e3a1; }
-.code-block .number { color: #fab387; }
-.code-block .func { color: #89b4fa; }
-.code-block .tag { color: #f38ba8; background: none; padding: 0; }
-.code-block .attr { color: #f9e2af; }
-.code-label {
-  font-family: var(--font);
-  font-size: 0.75rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--muted); margin-bottom: 10px; display: block;
-}
-.steps { display: flex; flex-direction: column; gap: 0; margin: 24px 0; }
-.step {
-  display: flex; gap: 18px; padding: 18px 0;
-  border-bottom: 1px solid var(--line);
-}
-.step:last-child { border-bottom: 0; }
-.step-num {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--accent); color: #fff;
-  display: grid; place-items: center;
-  font-weight: 800; font-size: 0.85rem; flex: none;
-}
-.step-body { flex: 1; }
-.step-title { font-weight: 700; font-size: var(--step-0); margin-bottom: 4px; }
-.step-desc { color: var(--ink-secondary); font-size: 0.9rem; line-height: 1.6; }
-.config-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
-}
-@media print {
-  .site-header, .no-print { display: none !important; }
-  body { background: #fff; color: #000; }
-  .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
-  .hero { background: #1e3a5f !important; -webkit-print-color-adjust: exact; }
-  .code-block { background: #f5f5f5 !important; color: #333 !important; }
-}
-@page { size: A4; margin: 16mm; }
-@media (max-width: 640px) {
-  .header-inner { padding: 12px 16px; }
-  .nav-links { display: none; }
-  main { padding: 24px 16px 60px; }
-  .card { padding: 20px; }
-}
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:var(--navy);color:#dce6f3;padding:22px 15px;display:flex;flex-direction:column;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:11px;padding:2px 10px 27px}
+.brand-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#65a6ff,#2862bd);display:grid;place-items:center;color:white;font-weight:800;font-size:17px;box-shadow:0 5px 16px #0c1c32}
+.brand strong{font-size:16px;letter-spacing:.2px;color:#fff}.brand small{display:block;color:#91a7c1;font-size:10px;letter-spacing:1.4px;margin-top:1px}
+.nav-label{font-size:10px;letter-spacing:1.5px;color:#7f96b1;padding:13px 12px 8px;font-weight:700}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:9px;color:#b9c8da;margin:2px 0;text-decoration:none;cursor:pointer;transition:.18s}
+.nav-item:hover{background:#ffffff12;color:white}.nav-item.active{background:#2b4b70;color:#fff;box-shadow:inset 3px 0 #70a8ff}
+.nav-icon{width:18px;text-align:center;font-size:15px}.nav-item .count{margin-left:auto;font-size:10px;background:#385a80;padding:2px 7px;border-radius:20px;color:#dceaff}
+.sidebar-bottom{margin-top:auto;border-top:1px solid #ffffff18;padding:16px 8px 0}
+.user{display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#dbeafe;color:#2456a1;font-weight:800}
+.user b{font-size:12px;color:white;display:block}.user small{color:#8fa5bf;font-size:11px}
+.main{flex:1;min-width:0}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:5}
+.crumb{color:var(--muted);font-size:12px}.crumb b{color:var(--ink);font-weight:650}
+.top-actions{display:flex;align-items:center;gap:12px}.icon-btn{border:1px solid var(--line);background:#fff;width:35px;height:35px;border-radius:9px;color:#526174}
+.company-select{border:1px solid var(--line);border-radius:8px;padding:8px 11px;background:#fff;color:#344054;font-size:12px}
+.content{padding:28px 32px 40px;max-width:1600px;margin:auto}
+.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:23px}
+.eyebrow{font-size:10px;letter-spacing:1.5px;font-weight:750;color:var(--blue);text-transform:uppercase}
+h1{font-size:25px;letter-spacing:-.7px;margin:4px 0 5px;color:#17283e}
+.subtitle{color:var(--muted);font-size:12px}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:1px solid #d8e0ea;background:white;color:#344054;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:650;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{background:#f8fafc}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn.primary:hover{background:#2868c2}
+.btn.soft{background:var(--blue2);border-color:#d9e7ff;color:#285fae}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}
+.card{background:white;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.stat{padding:17px 18px}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;font-weight:600}
+.stat-icon{width:31px;height:31px;border-radius:9px;display:grid;place-items:center;background:#eef4ff;color:#326ec4;font-size:15px}
+.stat-value{font-size:24px;font-weight:750;letter-spacing:-.7px;margin:10px 0 3px;color:#17283e}
+.stat-foot{font-size:10px;color:var(--muted)}.positive{color:var(--green);font-weight:700}
+.middle{grid-template-columns:minmax(0,1.55fr) minmax(280px,.9fr);margin-bottom:17px}
+.card-head{padding:17px 19px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-title{font-size:13px;font-weight:750;color:#24364b}.card-sub{font-size:10px;color:var(--muted);margin-top:3px}
+.card-body{padding:4px 19px 18px}
+.legend{display:flex;gap:16px;color:var(--muted);font-size:10px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:#3978d6}.dot.gray{background:#b9c6d6}
+.chart{height:190px;display:flex;align-items:flex-end;gap:15px;padding:12px 5px 0;border-bottom:1px solid var(--line);position:relative}
+.chart:before,.chart:after{content:"";position:absolute;left:0;right:0;border-top:1px dashed #edf0f5}.chart:before{top:35%}.chart:after{top:68%}
+.bar-group{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;position:relative;z-index:1}
+.bar{width:23%;max-width:25px;border-radius:5px 5px 0 0;background:#3978d6;min-height:4px}.bar.alt{background:#c4d0df}
+.month{position:absolute;bottom:-22px;font-size:10px;color:#8290a2}
+.legend-wrap{margin-top:30px}
+.budget-list{display:flex;flex-direction:column;gap:15px;padding-top:7px}
+.budget-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:7px}.budget-row span:first-child{color:#475467}.budget-row b{color:#25364a}
+.progress{height:7px;background:#eef1f5;border-radius:20px;overflow:hidden}.progress span{height:100%;display:block;border-radius:20px;background:#3978d6}.progress.orange span{background:#e4a04c}.progress.green span{background:#25a477}
+.lower{grid-template-columns:minmax(0,1.5fr) minmax(270px,.8fr)}
+.table-card{overflow:hidden}.table-tools{display:flex;gap:8px;align-items:center}
+.search{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;width:180px;outline:none}.search:focus{border-color:#80a9e8}
+table{width:100%;border-collapse:collapse}th{text-align:left;font-size:10px;color:#7b8796;font-weight:700;padding:11px 17px;background:#fafbfd;border-top:1px solid #f0f2f5;border-bottom:1px solid #edf0f4;white-space:nowrap}
+td{padding:13px 17px;border-bottom:1px solid #f0f2f5;font-size:11px;white-space:nowrap}tr:last-child td{border-bottom:0}
+.person{display:flex;align-items:center;gap:9px}.mini-avatar{width:28px;height:28px;border-radius:8px;background:#edf3ff;color:#3467b3;display:grid;place-items:center;font-size:10px;font-weight:800}
+.person b{display:block;font-size:11px}.person small{color:#8994a3;font-size:10px}
+.pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:20px;font-size:9px;font-weight:700}.pill.green{background:var(--greenbg);color:var(--green)}.pill.orange{background:var(--orangebg);color:var(--orange)}.pill.blue{background:var(--blue2);color:#2e65b5}.pill.gray{background:#f0f2f5;color:#667085}
+.link-btn{border:0;background:none;color:#3978d6;font-size:10px;font-weight:700;padding:4px}
+.activity{padding:2px 19px 16px}.activity-item{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid #f0f2f5}.activity-item:last-child{border:0}
+.activity-icon{width:28px;height:28px;border-radius:8px;background:#eef4ff;color:#3978d6;display:grid;place-items:center;flex-shrink:0}
+.activity-text{font-size:11px;color:#475467}.activity-text b{color:#26384e}.activity-text small{display:block;color:#98a2b3;margin-top:3px;font-size:9px}
+.notice{margin-top:17px;border:1px solid #f1dfb9;background:#fffaf0;border-radius:10px;padding:11px 14px;color:#805b1b;font-size:10px;display:flex;gap:9px;align-items:flex-start}
+.page{display:none}.page.active{display:block}
+.panel{padding:19px;margin-bottom:16px}.panel h3{margin:0 0 5px;font-size:14px}.panel p{margin:0;color:var(--muted);font-size:11px}
+.kpi-grid{grid-template-columns:repeat(3,1fr);margin-top:16px}
+.kpi-card{padding:17px}.kpi-card h4{font-size:12px;margin:0 0 8px}.kpi-card .big{font-size:22px;font-weight:750}.kpi-card p{margin-top:5px}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.field{display:flex;flex-direction:column;gap:5px;min-width:160px;flex:1}.field label{font-size:10px;color:#667085;font-weight:650}.field input,.field select{border:1px solid var(--line);border-radius:8px;padding:9px;font-size:11px;background:white;color:#344054}
+.empty-hint{padding:28px;text-align:center;color:#8994a3;font-size:11px}
+.modal-backdrop{position:fixed;inset:0;background:#12243b70;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal-backdrop.show{display:flex}
+.modal{background:white;border-radius:14px;width:min(520px,100%);box-shadow:0 20px 60px #0d203b40;overflow:hidden}
+.modal-head{padding:18px 21px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head b{font-size:14px}.modal-body{padding:20px}.modal-foot{padding:14px 20px;background:#fafbfd;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.toast{position:fixed;bottom:22px;right:22px;background:#172d47;color:white;padding:12px 16px;border-radius:9px;box-shadow:var(--shadow);font-size:11px;display:none;z-index:30}.toast.show{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.mobile-menu{display:none}
+@media(max-width:1050px){.sidebar{width:215px}.stats{grid-template-columns:repeat(2,1fr)}.middle,.lower{grid-template-columns:1fr}}
+@media(max-width:700px){.sidebar{position:fixed;left:-260px;top:0;bottom:0;z-index:10;transition:.2s}.sidebar.open{left:0}.topbar{padding:0 16px}.content{padding:22px 15px}.mobile-menu{display:inline-flex}.page-head{flex-direction:column}.stats{gap:10px}.stat{padding:13px}.stat-value{font-size:20px}.top-actions .company-select{max-width:135px}.kpi-grid{grid-template-columns:1fr}.table-card{overflow-x:auto}}
 </style>
 </head>
 <body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+ <div class="brand"><div class="brand-mark">H</div><div><strong>HR PORTAL</strong><small>PEOPLE & COMPENSATION</small></div></div>
+ <div class="nav-label">WORKSPACE</div>
+ <a class="nav-item active" data-page="overview"><span class="nav-icon">▦</span> Tổng quan</a>
+ <a class="nav-item" data-page="structures"><span class="nav-icon">▤</span> Cấu trúc lương</a>
+ <a class="nav-item" data-page="components"><span class="nav-icon">◈</span> Thành phần lương</a>
+ <a class="nav-item" data-page="kpi"><span class="nav-icon">◎</span> KPI Compensation <span class="count">NEW</span></a>
+ <div class="nav-label">PAYROLL OPERATIONS</div>
+ <a class="nav-item" data-page="employees"><span class="nav-icon">♙</span> Lương nhân viên</a>
+ <a class="nav-item" data-page="payroll"><span class="nav-icon">▣</span> Xử lý bảng lương</a>
+ <a class="nav-item" data-page="imports"><span class="nav-icon">⇧</span> Policy Import Center</a>
+ <a class="nav-item" data-page="reports"><span class="nav-icon">▥</span> Báo cáo & phân tích</a>
+ <div class="nav-label">GOVERNANCE</div>
+ <a class="nav-item" data-page="policies"><span class="nav-icon">⚙</span> Chính sách & công thức</a>
+ <a class="nav-item" data-page="audit"><span class="nav-icon">◷</span> Lịch sử thay đổi</a>
+ <div class="sidebar-bottom"><div class="user"><div class="avatar">TN</div><div><b>HR Administrator</b><small>Demo workspace · Admin</small></div></div></div>
+</aside>
+<main class="main">
+ <header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn">☰</button><div class="crumb">Workspace&nbsp; / &nbsp;<b id="crumb">Tổng quan</b></div></div>
+  <div class="top-actions"><select class="company-select"><option>Công ty Demo Việt Nam</option><option>Chi nhánh Hà Nội</option><option>Chi nhánh TP.HCM</option></select><button class="icon-btn" title="Thông báo">♧</button><div class="avatar">TN</div></div>
+ </header>
+ <div class="content">
+  <section class="page active" id="page-overview">
+   <div class="page-head"><div><div class="eyebrow">COMPENSATION MANAGEMENT</div><h1>Tổng quan đãi ngộ</h1><div class="subtitle">Theo dõi cấu trúc lương, ngân sách và tiến độ xử lý lương của doanh nghiệp.</div></div><div class="actions"><button class="btn" onclick="showToast('Đã tạo bản xem trước báo cáo demo.')">↧ Xuất báo cáo</button><button class="btn primary" onclick="openModal('newPayroll')">＋ Tạo kỳ lương</button></div></div>
+   <div class="grid stats">
+    <div class="card stat"><div class="stat-top">Tổng nhân sự áp dụng lương <span class="stat-icon">♙</span></div><div class="stat-value">248</div><div class="stat-foot"><span class="positive">+12</span> so với tháng trước</div></div>
+    <div class="card stat"><div class="stat-top">Quỹ lương dự kiến <span class="stat-icon">₫</span></div><div class="stat-value">4,82 tỷ</div><div class="stat-foot">Kỳ lương tháng 11/2026</div></div>
+    <div class="card stat"><div class="stat-top">Kỳ lương đang xử lý <span class="stat-icon">▣</span></div><div class="stat-value">02</div><div class="stat-foot"><span class="pill orange">Đang xử lý</span> · 1 chờ duyệt</div></div>
+    <div class="card stat"><div class="stat-top">Chính sách đang hiệu lực <span class="stat-icon">◈</span></div><div class="stat-value">08</div><div class="stat-foot"><span class="positive">100%</span> có phiên bản áp dụng</div></div>
+   </div>
+   <div class="grid middle">
+    <div class="card"><div class="card-head"><div><div class="card-title">Xu hướng quỹ lương</div><div class="card-sub">Tổng chi phí lương theo tháng · đơn vị: tỷ VNĐ</div></div><div class="legend"><span><i class="dot"></i>Thực tế</span><span><i class="dot gray"></i>Kế hoạch</span></div></div><div class="card-body"><div class="chart">
+     <div class="bar-group"><div class="bar" style="height:58%"></div><div class="bar alt" style="height:63%"></div><span class="month">T6</span></div>
+     <div class="bar-group"><div class="bar" style="height:65%"></div><div class="bar alt" style="height:68%"></div><span class="month">T7</span></div>
+     <div class="bar-group"><div class="bar" style="height:61%"></div><div class="bar alt" style="height:70%"></div><span class="month">T8</span></div>
+     <div class="bar-group"><div class="bar" style="height:74%"></div><div class="bar alt" style="height:73%"></div><span class="month">T9</span></div>
+     <div class="bar-group"><div class="bar" style="height:69%"></div><div class="bar alt" style="height:76%"></div><span class="month">T10</span></div>
+     <div class="bar-group"><div class="bar" style="height:82%"></div><div class="bar alt" style="height:80%"></div><span class="month">T11</span></div>
+    </div><div class="legend-wrap card-sub">Dữ liệu minh họa phục vụ trình diễn giao diện.</div></div></div>
+    <div class="card"><div class="card-head"><div><div class="card-title">Phân bổ quỹ lương</div><div class="card-sub">Theo nhóm chi phí · tháng 11/2026</div></div><button class="link-btn" onclick="navigate('reports')">Chi tiết →</button></div><div class="card-body"><div class="budget-list">
+     <div><div class="budget-row"><span>Lương cố định</span><b>62% · 2,99 tỷ</b></div><div class="progress"><span style="width:62%"></span></div></div>
+     <div><div class="budget-row"><span>Phụ cấp & hỗ trợ</span><b>14% · 675 triệu</b></div><div class="progress green"><span style="width:14%"></span></div></div>
+     <div><div class="budget-row"><span>KPI & thưởng</span><b>16% · 771 triệu</b></div><div class="progress orange"><span style="width:16%"></span></div></div>
+     <div><div class="budget-row"><span>OT & khoản khác</span><b>8% · 386 triệu</b></div><div class="progress"><span style="width:8%"></span></div></div>
+    </div></div></div>
+   </div>
+   <div class="grid lower">
+    <div class="card table-card"><div class="card-head"><div><div class="card-title">Tiến độ xử lý bảng lương</div><div class="card-sub">Các kỳ lương gần nhất</div></div><div class="table-tools"><input class="search" id="payrollSearch" placeholder="Tìm kỳ lương..." oninput="filterTable('payrollTable',this.value)"></div></div>
+     <table id="payrollTable"><thead><tr><th>KỲ LƯƠNG</th><th>NHÂN SỰ</th><th>TỔNG GROSS</th><th>TRẠNG THÁI</th><th></th></tr></thead><tbody>
+      <tr><td><b>Tháng 11/2026</b><br><small style="color:#98a2b3">01/11 – 30/11/2026</small></td><td>248</td><td>4.820.000.000 ₫</td><td><span class="pill orange">Đang xử lý</span></td><td><button class="link-btn" onclick="navigate('payroll')">Mở →</button></td></tr>
+      <tr><td><b>Tháng 10/2026</b><br><small style="color:#98a2b3">01/10 – 31/10/2026</small></td><td>236</td><td>4.610.000.000 ₫</td><td><span class="pill green">Đã khóa</span></td><td><button class="link-btn" onclick="navigate('payroll')">Mở →</button></td></tr>
+      <tr><td><b>Tháng 09/2026</b><br><small style="color:#98a2b3">01/09 – 30/09/2026</small></td><td>231</td><td>4.530.000.000 ₫</td><td><span class="pill green">Đã khóa</span></td><td><button class="link-btn" onclick="navigate('payroll')">Mở →</button></td></tr>
+     </tbody></table></div>
+    <div class="card"><div class="card-head"><div><div class="card-title">Hoạt động gần đây</div><div class="card-sub">Nhật ký demo</div></div></div><div class="activity">
+     <div class="activity-item"><div class="activity-icon">✓</div><div class="activity-text"><b>Phiên bản lương V2.1</b> được phê duyệt<small>10:42 · HR Manager</small></div></div>
+     <div class="activity-item"><div class="activity-icon">⇧</div><div class="activity-text"><b>Import bảng phụ cấp</b> đã tải lên<small>09:18 · HR Admin</small></div></div>
+     <div class="activity-item"><div class="activity-icon">◎</div><div class="activity-text"><b>Kết quả KPI tháng 10</b> đã đồng bộ<small>Hôm qua · Performance</small></div></div>
+     <div class="activity-item"><div class="activity-icon">▣</div><div class="activity-text"><b>Kỳ lương tháng 10</b> đã khóa<small>05/11/2026 · C&B</small></div></div>
+    </div></div>
+   </div>
+   <div class="notice"><span>ⓘ</span><span><b>Chế độ Demo:</b> Số liệu và nghiệp vụ trên màn hình là dữ liệu giả lập, chưa kết nối Supabase và không dùng để tính lương thực tế.</span></div>
+  </section>
 
-<header class="site-header">
-  <div class="header-inner">
-    <a href="#" class="logo">
-      <span class="logo-mark">HR</span>
-      <span>Kiến trúc Lương &amp; KPI</span>
-    </a>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="#tong-quan">Tổng quan</a></li>
-        <li><a href="#schema">Schema</a></li>
-        <li><a href="#config">Cấu hình</a></li>
-        <li><a href="#tinh-luong">Tính lương</a></li>
-        <li><a href="#tinh-kpi">Tính KPI</a></li>
-        <li><a href="#tich-hop">Tích hợp</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  <section class="page" id="page-structures">
+   <div class="page-head"><div><div class="eyebrow">SALARY ARCHITECTURE</div><h1>Cấu trúc lương</h1><div class="subtitle">Thiết kế nhiều cấu trúc lương theo mô hình vận hành và chính sách từng doanh nghiệp.</div></div><button class="btn primary" onclick="openModal('newStructure')">＋ Tạo cấu trúc</button></div>
+   <div class="grid stats">
+    <div class="card stat"><div class="stat-top">Cấu trúc đang hoạt động</div><div class="stat-value">04</div><div class="stat-foot">Theo nhóm chức danh</div></div>
+    <div class="card stat"><div class="stat-top">Salary grades</div><div class="stat-value">12</div><div class="stat-foot">Có thể bật/tắt theo chính sách</div></div>
+    <div class="card stat"><div class="stat-top">Nhân viên đã gán</div><div class="stat-value">248</div><div class="stat-foot">100% dữ liệu demo</div></div>
+    <div class="card stat"><div class="stat-top">Chờ phê duyệt</div><div class="stat-value">01</div><div class="stat-foot"><span class="pill orange">Cần xem xét</span></div></div>
+   </div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Danh sách cấu trúc lương</div><div class="card-sub">Mỗi cấu trúc có phiên bản và thời gian hiệu lực riêng.</div></div><input class="search" placeholder="Tìm cấu trúc..." oninput="filterTable('structureTable',this.value)"></div>
+    <table id="structureTable"><thead><tr><th>TÊN CẤU TRÚC</th><th>NHÓM ÁP DỤNG</th><th>THÀNH PHẦN</th><th>HIỆU LỰC TỪ</th><th>PHIÊN BẢN</th><th>TRẠNG THÁI</th></tr></thead><tbody>
+    <tr><td><b>Office Standard</b><br><small style="color:#98a2b3">STR-OFF-001</small></td><td>Khối văn phòng</td><td>6</td><td>01/01/2026</td><td>v2.1</td><td><span class="pill green">Đang áp dụng</span></td></tr>
+    <tr><td><b>Sales Performance</b><br><small style="color:#98a2b3">STR-SAL-002</small></td><td>Kinh doanh</td><td>8</td><td>01/04/2026</td><td>v1.3</td><td><span class="pill green">Đang áp dụng</span></td></tr>
+    <tr><td><b>Production Shift</b><br><small style="color:#98a2b3">STR-PRD-003</small></td><td>Sản xuất</td><td>7</td><td>01/01/2026</td><td>v1.0</td><td><span class="pill green">Đang áp dụng</span></td></tr>
+    <tr><td><b>Technology Grade</b><br><small style="color:#98a2b3">STR-TEC-004</small></td><td>Công nghệ</td><td>7</td><td>01/06/2026</td><td>v1.1</td><td><span class="pill orange">Chờ duyệt</span></td></tr>
+    </tbody></table></div>
+   <div class="card panel" style="margin-top:16px"><h3>Nguyên tắc thiết kế</h3><p>Không bắt buộc mọi doanh nghiệp phải dùng Salary Grade/Range. Cấu trúc có thể tính theo lương tháng, ngày, giờ, sản phẩm, doanh số hoặc công thức hỗn hợp.</p></div>
+  </section>
 
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Kiến trúc HR Portal</div>
-    <h1>Bảng lương &amp; KPI — Thiết kế Configurable cho mọi công ty</h1>
-    <p>Xây dựng một lần, điều chỉnh linh hoạt. Không cần sửa code khi chuyển công ty hay thay đổi chính sách lương.</p>
-  </div>
-</section>
+  <section class="page" id="page-components">
+   <div class="page-head"><div><div class="eyebrow">COMPONENT LIBRARY</div><h1>Thành phần lương</h1><div class="subtitle">Danh mục thành phần có cấu hình độc lập về cách tính, thuế, bảo hiểm và hiệu lực.</div></div><button class="btn primary" onclick="openModal('newComponent')">＋ Thêm thành phần</button></div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Component Library</div><div class="card-sub">Danh mục dùng chung, được gán vào từng cấu trúc lương.</div></div><input class="search" placeholder="Tìm thành phần..." oninput="filterTable('componentTable',this.value)"></div>
+   <table id="componentTable"><thead><tr><th>MÃ</th><th>TÊN THÀNH PHẦN</th><th>LOẠI</th><th>CÁCH TÍNH</th><th>THUẾ TNCN</th><th>BẢO HIỂM</th><th>TRẠNG THÁI</th></tr></thead><tbody>
+    <tr><td>BASE</td><td><b>Lương cơ bản theo HĐLĐ</b></td><td><span class="pill blue">Earning</span></td><td>Cố định / tháng</td><td>Chịu thuế*</td><td>Theo quy định*</td><td><span class="pill green">Hoạt động</span></td></tr>
+    <tr><td>POS</td><td><b>Phụ cấp chức vụ</b></td><td><span class="pill blue">Earning</span></td><td>Số tiền cố định</td><td>Phân loại theo quy định*</td><td>Phân loại riêng*</td><td><span class="pill green">Hoạt động</span></td></tr>
+    <tr><td>KPI</td><td><b>Thưởng hiệu suất KPI</b></td><td><span class="pill blue">Earning</span></td><td>Tier / Formula</td><td>Chịu thuế*</td><td>Đánh giá theo bản chất khoản chi*</td><td><span class="pill green">Hoạt động</span></td></tr>
+    <tr><td>COMM</td><td><b>Hoa hồng doanh số</b></td><td><span class="pill blue">Earning</span></td><td>% doanh số</td><td>Chịu thuế*</td><td>Phân loại riêng*</td><td><span class="pill green">Hoạt động</span></td></tr>
+    <tr><td>OT</td><td><b>Tiền làm thêm giờ</b></td><td><span class="pill blue">Earning</span></td><td>Giờ × đơn giá × hệ số</td><td>Theo quy định hiện hành*</td><td>Không mặc định đồng nhất cơ sở tính</td><td><span class="pill green">Hoạt động</span></td></tr>
+    <tr><td>DEDUCT</td><td><b>Khoản khấu trừ khác</b></td><td><span class="pill orange">Deduction</span></td><td>Số tiền / công thức</td><td>Không áp dụng chung</td><td>Không áp dụng chung</td><td><span class="pill green">Hoạt động</span></td></tr>
+   </tbody></table></div>
+   <div class="notice"><span>ⓘ</span><span>* Phân loại thuế và bảo hiểm phải được cấu hình theo bản chất khoản chi, hồ sơ và quy định pháp luật tại thời điểm áp dụng; demo không kết luận pháp lý cho từng khoản.</span></div>
+  </section>
 
-<main>
+  <section class="page" id="page-kpi">
+   <div class="page-head"><div><div class="eyebrow">PERFORMANCE-BASED PAY</div><h1>KPI Compensation</h1><div class="subtitle">Chuyển kết quả KPI đã được phê duyệt thành khoản chi trả theo chính sách của doanh nghiệp.</div></div><button class="btn primary" onclick="openModal('newKpi')">＋ Tạo chính sách KPI</button></div>
+   <div class="grid stats"><div class="card stat"><div class="stat-top">Chính sách KPI</div><div class="stat-value">03</div><div class="stat-foot">2 đang áp dụng · 1 bản nháp</div></div><div class="card stat"><div class="stat-top">Ngân sách KPI tháng</div><div class="stat-value">771 triệu</div><div class="stat-foot">Dữ liệu giả lập</div></div><div class="card stat"><div class="stat-top">Kết quả đã đồng bộ</div><div class="stat-value">212/248</div><div class="stat-foot">85,5% nhân sự</div></div><div class="card stat"><div class="stat-top">Chờ xác nhận</div><div class="stat-value">06</div><div class="stat-foot"><span class="pill orange">Chưa chốt</span></div></div></div>
+   <div class="grid kpi-grid">
+    <div class="card kpi-card"><span class="pill blue">FIXED AMOUNT</span><h4 style="margin-top:12px">KPI văn phòng</h4><div class="big">1.500.000 ₫</div><p>Đạt ngưỡng KPI thì nhận mức cố định; không đạt ngưỡng thì không phát sinh.</p></div>
+    <div class="card kpi-card"><span class="pill blue">TIER BASED</span><h4 style="margin-top:12px">KPI kinh doanh</h4><div class="big">0–150%</div><p>Mức chi trả theo bậc điểm hoặc tỷ lệ hoàn thành mục tiêu đã duyệt.</p></div>
+    <div class="card kpi-card"><span class="pill blue">REVENUE BASED</span><h4 style="margin-top:12px">Hoa hồng doanh số</h4><div class="big">Theo doanh thu</div><p>Tính theo doanh số hợp lệ, tỷ lệ và điều kiện được phê duyệt.</p></div>
+   </div>
+   <div class="card panel" style="margin-top:16px"><h3>Luồng tính KPI Compensation</h3><p>Chốt kỳ đánh giá → nhận kết quả KPI đã duyệt → kiểm tra điều kiện → áp dụng chính sách và phiên bản → tính khoản chi trả → HR/C&B kiểm tra → phê duyệt → chuyển dữ liệu sang Payroll.</p><div class="notice"><span>!</span><span><b>Lưu ý quan trọng:</b> Điểm KPI 90/100 không tự động có nghĩa là được nhận 90% tiền KPI. Hệ thống phải đọc bảng quy đổi, ngưỡng, trọng số và công thức do doanh nghiệp ban hành.</span></div></div>
+  </section>
 
-<!-- ==================== TỔNG QUAN ==================== -->
-<section id="tong-quan">
-  <div class="section-header">
-    <div class="section-number">01</div>
-    <h2>Tổng quan kiến trúc</h2>
-    <p class="lead">Thay vì hard-code công thức lương và KPI, bạn cần một hệ thống <strong>configuration-driven</strong>: dữ liệu định nghĩa cách tính, code chỉ đọc và thực thi.</p>
-  </div>
+  <section class="page" id="page-employees">
+   <div class="page-head"><div><div class="eyebrow">EMPLOYEE COMPENSATION</div><h1>Lương nhân viên</h1><div class="subtitle">Theo dõi cấu trúc, mức lương được gán và lịch sử thay đổi theo ngày hiệu lực.</div></div><button class="btn primary" onclick="openModal('assignSalary')">＋ Gán cấu trúc lương</button></div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Danh sách áp dụng</div><div class="card-sub">Thông tin demo đã được ẩn một phần.</div></div><input class="search" placeholder="Tìm nhân viên..." oninput="filterTable('employeeTable',this.value)"></div>
+   <table id="employeeTable"><thead><tr><th>NHÂN VIÊN</th><th>PHÒNG BAN</th><th>CẤU TRÚC</th><th>GROSS THỎA THUẬN</th><th>HIỆU LỰC</th><th>TRẠNG THÁI</th></tr></thead><tbody>
+    <tr><td><div class="person"><div class="mini-avatar">NA</div><div><b>Nguyễn An</b><small>NV001 · HR</small></div></div></td><td>Nhân sự</td><td>Office Standard</td><td>18.500.000 ₫</td><td>01/01/2026</td><td><span class="pill green">Đang áp dụng</span></td></tr>
+    <tr><td><div class="person"><div class="mini-avatar">TB</div><div><b>Trần Bình</b><small>NV024 · Sales</small></div></div></td><td>Kinh doanh</td><td>Sales Performance</td><td>22.000.000 ₫</td><td>01/04/2026</td><td><span class="pill green">Đang áp dụng</span></td></tr>
+    <tr><td><div class="person"><div class="mini-avatar">LC</div><div><b>Lê Chi</b><small>NV052 · Tech</small></div></div></td><td>Công nghệ</td><td>Technology Grade</td><td>30.000.000 ₫</td><td>01/06/2026</td><td><span class="pill orange">Chờ duyệt</span></td></tr>
+   </tbody></table></div>
+  </section>
 
-  <div class="card-grid">
-    <div class="card card-accent">
-      <h4 style="margin-top:0">Configuration Layer</h4>
-      <p style="font-size:0.9rem;color:var(--ink-secondary)">Các bảng cấu hình: công thức lương, bộ KPI theo chức danh, thang điểm, ngưỡng thưởng. Chỉnh sửa = UPDATE database, không cần deploy code.</p>
+  <section class="page" id="page-payroll">
+   <div class="page-head"><div><div class="eyebrow">PAYROLL OPERATIONS</div><h1>Xử lý bảng lương</h1><div class="subtitle">Tập hợp dữ liệu đầu vào, tính toán, đối soát, phê duyệt và khóa kỳ lương.</div></div><button class="btn primary" onclick="openModal('newPayroll')">＋ Tạo kỳ lương</button></div>
+   <div class="card panel"><h3>Tháng 11/2026 · Payroll Run #PR-2026-11</h3><p>Trạng thái: <span class="pill orange">Đang xử lý</span> · 248 nhân sự · Phiên bản chính sách: COMP-V2.1</p>
+    <div class="grid kpi-grid">
+     <div class="kpi-card" style="background:#fafbfd;border-radius:9px"><p>Tổng Gross</p><div class="big">4,82 tỷ</div></div>
+     <div class="kpi-card" style="background:#fafbfd;border-radius:9px"><p>Khấu trừ dự kiến</p><div class="big">612 triệu</div></div>
+     <div class="kpi-card" style="background:#fafbfd;border-radius:9px"><p>Net dự kiến</p><div class="big">4,21 tỷ</div></div>
     </div>
-    <div class="card card-accent card-success">
-      <h4 style="margin-top:0">Data Layer</h4>
-      <p style="font-size:0.9rem;color:var(--ink-secondary)">Dữ liệu nhân viên, chấm công, KPI thực tế, bảng lương từng kỳ. Lưu lịch sử để audit và so sánh theo thời gian.</p>
-    </div>
-    <div class="card card-accent card-warning">
-      <h4 style="margin-top:0">Engine Layer</h4>
-      <p style="font-size:0.9rem;color:var(--ink-secondary)">Code tính toán đọc config và data, output bảng lương. Công thức viết dưới dạng expression có thể parse (JSON/DSL).</p>
-    </div>
-    <div class="card card-accent card-danger">
-      <h4 style="margin-top:0">Presentation Layer</h4>
-      <p style="font-size:0.9rem;color:var(--ink-secondary)">UI hiển thị bảng lương, biểu đồ KPI, báo cáo. Tách biệt hoàn toàn với logic tính toán.</p>
-    </div>
-  </div>
-
-  <div class="callout callout-info">
-    <div class="callout-icon">i</div>
-    <div>
-      <strong>Triết lý thiết kế:</strong> Mọi quy tắc tính lương, KPI, thuế, bảo hiểm đều phải lưu trong database dưới dạng config. Khi bn chuyển sang công ty mới, chỉ cần import config mới — code giữ nguyên.
-    </div>
-  </div>
-</section>
-
-<!-- ==================== SCHEMA ==================== -->
-<section id="schema">
-  <div class="section-header">
-    <div class="section-number">02</div>
-    <h2>Database Schema (Supabase/PostgreSQL)</h2>
-    <p class="lead">Dưới đây là các bảng cần thiết, thiết kế để dễ dàng điều chỉnh trong tương lai.</p>
-  </div>
-
-  <h3>2.1. Bảng Cấu hình — Lương</h3>
-  <div class="code-block">
-<span class="code-label">SQL — salary_components (Các khoản lương)</span>
-<span class="keyword">CREATE TABLE</span> <span class="func">salary_components</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  code            <span class="keyword">TEXT NOT NULL UNIQUE</span>,       <span class="comment">-- 'BASE_SALARY', 'KPI_BONUS', 'LUNCH_ALLOWANCE'...</span>
-  name_vi         <span class="keyword">TEXT NOT NULL</span>,               <span class="comment">-- 'Lương cơ bản'</span>
-  name_en         <span class="keyword">TEXT</span>,                      <span class="comment">-- 'Base Salary'</span>
-  type            <span class="keyword">TEXT NOT NULL CHECK</span> (type <span class="keyword">IN</span> (<span class="string">'fixed'</span>,<span class="string">'variable'</span>,<span class="string">'allowance'</span>,<span class="string">'deduction'</span>,<span class="string">'tax'</span>,<span class="string">'insurance'</span>)),
-  is_taxable      <span class="keyword">BOOLEAN DEFAULT FALSE</span>,       <span class="comment">-- Có tính thuế TNCN không</span>
-  is_insurable    <span class="keyword">BOOLEAN DEFAULT FALSE</span>,       <span class="comment">-- Có tính đóng BHXH không</span>
-  is_visible      <span class="keyword">BOOLEAN DEFAULT TRUE</span>,        <span class="comment">-- Hiển thị trên phiếu lương</span>
-  sort_order      <span class="keyword">INTEGER DEFAULT 0</span>,           <span class="comment">-- Thứ tự hiển thị</span>
-  formula_expr    <span class="keyword">TEXT</span>,                      <span class="comment">-- Công thức JS expression, NULL = nhập tay</span>
-  active          <span class="keyword">BOOLEAN DEFAULT TRUE</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>()
-);
-
-<span class="comment">-- Ví dụ insert</span>
-<span class="keyword">INSERT INTO</span> salary_components (code, name_vi, type, is_taxable, is_insurable, sort_order, formula_expr) <span class="keyword">VALUES</span>
-(<span class="string">'BASE_SALARY'</span>,      <span class="string">'Lương cơ bản'</span>,       <span class="string">'fixed'</span>,      <span class="keyword">true</span>,  <span class="keyword">true</span>,   10,  <span class="keyword">NULL</span>),       <span class="comment">-- Nhập tay từ hợp đồng</span>
-(<span class="string">'LUNCH_ALLOWANCE'</span>,  <span class="string">'Phụ cấp ăn trưa'</span>,    <span class="string">'allowance'</span>,  <span class="keyword">false</span>, <span class="keyword">false</span>,  20,  <span class="string">'730000'</span>),  <span class="comment">-- Cố định 730k</span>
-(<span class="string">'KPI_BONUS'</span>,        <span class="string">'Thưởng KPI'</span>,         <span class="string">'variable'</span>, <span class="keyword">true</span>,  <span class="keyword">false</span>,  30,  <span class="keyword">NULL</span>),       <span class="comment">-- Tính từ bảng kpi_results</span>
-(<span class="string">'BHXH_EE'</span>,          <span class="string">'BHXH (8%)'</span>,          <span class="string">'insurance'</span>,  <span class="keyword">false</span>, <span class="keyword">false</span>,  100, <span class="string">'-BASE_SALARY * 0.08'</span>),
-(<span class="string">'BHYT_EE'</span>,          <span class="string">'BHYT (1.5%)'</span>,        <span class="string">'insurance'</span>,  <span class="keyword">false</span>, <span class="keyword">false</span>,  101, <span class="string">'-BASE_SALARY * 0.015'</span>),
-(<span class="string">'BHTN_EE'</span>,          <span class="string">'BHTN (1%)'</span>,          <span class="string">'insurance'</span>,  <span class="keyword">false</span>, <span class="keyword">false</span>,  102, <span class="string">'-BASE_SALARY * 0.01'</span>);
-</div>
-
-  <h3>2.2. Bảng Cấu hình — Công thức lương theo công ty</h3>
-  <div class="code-block">
-<span class="code-label">SQL — payroll_formulas (Công thức tính lương)</span>
-<span class="keyword">CREATE TABLE</span> <span class="func">payroll_formulas</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  company_id      <span class="keyword">TEXT DEFAULT 'default'</span>,  <span class="comment">-- Hỗ trợ multi-tenant trong tương lai</span>
-  formula_name    <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- 'gross_to_net', 'kpi_linear', 'kpi_tiered'</span>
-  formula_type    <span class="keyword">TEXT NOT NULL CHECK</span> (formula_type <span class="keyword">IN</span> (<span class="string">'salary'</span>,<span class="string">'kpi'</span>,<span class="string">'tax'</span>)),
-  config_json     <span class="keyword">JSONB NOT NULL</span>,             <span class="comment">-- Cấu hình dạng JSON linh hoạt</span>
-  effective_from  <span class="keyword">DATE NOT NULL</span>,
-  effective_to    <span class="keyword">DATE</span>,                      <span class="comment">-- NULL = đang hiệu lực</span>
-  active          <span class="keyword">BOOLEAN DEFAULT TRUE</span>,
-  created_by      <span class="keyword">UUID REFERENCES auth.users</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>()
-);
-
-<span class="comment">-- Ví dụ: Công thức KPI dạng Bậc thang</span>
-<span class="keyword">INSERT INTO</span> payroll_formulas (formula_name, formula_type, config_json, effective_from) <span class="keyword">VALUES</span>
-(<span class="string">'kpi_tiered'</span>, <span class="string">'kpi'</span>, <span class="string">'{
-  "method": "tiered",
-  "max_bonus_multiplier": 1.5,
-  "tiers": [
-    {"min": 0,   "max": 69,  "factor": 0.0},
-    {"min": 70,  "max": 84,  "factor": 0.5},
-    {"min": 85,  "max": 99,  "factor": 0.8},
-    {"min": 100, "max": 109, "factor": 1.0},
-    {"min": 110, "max": 119, "factor": 1.2},
-    {"min": 120, "max": 999, "factor": 1.5}
-  ],
-  "grade_map": {
-    "A": {"min_score": 90, "label": "Xuất sắc"},
-    "B": {"min_score": 80, "label": "Tốt"},
-    "C": {"min_score": 70, "label": "Khá"},
-    "D": {"min_score": 60, "label": "Đạt"},
-    "E": {"min_score": 0,  "label": "Chưa đạt"}
-  }
-}'</span>::jsonb, <span class="string">'2024-01-01'</span>);
-</div>
-
-  <h3>2.3. Bảng KPI — Định nghĩa</h3>
-  <div class="code-block">
-<span class="code-label">SQL — kpi_definitions (Định nghĩa KPI)</span>
-<span class="keyword">CREATE TABLE</span> <span class="func">kpi_definitions</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  code            <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- 'SALES_REVENUE', 'CSAT'</span>
-  name_vi         <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- 'Doanh số cá nhân'</span>
-  name_en         <span class="keyword">TEXT</span>,
-  description     <span class="keyword">TEXT</span>,
-  unit            <span class="keyword">TEXT</span>,                      <span class="comment">-- 'VND', '%', 'số lượng', 'điểm'</span>
-  formula         <span class="keyword">TEXT</span>,                      <span class="comment">-- Công thức tính: 'actual / target'</span>
-  data_source     <span class="keyword">TEXT</span>,                      <span class="comment">-- 'manual', 'sales_db', 'survey'</span>
-  active          <span class="keyword">BOOLEAN DEFAULT TRUE</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>()
-);
-
-<span class="keyword">CREATE TABLE</span> <span class="func">kpi_templates</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  template_name   <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- 'Sales_KPI_Q4', 'HR_KPI_2024'</span>
-  department      <span class="keyword">TEXT</span>,                      <span class="comment">-- 'Sales', 'HR', 'IT', NULL = áp dụng tất cả</span>
-  job_level       <span class="keyword">TEXT</span>,                      <span class="comment">-- 'staff', 'senior', 'manager', 'director'</span>
-  kpi_items       <span class="keyword">JSONB NOT NULL</span>,          <span class="comment">-- [{kpi_id, weight, target}, ...]</span>
-  effective_from  <span class="keyword">DATE NOT NULL</span>,
-  effective_to    <span class="keyword">DATE</span>,
-  active          <span class="keyword">BOOLEAN DEFAULT TRUE</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>()
-);
-
-<span class="comment">-- Ví dụ KPI template cho Sales</span>
-<span class="keyword">INSERT INTO</span> kpi_templates (template_name, department, job_level, kpi_items, effective_from) <span class="keyword">VALUES</span>
-(<span class="string">'Sales_Staff_2024'</span>, <span class="string">'Sales'</span>, <span class="string">'staff'</span>, <span class="string">'[
-  {"kpi_code": "SALES_REVENUE", "weight": 0.35, "target": 500000000, "min": 350000000, "max": 700000000},
-  {"kpi_code": "NEW_CUSTOMERS", "weight": 0.20, "target": 10, "min": 5, "max": 20},
-  {"kpi_code": "CONVERSION_RATE", "weight": 0.20, "target": 0.25, "min": 0.15, "max": 0.40},
-  {"kpi_code": "AVERAGE_ORDER", "weight": 0.15, "target": 50000000, "min": 30000000, "max": 80000000},
-  {"kpi_code": "CSAT", "weight": 0.10, "target": 4.2, "min": 3.0, "max": 5.0}
-]'</span>::jsonb, <span class="string">'2024-01-01'</span>);
-</div>
-
-  <h3>2.4. Bảng KPI — Kết quả thực tế</h3>
-  <div class="code-block">
-<span class="code-label">SQL — kpi_results (Kết quả KPI từng kỳ)</span>
-<span class="keyword">CREATE TABLE</span> <span class="func">kpi_results</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  user_id         <span class="keyword">UUID NOT NULL REFERENCES auth.users</span>,
-  period          <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- '2024-01', '2024-Q1', '2024'</span>
-  period_type     <span class="keyword">TEXT NOT NULL CHECK</span> (period_type <span class="keyword">IN</span> (<span class="string">'month'</span>,<span class="string">'quarter'</span>,<span class="string">'year'</span>)),
-  kpi_template_id <span class="keyword">INTEGER REFERENCES kpi_templates</span>,
-  kpi_code        <span class="keyword">TEXT NOT NULL</span>,
-  target_value    <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Mục tiêu</span>
-  actual_value    <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Thực tế</span>
-  achievement_pct <span class="keyword">NUMERIC</span>,                   <span class="comment">-- actual / target * 100</span>
-  weighted_score  <span class="keyword">NUMERIC</span>,                   <span class="comment">-- achievement_pct * weight</span>
-  evidence_url    <span class="keyword">TEXT</span>,                      <span class="comment">-- Link minh chứng</span>
-  evaluator_id    <span class="keyword">UUID REFERENCES auth.users</span>, <span class="comment">-- Người đánh giá</span>
-  evaluated_at    <span class="keyword">TIMESTAMPTZ</span>,
-  status          <span class="keyword">TEXT DEFAULT 'draft'</span> <span class="keyword">CHECK</span> (status <span class="keyword">IN</span> (<span class="string">'draft'</span>,<span class="string">'submitted'</span>,<span class="string">'approved'</span>,<span class="string">'disputed'</span>)),
-  note            <span class="keyword">TEXT</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>(),
-  <span class="keyword">UNIQUE</span> (user_id, period, kpi_code)
-);
-</div>
-
-  <h3>2.5. Bảng Bảng lương</h3>
-  <div class="code-block">
-<span class="code-label">SQL — payroll_records (Bảng lương từng kỳ)</span>
-<span class="keyword">CREATE TABLE</span> <span class="func">payroll_records</span> (
-  id              <span class="keyword">SERIAL PRIMARY KEY</span>,
-  user_id         <span class="keyword">UUID NOT NULL REFERENCES auth.users</span>,
-  period          <span class="keyword">TEXT NOT NULL</span>,             <span class="comment">-- '2024-01'</span>
-  base_salary     <span class="keyword">NUMERIC NOT NULL</span>,          <span class="comment">-- Lương cơ bản</span>
-  items           <span class="keyword">JSONB NOT NULL DEFAULT '[]'</span>, <span class="comment">-- [{component_code, amount, note}, ...]</span>
-  gross_salary    <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Tổng trước khấu trừ</span>
-  total_deduction <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Tổng khấu trừ</span>
-  tax_amount      <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Thuế TNCN</span>
-  net_salary      <span class="keyword">NUMERIC</span>,                   <span class="comment">-- Thực nhận</span>
-  formula_used    <span class="keyword">JSONB</span>,                      <span class="comment">-- Snapshot công thức đã dùng</span>
-  status          <span class="keyword">TEXT DEFAULT 'draft'</span> <span class="keyword">CHECK</span> (status <span class="keyword">IN</span> (<span class="string">'draft'</span>,<span class="string">'calculated'</span>,<span class="string">'locked'</span>,<span class="string">'paid'</span>)),
-  locked_by       <span class="keyword">UUID REFERENCES auth.users</span>,
-  locked_at       <span class="keyword">TIMESTAMPTZ</span>,
-  created_at      <span class="keyword">TIMESTAMPTZ DEFAULT NOW</span>(),
-  <span class="keyword">UNIQUE</span> (user_id, period)
-);
-</div>
-
-  <div class="callout callout-success">
-    <div class="callout-icon">OK</div>
-    <div>
-      <strong>Ưu điểm của thiết kế này:</strong> Khi chuyển sang công ty mới, bạn chỉ cn INSERT config mới vào <code>salary_components</code>, <code>payroll_formulas</code>, <code>kpi_definitions</code>, <code>kpi_templates</code>. Code JavaScript tính lương giữ nguyên 100%.
-    </div>
-  </div>
-</section>
-
-<!-- ==================== CẤU HÌNH ==================== -->
-<section id="config">
-  <div class="section-header">
-    <div class="section-number">03</div>
-    <h2>Cấu hình linh hoạt theo công ty</h2>
-    <p class="lead">Dưới đây là các kịch bản cấu hình phổ biến. Bạn có thể chuyển đổi chỉ bằng cách thay đổi dữ liệu trong database.</p>
-  </div>
-
-  <h3>3.1. Kịch bản A: Startup — Lương thấp, thưởng KPI cao</h3>
-  <div class="code-block">
-<span class="code-label">Config — Startup Sales (50/50)</span>
-<span class="comment">// salary_components: Thêm các khoản</span>
-{ <span class="attr">code</span>: <span class="string">'BASE_SALARY'</span>,      <span class="attr">type</span>: <span class="string">'fixed'</span>,      <span class="attr">formula_expr</span>: <span class="keyword">null</span> }
-{ <span class="attr">code</span>: <span class="string">'KPI_BONUS'</span>,        <span class="attr">type</span>: <span class="string">'variable'</span>,   <span class="attr">formula_expr</span>: <span class="keyword">null</span> }  <span class="comment">// Tính từ kpi_results</span>
-{ <span class="attr">code</span>: <span class="string">'ESOP_VESTED'</span>,      <span class="attr">type</span>: <span class="string">'variable'</span>,   <span class="attr">formula_expr</span>: <span class="keyword">null</span> }  <span class="comment">// Cổ phần thưởng</span>
-
-<span class="comment">// payroll_formulas: kpi_tiered với hệ số cao</span>
-{
-  <span class="attr">formula_name</span>: <span class="string">'kpi_startup'</span>,
-  <span class="attr">config_json</span>: {
-    <span class="attr">method</span>: <span class="string">"tiered"</span>,
-    <span class="attr">base_bonus_pct</span>: 0.50,     <span class="comment">// 50% lương cơ bản làm thưởng KPI tối đa</span>
-    <span class="attr">tiers</span>: [
-      { <span class="attr">min</span>: 0,   <span class="attr">max</span>: 59,  <span class="attr">factor</span>: 0.0 },
-      { <span class="attr">min</span>: 60,  <span class="attr">max</span>: 79,  <span class="attr">factor</span>: 0.3 },
-      { <span class="attr">min</span>: 80,  <span class="attr">max</span>: 99,  <span class="attr">factor</span>: 0.7 },
-      { <span class="attr">min</span>: 100, <span class="attr">max</span>: 109, <span class="attr">factor</span>: 1.0 },
-      { <span class="attr">min</span>: 110, <span class="attr">max</span>: 129, <span class="attr">factor</span>: 1.5 },
-      { <span class="attr">min</span>: 130, <span class="attr">max</span>: 999, <span class="attr">factor</span>: 2.0 }  <span class="comment">// Thưởng gấp đôi nếu vượt 30%</span>
-    ]
-  }
-}</div>
-
-  <h3>3.2. Kịch bản B: Doanh nghiệp truyền thống — Ổn định</h3>
-  <div class="code-block">
-<span class="code-label">Config — Traditional Company (80/20)</span>
-{
-  <span class="attr">formula_name</span>: <span class="string">'kpi_traditional'</span>,
-  <span class="attr">config_json</span>: {
-    <span class="attr">method</span>: <span class="string">"linear"</span>,         <span class="comment">// Tuyến tính đơn giản</span>
-    <span class="attr">base_bonus_pct</span>: 0.20,    <span class="comment">// 20% lương cơ bản</span>
-    <span class="attr">min_achievement</span>: 0.70,   <span class="comment">// Dưới 70% không có thưởng</span>
-    <span class="attr">cap_multiplier</span>: 1.5    <span class="comment">// Tối đa 1.5 lần thưởng KPI tối đa</span>
-  }
-}</div>
-
-  <h3>3.3. Kịch bản C: Tập đoàn — Ma trận phức tạp</h3>
-  <div class="code-block">
-<span class="code-label">Config — Enterprise (Matrix)</span>
-{
-  <span class="attr">formula_name</span>: <span class="string">'kpi_enterprise'</span>,
-  <span class="attr">config_json</span>: {
-    <span class="attr">method</span>: <span class="string">"matrix"</span>,
-    <span class="attr">components</span>: [
-      { <span class="attr">type</span>: <span class="string">"individual_kpi"</span>, <span class="attr">weight</span>: 0.60 },  <span class="comment">// 60% KPI cá nhân</span>
-      { <span class="attr">type</span>: <span class="string">"dept_kpi"</span>,       <span class="attr">weight</span>: 0.25 },  <span class="comment">// 25% KPI bộ phận</span>
-      { <span class="attr">type</span>: <span class="string">"company_kpi"</span>,    <span class="attr">weight</span>: 0.15 }   <span class="comment">// 15% KPI công ty (lợi nhuận)</span>
-    ],
-    <span class="attr">company_factor</span>: {
-      <span class="attr">source</span>: <span class="string">"profit_vs_target"</span>,  <span class="comment">// Lấy từ bảng company_targets</span>
-      <span class="attr">min</span>: 0.5, <span class="attr">max</span>: 1.5
-    },
-    <span class="attr">calibration</span>: <span class="keyword">true</span>   <span class="comment">// Bắt buộc calibration meeting trước khi chốt</span>
-  }
-}</div>
-
-  <div class="callout callout-warning">
-    <div class="callout-icon">!</div>
-    <div>
-      <strong>Lưu ý khi chuyển công ty:</strong> Luôn snapshot (lưu bản sao) config cũ trước khi import config mới. Dùng trường <code>effective_from</code> và <code>effective_to</code> để giữ lịch sử — điều này rất quan trọng khi bạn cần truy vết bảng lương cũ.
-    </div>
-  </div>
-</section>
-
-<!-- ==================== TÍNH LƯƠNG ==================== -->
-<section id="tinh-luong">
-  <div class="section-header">
-    <div class="section-number">04</div>
-    <h2>Code JavaScript — Engine tính lương</h2>
-    <p class="lead">Engine đọc config từ database, tính toán và lưu kết quả. Code này không cần sửa khi đổi công ty.</p>
-  </div>
-
-  <h3>4.1. Hàm tính lương GROSS → NET</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — payrollEngine.js</span>
-<span class="comment">/**
- * Tính bảng lương cho 1 nhân viên 1 kỳ
- * @param {Object} config — từ bảng payroll_formulas + salary_components
- * @param {Object} data   — lương CB, phụ cấp, KPI, chấm công...
- * @returns {Object}      — chi tiết từng khoản + net_salary
- */</span>
-<span class="keyword">async function</span> <span class="func">calculatePayroll</span>(userId, period, supabase) {
-  <span class="comment">// 1. Lấy config hiện hành</span>
-  <span class="keyword">const</span> { data: components } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'salary_components'</span>)
-    .<span class="func">select</span>(<span class="string">'*'</span>)
-    .<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>)
-    .<span class="func">order</span>(<span class="string">'sort_order'</span>);
-
-  <span class="keyword">const</span> { data: formula } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'payroll_formulas'</span>)
-    .<span class="func">select</span>(<span class="string">'*'</span>)
-    .<span class="func">eq</span>(<span class="string">'formula_type'</span>, <span class="string">'salary'</span>)
-    .<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>)
-    .<span class="func">lte</span>(<span class="string">'effective_from'</span>, period + <span class="string">'-01'</span>)
-    .<span class="func">or</span>(<span class="string">`effective_to.is.null,effective_to.gte.${period}-01`</span>)
-    .<span class="func">single</span>();
-
-  <span class="comment">// 2. Lấy dữ liệu nhân viên</span>
-  <span class="keyword">const</span> { data: salary } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'salaries'</span>)
-    .<span class="func">select</span>(<span class="string">'*'</span>)
-    .<span class="func">eq</span>(<span class="string">'user_id'</span>, userId)
-    .<span class="func">single</span>();
-
-  <span class="comment">// 3. Tính từng khoản</span>
-  <span class="keyword">const</span> context = {
-    BASE_SALARY: salary?.sal || 0,
-    ALLOWANCE:   salary?.al || 0,
-    KPI_BONUS:   <span class="keyword">await</span> <span class="func">calculateKPIBonus</span>(userId, period, supabase),
-    PERIOD:      period,
-  };
-
-  <span class="keyword">const</span> items = components.<span class="func">map</span>(comp => {
-    <span class="keyword">let</span> amount = 0;
-    <span class="keyword">if</span> (!comp.formula_expr) {
-      <span class="comment">// Nhập tay hoặc lấy từ context</span>
-      amount = context[comp.code] || 0;
-    } <span class="keyword">else</span> {
-      <span class="comment">// Đánh giá expression an toàn</span>
-      amount = <span class="func">safeEval</span>(comp.formula_expr, context);
-    }
-    <span class="keyword">return</span> {
-      component_code: comp.code,
-      component_name: comp.name_vi,
-      type: comp.type,
-      amount: <span class="func">Math.round</span>(amount),
-    };
-  });
-
-  <span class="comment">// 4. Tổng hợp</span>
-  <span class="keyword">const</span> gross = items.<span class="func">filter</span>(i =&gt; [<span class="string">'fixed'</span>,<span class="string">'variable'</span>,<span class="string">'allowance'</span>].<span class="func">includes</span>(i.type))
-                   .<span class="func">reduce</span>((s, i) =&gt; s + i.amount, 0);
-  <span class="keyword">const</span> deductions = items.<span class="func">filter</span>(i =&gt; [<span class="string">'deduction'</span>,<span class="string">'insurance'</span>,<span class="string">'tax'</span>].<span class="func">includes</span>(i.type))
-                          .<span class="func">reduce</span>((s, i) =&gt; s + i.amount, 0);
-  <span class="keyword">const</span> tax = <span class="func">calculateTax</span>(gross, supabase);  <span class="comment">// Tính thuế theo biểu lũy tiến config</span>
-  <span class="keyword">const</span> net = gross + deductions + tax;  <span class="comment">// deductions &amp; tax đã âm</span>
-
-  <span class="comment">// 5. Lưu vào payroll_records</span>
-  <span class="keyword">await</span> supabase.<span class="func">from</span>(<span class="string">'payroll_records'</span>).<span class="func">upsert</span>({
-    user_id: userId,
-    period: period,
-    base_salary: context.BASE_SALARY,
-    items: items,
-    gross_salary: gross,
-    total_deduction: deductions,
-    tax_amount: tax,
-    net_salary: net,
-    formula_used: formula?.config_json,
-    status: <span class="string">'calculated'</span>,
-  });
-
-  <span class="keyword">return</span> { items, gross, deductions, tax, net };
-}
-
-<span class="comment">// Đánh giá expression an toàn — KHÔNG dùng eval()</span>
-<span class="keyword">function</span> <span class="func">safeEval</span>(expr, context) {
-  <span class="comment">// Chỉ cho phép số, toán tử + - * / ( ), và biến từ context</span>
-  <span class="keyword">const</span> vars = <span class="func">Object.keys</span>(context).<span class="func">join</span>(<span class="string">','</span>);
-  <span class="keyword">const</span> vals = <span class="func">Object.values</span>(context);
-  <span class="keyword">const</span> fn = <span class="keyword">new</span> <span class="func">Function</span>(vars, <span class="string">`return (${expr})`</span>);
-  <span class="keyword">return</span> <span class="func">fn</span>(...vals);
-}</div>
-
-  <h3>4.2. Hàm tính thuế TNCN (configurable)</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — taxEngine.js</span>
-<span class="comment">// Bảng thuế lũy tiến — lưu trong DB, có thể cập nhật khi luật thay đổi</span>
-<span class="comment">// Bậc 1: đến 5tr: 5% | Bậc 2: 5-10tr: 10% | Bậc 3: 10-18tr: 15% ...</span>
-
-<span class="keyword">async function</span> <span class="func">calculateTax</span>(taxableIncome, supabase) {
-  <span class="keyword">const</span> { data: brackets } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'tax_brackets'</span>)
-    .<span class="func">select</span>(<span class="string">'*'</span>)
-    .<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>)
-    .<span class="func">order</span>(<span class="string">'bracket_order'</span>);
-
-  <span class="keyword">let</span> remaining = taxableIncome;
-  <span class="keyword">let</span> tax = 0;
-  <span class="keyword">for</span> (<span class="keyword">const</span> b <span class="keyword">of</span> brackets) {
-    <span class="keyword">const</span> range = b.upper_bound ? (b.upper_bound - b.lower_bound) : <span class="number">Infinity</span>;
-    <span class="keyword">const</span> taxable = <span class="func">Math.min</span>(remaining, range);
-    tax += taxable * b.rate;
-    remaining -= taxable;
-    <span class="keyword">if</span> (remaining &lt;= 0) <span class="keyword">break</span>;
-  }
-  <span class="keyword">return</span> -<span class="func">Math.round</span>(tax);  <span class="comment">// Trả về số âm (khấu trừ)</span>
-}
-
-<span class="comment">// SQL tạo bảng tax_brackets</span>
-<span class="comment">/*
-CREATE TABLE tax_brackets (
-  id SERIAL PRIMARY KEY,
-  bracket_order INT NOT NULL,
-  lower_bound NUMERIC NOT NULL,
-  upper_bound NUMERIC,          -- NULL = trở lên
-  rate NUMERIC NOT NULL,         -- 0.05, 0.10, 0.15...
-  description TEXT,
-  active BOOLEAN DEFAULT TRUE,
-  effective_from DATE DEFAULT '2020-07-01'
-);
-*/</span></div>
-</section>
-
-<!-- ==================== TÍNH KPI ==================== -->
-<section id="tinh-kpi">
-  <div class="section-header">
-    <div class="section-number">05</div>
-    <h2>Code JavaScript — Engine tính KPI</h2>
-    <p class="lead">Engine đọc KPI template, tính điểm và xếp loại. Hỗ trợ 4 phương pháp: Linear, Tiered, Matrix, OKR.</p>
-  </div>
-
-  <h3>5.1. Hàm tính KPI tổng hợp</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — kpiEngine.js</span>
-<span class="keyword">async function</span> <span class="func">calculateKPIBonus</span>(userId, period, supabase) {
-  <span class="comment">// 1. Lấy KPI results đã nhập</span>
-  <span class="keyword">const</span> { data: results } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'kpi_results'</span>)
-    .<span class="func">select</span>(<span class="string">'*, kpi_templates(kpi_items)'</span>)
-    .<span class="func">eq</span>(<span class="string">'user_id'</span>, userId)
-    .<span class="func">eq</span>(<span class="string">'period'</span>, period)
-    .<span class="func">eq</span>(<span class="string">'status'</span>, <span class="string">'approved'</span>);
-
-  <span class="keyword">if</span> (!results?.length) <span class="keyword">return</span> 0;
-
-  <span class="comment">// 2. Lấy công thức KPI hiện hành</span>
-  <span class="keyword">const</span> { data: kpiFormula } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'payroll_formulas'</span>)
-    .<span class="func">select</span>(<span class="string">'*'</span>)
-    .<span class="func">eq</span>(<span class="string">'formula_type'</span>, <span class="string">'kpi'</span>)
-    .<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>)
-    .<span class="func">lte</span>(<span class="string">'effective_from'</span>, period + <span class="string">'-01'</span>)
-    .<span class="func">order</span>(<span class="string">'effective_from'</span>, { ascending: <span class="keyword">false</span> })
-    .<span class="func">limit</span>(1)
-    .<span class="func">single</span>();
-
-  <span class="keyword">const</span> cfg = kpiFormula?.config_json || { <span class="attr">method</span>: <span class="string">'linear'</span>, <span class="attr">base_bonus_pct</span>: 0.20 };
-
-  <span class="comment">// 3. Tính tổng điểm KPI</span>
-  <span class="keyword">const</span> totalScore = results.<span class="func">reduce</span>((sum, r) =&gt; sum + (r.weighted_score || 0), 0);
-
-  <span class="comment">// 4. Lấy lương cơ bản để tính thưởng KPI tối đa</span>
-  <span class="keyword">const</span> { data: sal } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'salaries'</span>)
-    .<span class="func">select</span>(<span class="string">'sal'</span>)
-    .<span class="func">eq</span>(<span class="string">'user_id'</span>, userId)
-    .<span class="func">single</span>();
-
-  <span class="keyword">const</span> baseSalary = sal?.sal || 0;
-  <span class="keyword">const</span> maxBonus = baseSalary * (cfg.base_bonus_pct || 0.20);
-
-  <span class="comment">// 5. Áp dụng phương pháp tính</span>
-  <span class="keyword">let</span> bonus = 0;
-  <span class="keyword">switch</span> (cfg.method) {
-    <span class="keyword">case</span> <span class="string">'linear'</span>:
-      bonus = maxBonus * (totalScore / 100);
-      <span class="keyword">break</span>;
-
-    <span class="keyword">case</span> <span class="string">'tiered'</span>:
-      bonus = <span class="func">applyTieredFormula</span>(totalScore, maxBonus, cfg.tiers);
-      <span class="keyword">break</span>;
-
-    <span class="keyword">case</span> <span class="string">'matrix'</span>:
-      bonus = <span class="keyword">await</span> <span class="func">applyMatrixFormula</span>(userId, period, maxBonus, cfg, supabase);
-      <span class="keyword">break</span>;
-
-    <span class="keyword">case</span> <span class="string">'okr'</span>:
-      bonus = <span class="keyword">await</span> <span class="func">applyOKRFormula</span>(userId, period, maxBonus, cfg, supabase);
-      <span class="keyword">break</span>;
-
-    <span class="keyword">default</span>:
-      bonus = maxBonus * (totalScore / 100);
-  }
-
-  <span class="comment">// 6. Áp giới hạn nếu có</span>
-  <span class="keyword">if</span> (cfg.cap_multiplier) {
-    bonus = <span class="func">Math.min</span>(bonus, maxBonus * cfg.cap_multiplier);
-  }
-
-  <span class="keyword">return</span> <span class="func">Math.round</span>(bonus);
-}
-
-<span class="comment">// === Phương pháp Bậc thang ===</span>
-<span class="keyword">function</span> <span class="func">applyTieredFormula</span>(score, maxBonus, tiers) {
-  <span class="keyword">for</span> (<span class="keyword">const</span> tier <span class="keyword">of</span> tiers || []) {
-    <span class="keyword">if</span> (score &gt;= tier.min &amp;&amp; score &lt;= tier.max) {
-      <span class="keyword">return</span> maxBonus * tier.factor;
-    }
-  }
-  <span class="keyword">return</span> 0;
-}
-
-<span class="comment">// === Phương pháp Ma trận (cá nhân + bộ phận + công ty) ===</span>
-<span class="keyword">async function</span> <span class="func">applyMatrixFormula</span>(userId, period, maxBonus, cfg, supabase) {
-  <span class="keyword">let</span> weightedBonus = 0;
-
-  <span class="keyword">for</span> (<span class="keyword">const</span> comp <span class="keyword">of</span> cfg.components || []) {
-    <span class="keyword">let</span> score = 0;
-    <span class="keyword">if</span> (comp.type === <span class="string">'individual_kpi'</span>) {
-      <span class="keyword">const</span> { data } = <span class="keyword">await</span> supabase.<span class="func">from</span>(<span class="string">'kpi_results'</span>)
-        .<span class="func">select</span>(<span class="string">'weighted_score'</span>)
-        .<span class="func">eq</span>(<span class="string">'user_id'</span>, userId).<span class="func">eq</span>(<span class="string">'period'</span>, period);
-      score = data?.<span class="func">reduce</span>((s, r) =&gt; s + r.weighted_score, 0) || 0;
-    }
-    <span class="keyword">else if</span> (comp.type === <span class="string">'dept_kpi'</span>) {
-      score = <span class="keyword">await</span> <span class="func">getDepartmentKPIScore</span>(userId, period, supabase);
-    }
-    <span class="keyword">else if</span> (comp.type === <span class="string">'company_kpi'</span>) {
-      score = <span class="keyword">await</span> <span class="func">getCompanyKPIScore</span>(period, supabase);
-    }
-    weightedBonus += maxBonus * comp.weight * (score / 100);
-  }
-
-  <span class="comment">// Áp hệ số công ty</span>
-  <span class="keyword">const</span> companyFactor = <span class="keyword">await</span> <span class="func">getCompanyFactor</span>(period, cfg.company_factor, supabase);
-  <span class="keyword">return</span> weightedBonus * companyFactor;
-}</div>
-
-  <h3>5.2. Hàm xếp loại &amp; snapshot</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — kpiGrade.js</span>
-<span class="comment">// Xếp loại dựa trên config trong payroll_formulas</span>
-<span class="keyword">function</span> <span class="func">getKPIGrade</span>(score, gradeMap) {
-  <span class="keyword">const</span> grades = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>];
-  <span class="keyword">for</span> (<span class="keyword">const</span> grade <span class="keyword">of</span> grades) {
-    <span class="keyword">if</span> (score &gt;= (gradeMap[grade]?.min_score || 0)) {
-      <span class="keyword">return</span> { grade, label: gradeMap[grade]?.label || grade };
-    }
-  }
-  <span class="keyword">return</span> { grade: <span class="string">'E'</span>, label: <span class="string">'Chưa đạt'</span> };
-}
-
-<span class="comment">// Snapshot kết quả KPI để lưu vào payroll_records</span>
-<span class="keyword">async function</span> <span class="func">snapshotKPIResults</span>(userId, period, supabase) {
-  <span class="keyword">const</span> { data: results } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'kpi_results'</span>)
-    .<span class="func">select</span>(<span class="string">'kpi_code, target_value, actual_value, achievement_pct, weighted_score'</span>)
-    .<span class="func">eq</span>(<span class="string">'user_id'</span>, userId)
-    .<span class="func">eq</span>(<span class="string">'period'</span>, period)
-    .<span class="func">eq</span>(<span class="string">'status'</span>, <span class="string">'approved'</span>);
-
-  <span class="keyword">const</span> totalScore = results?.<span class="func">reduce</span>((s, r) =&gt; s + r.weighted_score, 0) || 0;
-  <span class="keyword">const</span> { data: formula } = <span class="keyword">await</span> supabase
-    .<span class="func">from</span>(<span class="string">'payroll_formulas'</span>)
-    .<span class="func">select</span>(<span class="string">'config_json'</span>)
-    .<span class="func">eq</span>(<span class="string">'formula_type'</span>, <span class="string">'kpi'</span>)
-    .<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>)
-    .<span class="func">single</span>();
-
-  <span class="keyword">const</span> gradeMap = formula?.config_json?.grade_map || {};
-  <span class="keyword">const</span> { grade, label } = <span class="func">getKPIGrade</span>(totalScore, gradeMap);
-
-  <span class="keyword">return</span> {
-    kpi_details: results,
-    total_score: <span class="func">Math.round</span>(totalScore * 100) / 100,
-    grade,
-    grade_label: label,
-    calculated_at: <span class="keyword">new</span> <span class="func">Date</span>().<span class="func">toISOString</span>(),
-  };
-}</div>
-</section>
-
-<!-- ==================== TÍCH HỢP ==================== -->
-<section id="tich-hop">
-  <div class="section-header">
-    <div class="section-number">06</div>
-    <h2>Tích hợp vào HR Portal hiện tại</h2>
-    <p class="lead">Cách nối các bảng mới vào code HR Portal bạn đang có, với tối thiểu thay đổi.</p>
-  </div>
-
-  <h3>6.1. Thay đổi trong DB object</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — Thêm vào DB object hiện tại</span>
-<span class="comment">// Trong file HR Portal, tìm dòng:</span>
-<span class="comment">// let DB={contracts:[],candidates:[],...,kpi_bonuses:[],...};</span>
-
-<span class="comment">// Thay bằng:</span>
-<span class="keyword">let</span> DB = {
-  contracts: [], candidates: [], tasks: [], assets: [], reviews: [],
-  interviews: [], work_shifts: [], overtime_records: [],
-  salary_advances: [], kpi_bonuses: [], leave_carryovers: [],
-  training_courses: [], onboarding_tasks: [], contract_addenda: [],
-  shift_assignments: [],
-  <span class="comment">// === THÊM MỚI ===</span>
-  salary_components: [],      <span class="comment">// Cấu hình khoản lương</span>
-  payroll_formulas: [],       <span class="comment">// Công thức tính</span>
-  kpi_definitions: [],          <span class="comment">// Định nghĩa KPI</span>
-  kpi_templates: [],            <span class="comment">// Template KPI theo bộ phận</span>
-  kpi_results: [],              <span class="comment">// Kết quả thực tế</span>
-  payroll_records: [],          <span class="comment">// Bảng lương đã tính</span>
-  tax_brackets: [],             <span class="comment">// Biểu thuế</span>
-};
-
-<span class="comment">// Trong hàm load data, thêm các bảng mới vào Promise.all:</span>
-<span class="keyword">const</span> r = <span class="keyword">await</span> <span class="func">Promise.all</span>([
-  <span class="comment">// ... các bảng cũ ...</span>
-  sb.<span class="func">from</span>(<span class="string">'salary_components'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>),
-  sb.<span class="func">from</span>(<span class="string">'payroll_formulas'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>),
-  sb.<span class="func">from</span>(<span class="string">'kpi_definitions'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>),
-  sb.<span class="func">from</span>(<span class="string">'kpi_templates'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>),
-  sb.<span class="func">from</span>(<span class="string">'kpi_results'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'period'</span>, currentPeriod),
-  sb.<span class="func">from</span>(<span class="string">'payroll_records'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'period'</span>, currentPeriod),
-  sb.<span class="func">from</span>(<span class="string">'tax_brackets'</span>).<span class="func">select</span>(<span class="string">'*'</span>).<span class="func">eq</span>(<span class="string">'active'</span>, <span class="keyword">true</span>).<span class="func">order</span>(<span class="string">'bracket_order'</span>),
-]);
-
-<span class="comment">// Gán vào DB:</span>
-DB.salary_components = X[<span class="number">42</span>] || [];
-DB.payroll_formulas  = X[<span class="number">43</span>] || [];
-DB.kpi_definitions   = X[<span class="number">44</span>] || [];
-DB.kpi_templates     = X[<span class="number">45</span>] || [];
-DB.kpi_results       = X[<span class="number">46</span>] || [];
-DB.payroll_records   = X[<span class="number">47</span>] || [];
-DB.tax_brackets      = X[<span class="number">48</span>] || [];</div>
-
-  <h3>6.2. Thay thế hàm tính KPI bonus cũ</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — Thay thế trong payroll</span>
-<span class="comment">// Tìm dòng cũ trong hàm tính lương:</span>
-<span class="comment">// const autoBonus=(DB.kpi_bonuses||[]).filter(...).reduce(...)</span>
-
-<span class="comment">// Thay bằng:</span>
-<span class="keyword">const</span> autoBonus = <span class="keyword">await</span> <span class="func">calculateKPIBonus</span>(e.id, m, sb);
-
-<span class="comment">// Hoặc nếu muốn dùng offline (không async trong hàm render):</span>
-<span class="keyword">const</span> payrollRec = DB.payroll_records.<span class="func">find</span>(p =&gt;
-  <span class="func">String</span>(p.user_id) === <span class="func">String</span>(e.id) &amp;&amp; p.period === m
-);
-<span class="keyword">const</span> autoBonus = payrollRec?.items?.
-  <span class="func">find</span>(i =&gt; i.component_code === <span class="string">'KPI_BONUS'</span>)?.amount || 0;</div>
-
-  <h3>6.3. UI mới: Trang cấu hình KPI &amp; Lương</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — Thêm route mới</span>
-<span class="comment">// Thêm vào ROUTES:</span>
-<span class="keyword">const</span> ROUTES = {
-  <span class="comment">// ... routes cũ ...</span>
-  salaryComponents: { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-coins'</span>, title: <span class="string">'Cấu hình khoản lương'</span> },
-  payrollFormulas:  { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-calculator'</span>, title: <span class="string">'Công thức lương'</span> },
-  kpiDefinitions:   { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-target'</span>, title: <span class="string">'Định nghĩa KPI'</span> },
-  kpiTemplates:     { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-template'</span>, title: <span class="string">'Template KPI'</span> },
-  kpiResults:       { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-chart-bar'</span>, title: <span class="string">'Kết quả KPI'</span> },
-  payrollRecords:   { view: <span class="string">'module'</span>, mgmt: <span class="keyword">true</span>, icon: <span class="string">'ti-receipt'</span>, title: <span class="string">'Bảng lương đã tính'</span> },
-};
-
-<span class="comment">// Thêm vào HRX (module definitions):</span>
-<span class="keyword">const</span> HRX = {
-  <span class="comment">// ... modules cũ ...</span>
-  salaryComponents: {
-    titleKey: <span class="string">'title_salaryComponents'</span>,
-    tb: <span class="string">'salary_components'</span>,
-    cols: [
-      [<span class="string">'code'</span>, <span class="string">'Mã khoản'</span>, <span class="string">'text'</span>],
-      [<span class="string">'name_vi'</span>, <span class="string">'Tên khoản'</span>, <span class="string">'text'</span>],
-      [<span class="string">'type'</span>, <span class="string">'Loại'</span>, <span class="string">'select'</span>, [<span class="string">'fixed'</span>,<span class="string">'variable'</span>,<span class="string">'allowance'</span>,<span class="string">'deduction'</span>,<span class="string">'tax'</span>,<span class="string">'insurance'</span>]],
-      [<span class="string">'is_taxable'</span>, <span class="string">'Tính thuế'</span>, <span class="string">'bool'</span>],
-      [<span class="string">'is_insurable'</span>, <span class="string">'Tính BHXH'</span>, <span class="string">'bool'</span>],
-      [<span class="string">'formula_expr'</span>, <span class="string">'Công thức'</span>, <span class="string">'text'</span>],
-      [<span class="string">'sort_order'</span>, <span class="string">'Thứ tự'</span>, <span class="string">'num'</span>],
-      [<span class="string">'active'</span>, <span class="string">'Hoạt động'</span>, <span class="string">'bool'</span>],
-    ]
-  },
-  payrollFormulas: {
-    titleKey: <span class="string">'title_payrollFormulas'</span>,
-    tb: <span class="string">'payroll_formulas'</span>,
-    cols: [
-      [<span class="string">'formula_name'</span>, <span class="string">'Tên công thức'</span>, <span class="string">'text'</span>],
-      [<span class="string">'formula_type'</span>, <span class="string">'Loại'</span>, <span class="string">'select'</span>, [<span class="string">'salary'</span>,<span class="string">'kpi'</span>,<span class="string">'tax'</span>]],
-      [<span class="string">'config_json'</span>, <span class="string">'Cấu hình JSON'</span>, <span class="string">'text'</span>],
-      [<span class="string">'effective_from'</span>, <span class="string">'Hiệu lực từ'</span>, <span class="string">'date'</span>],
-      [<span class="string">'effective_to'</span>, <span class="string">'Hiệu lực đến'</span>, <span class="string">'date'</span>],
-      [<span class="string">'active'</span>, <span class="string">'Hoạt động'</span>, <span class="string">'bool'</span>],
-    ]
-  },
-  kpiDefinitions: {
-    titleKey: <span class="string">'title_kpiDefinitions'</span>,
-    tb: <span class="string">'kpi_definitions'</span>,
-    cols: [
-      [<span class="string">'code'</span>, <span class="string">'Mã KPI'</span>, <span class="string">'text'</span>],
-      [<span class="string">'name_vi'</span>, <span class="string">'Tên KPI'</span>, <span class="string">'text'</span>],
-      [<span class="string">'unit'</span>, <span class="string">'Đơn vị'</span>, <span class="string">'text'</span>],
-      [<span class="string">'formula'</span>, <span class="string">'Công thức'</span>, <span class="string">'text'</span>],
-      [<span class="string">'data_source'</span>, <span class="string">'Nguồn dữ liệu'</span>, <span class="string">'select'</span>, [<span class="string">'manual'</span>,<span class="string">'sales_db'</span>,<span class="string">'survey'</span>,<span class="string">'system'</span>]],
-      [<span class="string">'active'</span>, <span class="string">'Hoạt động'</span>, <span class="string">'bool'</span>],
-    ]
-  },
-  kpiTemplates: {
-    titleKey: <span class="string">'title_kpiTemplates'</span>,
-    tb: <span class="string">'kpi_templates'</span>,
-    cols: [
-      [<span class="string">'template_name'</span>, <span class="string">'Tên template'</span>, <span class="string">'text'</span>],
-      [<span class="string">'department'</span>, <span class="string">'Phòng ban'</span>, <span class="string">'text'</span>],
-      [<span class="string">'job_level'</span>, <span class="string">'Cấp bậc'</span>, <span class="string">'select'</span>, [<span class="string">'staff'</span>,<span class="string">'senior'</span>,<span class="string">'manager'</span>,<span class="string">'director'</span>]],
-      [<span class="string">'kpi_items'</span>, <span class="string">'Các KPI (JSON)'</span>, <span class="string">'text'</span>],
-      [<span class="string">'effective_from'</span>, <span class="string">'Hiệu lực từ'</span>, <span class="string">'date'</span>],
-      [<span class="string">'active'</span>, <span class="string">'Hoạt động'</span>, <span class="string">'bool'</span>],
-    ]
-  },
-  kpiResults: {
-    titleKey: <span class="string">'title_kpiResults'</span>,
-    tb: <span class="string">'kpi_results'</span>,
-    cols: [
-      [<span class="string">'user_id'</span>, <span class="string">'Nhân viên'</span>, <span class="string">'emp'</span>],
-      [<span class="string">'period'</span>, <span class="string">'Kỳ'</span>, <span class="string">'text'</span>],
-      [<span class="string">'kpi_code'</span>, <span class="string">'Mã KPI'</span>, <span class="string">'text'</span>],
-      [<span class="string">'target_value'</span>, <span class="string">'Mục tiêu'</span>, <span class="string">'num'</span>],
-      [<span class="string">'actual_value'</span>, <span class="string">'Thực tế'</span>, <span class="string">'num'</span>],
-      [<span class="string">'achievement_pct'</span>, <span class="string">'Tỷ lệ %'</span>, <span class="string">'num'</span>],
-      [<span class="string">'status'</span>, <span class="string">'Trạng thái'</span>, <span class="string">'select'</span>, [<span class="string">'draft'</span>,<span class="string">'submitted'</span>,<span class="string">'approved'</span>,<span class="string">'disputed'</span>]],
-      [<span class="string">'note'</span>, <span class="string">'Ghi chú'</span>, <span class="string">'text'</span>],
-    ]
-  },
-};</div>
-
-  <h3>6.4. Nút "Tính lương tháng" trong UI</h3>
-  <div class="code-block">
-<span class="code-label">JavaScript — Thêm nút tính lương</span>
-<span class="comment">// Trong trang Bảng lương (pay), thêm nút:</span>
-<span class="comment">// &lt;button class="p" onclick="runMonthlyPayroll()"&gt;Tính lương tháng&lt;/button&gt;</span>
-
-<span class="keyword">async function</span> <span class="func">runMonthlyPayroll</span>() {
-  <span class="keyword">const</span> period = PM;  <span class="comment">// Biến tháng hiện tại, ví dụ '2024-01'</span>
-  <span class="keyword">const</span> employees = P.<span class="func">filter</span>(e =&gt; e.status !== <span class="string">'terminated'</span>);
-  <span class="keyword">const</span> results = [];
-
-  <span class="keyword">for</span> (<span class="keyword">const</span> emp <span class="keyword">of</span> employees) {
-    <span class="keyword">try</span> {
-      <span class="keyword">const</span> payroll = <span class="keyword">await</span> <span class="func">calculatePayroll</span>(emp.id, period, sb);
-      results.<span class="func">push</span>({ name: emp.name, status: <span class="string">'OK'</span>, net: payroll.net });
-    } <span class="keyword">catch</span> (err) {
-      results.<span class="func">push</span>({ name: emp.name, status: <span class="string">'Lỗi'</span>, error: err.message });
-    }
-  }
-
-  <span class="comment">// Hiển thị kết quả</span>
-  MSG = <span class="string">`Đã tính lương ${results.filter(r =&gt; r.status === 'OK').length}/${results.length} nhân viên`</span>;
-  <span class="func">render</span>();
-}</div>
-
-  <div class="callout callout-success">
-    <div class="callout-icon">OK</div>
-    <div>
-      <strong>Tóm tắt những gì bạn cần làm:</strong><br>
-      1. Chạy các lệnh SQL tạo bảng trong Supabase SQL Editor<br>
-      2. Copy các hàm JavaScript (calculatePayroll, calculateKPIBonus, safeEval...) vào file HR Portal<br>
-      3. Thêm routes và HRX modules để có UI quản lý<br>
-      4. Thay thế logic tính KPI bonus cũ bằng engine mới<br>
-      5. Nhập config phù hợp với công ty bạn đang làm việc<br><br>
-      Khi chuyển công ty: chỉ cần xóa dữ liệu config cũ, nhập config mới. Code không đổi.
-    </div>
-  </div>
-</section>
-
-<!-- ==================== CHECKLIST ==================== -->
-<section id="checklist">
-  <div class="section-header">
-    <div class="section-number">07</div>
-    <h2>Checklist triển khai</h2>
-    <p class="lead">Dùng checklist này để đảm bảo không bỏ sót bước nào khi tích hợp vào HR Portal.</p>
-  </div>
-
-  <div class="card-grid">
-    <div class="card">
-      <h4 style="margin-top:0">Database</h4>
-      <ul style="margin:10px 0 0 18px;font-size:0.9rem;color:var(--ink-secondary);line-height:2">
-        <li>Tạo 7 bảng mới trong Supabase</li>
-        <li>Thiết lập RLS policies cho từng bảng</li>
-        <li>Tạo indexes trên user_id, period, status</li>
-        <li>Insert dữ liệu mẫu để test</li>
-        <li>Backup schema sau khi hoàn thành</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4 style="margin-top:0">Backend (JS Engine)</h4>
-      <ul style="margin:10px 0 0 18px;font-size:0.9rem;color:var(--ink-secondary);line-height:2">
-        <li>Copy safeEval (KHÔNG dùng eval thường)</li>
-        <li>Test calculatePayroll với dữ liệu mẫu</li>
-        <li>Test calculateKPIBonus với 4 phương pháp</li>
-        <li>Test calculateTax với biểu thuế mới nhất</li>
-        <li>Thêm error handling và rollback</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4 style="margin-top:0">Frontend (HR Portal)</h4>
-      <ul style="margin:10px 0 0 18px;font-size:0.9rem;color:var(--ink-secondary);line-height:2">
-        <li>Thêm routes mới vào ROUTES object</li>
-        <li>Thêm HRX module definitions</li>
-        <li>Thêm menu items trong sidebar</li>
-        <li>Thêm nút "Tính lương tháng"</li>
-        <li>Thêm trang xem phiếu lương cho nhân viên</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4 style="margin-top:0">Khi chuyển công ty</h4>
-      <ul style="margin:10px 0 0 18px;font-size:0.9rem;color:var(--ink-secondary);line-height:2">
-        <li>Export config cũ (JSON backup)</li>
-        <li>Truncate dữ liệu config cũ</li>
-        <li>Insert config mới theo chính sách công ty mới</li>
-        <li>Test với 1 nhân viên trước</li>
-        <li>Chạy thử 1 kỳ lương trước khi chính thức</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<footer style="text-align:center;padding:40px 24px;border-top:1px solid var(--line);color:var(--muted);font-size:0.85rem">
-  <p>HR Portal — Kiến trúc Bảng lương &amp; KPI Configurable</p>
-  <p style="margin-top:6px">In trang này (Ctrl+P) để lưu dưới dạng PDF.</p>
-</footer>
-
+   </div>
+   <div class="card panel"><h3>Quy trình xử lý</h3><div class="form-row">
+    <div class="field"><label>1. Dữ liệu nhân sự</label><div class="pill green">Đã kiểm tra</div></div>
+    <div class="field"><label>2. Công & OT</label><div class="pill green">Đã đồng bộ</div></div>
+    <div class="field"><label>3. KPI & hoa hồng</label><div class="pill orange">Cần xác nhận</div></div>
+    <div class="field"><label>4. Tính Gross / Net</label><div class="pill gray">Chưa chạy</div></div>
+    <div class="field"><label>5. Đối soát & duyệt</label><div class="pill gray">Chưa thực hiện</div></div>
+   </div><div class="actions" style="margin-top:20px"><button class="btn soft" onclick="showToast('Demo: đã chạy kiểm tra dữ liệu đầu vào.')">✓ Kiểm tra dữ liệu</button><button class="btn primary" onclick="showToast('Demo: chức năng tính lương chưa kết nối Payroll Engine.')">▶ Mô phỏng tính lương</button></div></div>
+   <div class="notice"><span>ⓘ</span><span>Đây là màn hình mô phỏng quy trình. Chưa triển khai công thức Gross-to-Net/Net-to-Gross, BHXH, thuế TNCN hoặc quy tắc OT dùng cho tính lương thật.</span></div>
+  </section>
+
+  <section class="page" id="page-imports">
+   <div class="page-head"><div><div class="eyebrow">POLICY MIGRATION</div><h1>Policy Import Center</h1><div class="subtitle">Đưa chính sách lương sẵn có của doanh nghiệp vào HR Portal mà không ghi đè dữ liệu đang vận hành.</div></div><button class="btn primary" onclick="document.getElementById('fileInput').click()">⇧ Tải tệp lên</button><input type="file" id="fileInput" hidden accept=".xlsx,.xls,.csv,.pdf,.doc,.docx" onchange="fileChosen(this)"></div>
+   <div class="grid kpi-grid">
+    <div class="card panel"><div class="stat-icon">01</div><h3 style="margin-top:12px">Tải tài liệu</h3><p>Excel, CSV, Word, PDF hoặc nhập cấu hình thủ công.</p></div>
+    <div class="card panel"><div class="stat-icon">02</div><h3 style="margin-top:12px">Mapping & chuẩn hóa</h3><p>Ánh xạ cột, thuật ngữ, thành phần và cách tính sang mô hình nội bộ.</p></div>
+    <div class="card panel"><div class="stat-icon">03</div><h3 style="margin-top:12px">Kiểm tra & mô phỏng</h3><p>Phát hiện dữ liệu thiếu, xung đột, sai công thức; so sánh kết quả.</p></div>
+   </div>
+   <div class="card panel"><h3>Ba loại dữ liệu cần phân biệt</h3><div class="form-row"><div class="field"><label>POLICY IMPORT</label><p>Chính sách, cấu trúc, thành phần, công thức, quy tắc.</p></div><div class="field"><label>EMPLOYEE DATA IMPORT</label><p>Hồ sơ nhân viên, hợp đồng, mức lương được gán.</p></div><div class="field"><label>HISTORICAL PAYROLL IMPORT</label><p>Kết quả bảng lương đã chốt để tra cứu và đối soát.</p></div></div></div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Lịch sử import</div><div class="card-sub">Không tự động kích hoạt sau khi tải tệp.</div></div></div><table><thead><tr><th>TÊN TỆP</th><th>LOẠI</th><th>NGÀY TẢI</th><th>TRẠNG THÁI</th></tr></thead><tbody><tr><td><b>Salary_Policy_2026.xlsx</b></td><td>Policy</td><td>06/11/2026</td><td><span class="pill green">Đã mô phỏng</span></td></tr><tr><td><b>Allowance_List_Q4.xlsx</b></td><td>Policy</td><td>04/11/2026</td><td><span class="pill orange">Chờ mapping</span></td></tr></tbody></table></div>
+  </section>
+
+  <section class="page" id="page-reports">
+   <div class="page-head"><div><div class="eyebrow">ANALYTICS</div><h1>Báo cáo & phân tích</h1><div class="subtitle">Phân tích chi phí nhân sự, cơ cấu thu nhập và mức độ sử dụng ngân sách.</div></div><button class="btn" onclick="showToast('Demo: báo cáo đã sẵn sàng để xuất.')">↧ Xuất dữ liệu</button></div>
+   <div class="grid stats"><div class="card stat"><div class="stat-top">Tổng chi phí nhân sự</div><div class="stat-value">5,16 tỷ</div><div class="stat-foot">Bao gồm chi phí doanh nghiệp giả lập</div></div><div class="card stat"><div class="stat-top">Chi phí / nhân viên</div><div class="stat-value">20,8 triệu</div><div class="stat-foot">Bình quân kỳ hiện tại</div></div><div class="card stat"><div class="stat-top">Tỷ lệ KPI / Gross</div><div class="stat-value">16,0%</div><div class="stat-foot">Theo kế hoạch demo</div></div><div class="card stat"><div class="stat-top">Vượt ngân sách</div><div class="stat-value">0,8%</div><div class="stat-foot"><span class="pill orange">Cần theo dõi</span></div></div></div>
+   <div class="card panel"><h3>Nhóm báo cáo dự kiến</h3><div class="form-row"><div class="field"><label>PAYROLL COST</label><p>Quỹ lương, chi phí theo phòng ban, biến động kỳ.</p></div><div class="field"><label>PAY EQUITY</label><p>So sánh mức lương theo grade, vị trí, thâm niên.</p></div><div class="field"><label>KPI PAYOUT</label><p>Tỷ lệ đạt KPI, phân bổ thưởng, ngân sách.</p></div><div class="field"><label>COMPLIANCE</label><p>Kiểm tra dữ liệu, phiên bản chính sách, lịch sử duyệt.</p></div></div></div>
+  </section>
+
+  <section class="page" id="page-policies">
+   <div class="page-head"><div><div class="eyebrow">POLICY & FORMULA ENGINE</div><h1>Chính sách & công thức</h1><div class="subtitle">Quản lý quy tắc có phiên bản, ngày hiệu lực và quy trình phê duyệt.</div></div><button class="btn primary" onclick="openModal('newPolicy')">＋ Tạo chính sách</button></div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Danh sách chính sách</div><div class="card-sub">Phiên bản cũ phải được giữ lại để tái hiện bảng lương lịch sử.</div></div></div><table><thead><tr><th>MÃ CHÍNH SÁCH</th><th>TÊN</th><th>PHIÊN BẢN</th><th>HIỆU LỰC</th><th>TRẠNG THÁI</th></tr></thead><tbody><tr><td>COMP-GEN</td><td><b>Compensation General</b></td><td>v2.1</td><td>01/01/2026</td><td><span class="pill green">Đang áp dụng</span></td></tr><tr><td>KPI-SALES</td><td><b>Sales KPI Payout</b></td><td>v1.3</td><td>01/04/2026</td><td><span class="pill green">Đang áp dụng</span></td></tr><tr><td>OT-RULE</td><td><b>Overtime Rule Set</b></td><td>v1.0</td><td>01/01/2026</td><td><span class="pill green">Đang áp dụng</span></td></tr></tbody></table></div>
+   <div class="card panel" style="margin-top:16px"><h3>Nguyên tắc Formula Engine</h3><p>Chỉ cho phép biểu thức có giới hạn như biến, số học, IF, AND, OR, MIN, MAX, ROUND, ABS. Phải kiểm tra biến đầu vào, kiểu dữ liệu, chia cho 0, vòng lặp phụ thuộc và độ phức tạp. Không dùng eval(), Function() hoặc chạy JavaScript tùy ý từ người dùng.</p></div>
+  </section>
+
+  <section class="page" id="page-audit">
+   <div class="page-head"><div><div class="eyebrow">GOVERNANCE</div><h1>Lịch sử thay đổi</h1><div class="subtitle">Theo dõi ai thay đổi, thay đổi nội dung gì, thời điểm và người phê duyệt.</div></div></div>
+   <div class="card table-card"><div class="card-head"><div><div class="card-title">Audit trail</div><div class="card-sub">Dữ liệu minh họa.</div></div></div><table><thead><tr><th>THỜI GIAN</th><th>NGƯỜI THỰC HIỆN</th><th>ĐỐI TƯỢNG</th><th>HÀNH ĐỘNG</th><th>TRẠNG THÁI</th></tr></thead><tbody><tr><td>07/11/2026 09:40</td><td>HR Admin</td><td>Salary Structure v2.1</td><td>Cập nhật cấu trúc</td><td><span class="pill green">Đã duyệt</span></td></tr><tr><td>06/11/2026 16:15</td><td>C&B Specialist</td><td>Payroll 11/2026</td><td>Chạy kiểm tra</td><td><span class="pill orange">Đang xử lý</span></td></tr><tr><td>06/11/2026 10:02</td><td>HR Manager</td><td>KPI Sales v1.3</td><td>Phê duyệt chính sách</td><td><span class="pill green">Hoàn tất</span></td></tr></tbody></table></div>
+  </section>
+ </div>
 </main>
-
+</div>
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modal-head"><b id="modalTitle">Tạo mới</b><button class="icon-btn" onclick="closeModal()">✕</button></div><div class="modal-body" id="modalBody"></div><div class="modal-foot"><button class="btn" onclick="closeModal()">Hủy</button><button class="btn primary" onclick="saveModal()">Lưu bản nháp</button></div></div></div>
+<div class="toast" id="toast"></div>
 <script>
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', e => {
-    const id = link.getAttribute('href');
-    if (id.startsWith('#')) {
-      e.preventDefault();
-      document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
-    }
-  });
-}, { rootMargin: '-20% 0px -60% 0px' });
-sections.forEach(s => observer.observe(s));
+const titles={overview:'Tổng quan',structures:'Cấu trúc lương',components:'Thành phần lương',kpi:'KPI Compensation',employees:'Lương nhân viên',payroll:'Xử lý bảng lương',imports:'Policy Import Center',reports:'Báo cáo & phân tích',policies:'Chính sách & công thức',audit:'Lịch sử thay đổi'};
+function navigate(page){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+ const target=document.getElementById('page-'+page);if(target)target.classList.add('active');
+ document.getElementById('crumb').textContent=titles[page]||'Tổng quan';
+ document.getElementById('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>navigate(n.dataset.page)));
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
+function filterTable(id,q){const term=q.toLowerCase();document.querySelectorAll('#'+id+' tbody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(term)?'':'none')}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+let currentModal='';
+const modalConfigs={
+ newPayroll:{title:'Tạo kỳ lương mới',fields:[['Tên kỳ lương','Tháng 12/2026'],['Ngày bắt đầu','01/12/2026'],['Ngày kết thúc','31/12/2026']]},
+ newStructure:{title:'Tạo cấu trúc lương',fields:[['Tên cấu trúc','Ví dụ: Office Standard'],['Mã cấu trúc','STR-OFF-005'],['Nhóm áp dụng','Khối văn phòng']]},
+ newComponent:{title:'Thêm thành phần lương',fields:[['Tên thành phần','Ví dụ: Phụ cấp trách nhiệm'],['Mã thành phần','RESP'],['Cách tính','Cố định / Công thức / Theo tỷ lệ']]},
+ newKpi:{title:'Tạo chính sách KPI Compensation',fields:[['Tên chính sách','Ví dụ: KPI Khối văn phòng'],['Phương pháp chi trả','Fixed / Tier / Formula / Hybrid'],['Ngày hiệu lực','01/12/2026']]},
+ assignSalary:{title:'Gán cấu trúc lương cho nhân viên',fields:[['Mã nhân viên','NV001'],['Cấu trúc lương','Office Standard'],['Ngày hiệu lực','01/12/2026']]},
+ newPolicy:{title:'Tạo chính sách',fields:[['Tên chính sách','Ví dụ: Compensation General'],['Mã chính sách','COMP-GEN'],['Ngày hiệu lực','01/12/2026']]}
+};
+function openModal(key){currentModal=key;const c=modalConfigs[key];document.getElementById('modalTitle').textContent=c.title;document.getElementById('modalBody').innerHTML='<div class="form-row">'+c.fields.map((f,i)=>'<div class="field"><label>'+f[0]+'</label><input id="modalField'+i+'" placeholder="'+f[1]+'"></div>').join('')+'</div><p style="font-size:10px;color:#98a2b3;margin-top:15px">Bản demo chỉ lưu trạng thái tạm thời trên giao diện, chưa ghi vào cơ sở dữ liệu.</p>';document.getElementById('modalBackdrop').classList.add('show')}
+function closeModal(){document.getElementById('modalBackdrop').classList.remove('show')}
+function saveModal(){const c=modalConfigs[currentModal];const vals=c.fields.map((f,i)=>document.getElementById('modalField'+i).value.trim());if(vals.every(v=>!v)){showToast('Nhập ít nhất một thông tin trước khi lưu.');return}closeModal();showToast('Đã lưu bản nháp demo: '+c.title)}
+function fileChosen(input){if(input.files&&input.files[0]){showToast('Đã chọn tệp: '+input.files[0].name+' · Demo chưa tải lên máy chủ.');input.value=''}}
 </script>
-
 </body>
 </html>
