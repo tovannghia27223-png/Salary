@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR Portal — Adaptive Payroll Engine for All Enterprise Types</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root {
+  --bg:#f5f5f7;--bg-elev:#fff;--cd:rgba(255,255,255,.72);--cd-solid:#fff;
+  --tx:#1d1d1f;--mu:#6e6e73;--bd:rgba(0,0,0,.07);--bd-strong:rgba(0,0,0,.12);
+  --ac:#0071e3;--ac2:#0077ed;--ac-soft:rgba(0,113,227,.10);
+  --ok:#30b14b;--ok-soft:rgba(48,177,75,.10);
+  --no:#ff3b30;--no-soft:rgba(255,59,48,.10);
+  --wa:#ff9500;--wa-soft:rgba(255,149,0,.10);
+  --sh-sm:0 1px 2px rgba(0,0,0,.04);--sh:0 2px 8px rgba(0,0,0,.04),0 12px 32px rgba(0,0,0,.06);
+  --sh-lg:0 4px 16px rgba(0,0,0,.06),0 24px 60px rgba(0,0,0,.10);
+  --r-sm:10px;--r:14px;--r-lg:20px;--r-xl:28px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Be Vietnam Pro",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000;--bg-elev:#1c1c1e;--cd:rgba(28,28,30,.72);--cd-solid:#1c1c1e;
+    --tx:#f5f5f7;--mu:#98989d;--bd:rgba(255,255,255,.08);--bd-strong:rgba(255,255,255,.16);
+    --ac:#0a84ff;--ac2:#3395ff;--ac-soft:rgba(10,132,255,.16);
+    --ok:#30d158;--ok-soft:rgba(48,209,88,.16);
+    --no:#ff453a;--no-soft:rgba(255,69,58,.16);
+    --wa:#ff9f0a;--wa-soft:rgba(255,159,10,.16);
+    --sh:0 2px 8px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.5);
+    --sh-lg:0 4px 16px rgba(0,0,0,.5),0 24px 60px rgba(0,0,0,.7);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh;background:var(--bg)}
+aside{background:var(--cd);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);
+  border-right:1px solid var(--bd);padding:20px 14px 20px;display:flex;flex-direction:column;gap:2px;
+  position:sticky;top:0;height:100vh;overflow-y:auto}
+aside::-webkit-scrollbar{width:0}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 22px;font-size:16px;font-weight:700;letter-spacing:-.02em}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0a84ff,#5e5ce6);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;box-shadow:0 4px 12px rgba(10,132,255,.35)}
+
+.ni{display:flex;align-items:center;gap:11px;border:0;background:transparent;text-align:left;padding:9px 12px;
+  border-radius:10px;color:var(--tx);font-weight:500;width:100%;font-size:13.5px;transition:background .18s,color .18s;cursor:pointer}
+.ni i{font-size:18px}.ni:hover{background:var(--ac-soft)}.ni.on{background:var(--ac-soft);color:var(--ac);font-weight:600}
+.sl{font-size:11px;color:var(--mu);font-weight:700;padding:14px 12px 4px;text-transform:uppercase;letter-spacing:.06em}
+
+section{background:var(--bg);min-width:0;display:flex;flex-direction:column}
+main{padding:20px 32px 40px;flex:1;width:100%;max-width:1400px;margin:0 auto}
+
+.top{position:fixed;top:0;left:270px;right:0;z-index:50;padding:12px 32px;
+  background:rgba(245,245,247,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);pointer-events:none}
+.topbar{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:10px 18px;
+  background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(24px);
+  border:1px solid rgba(0,0,0,.06);border-radius:18px;box-shadow:var(--sh-sm);max-width:1100px;margin:0 auto}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .topbar{background:rgba(28,28,30,.78);border-color:rgba(255,255,255,.08)}}
+.tb-title{font-size:15px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-actions{display:flex;gap:6px}
+.tb-btn{height:36px;padding:0 14px;border-radius:10px;border:0;background:rgba(120,120,128,.08);
+  color:var(--tx);font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:6px}
+.tb-btn:hover{background:rgba(120,120,128,.16)}.tb-btn i{font-size:16px}
+.tb-btn.p{background:var(--ac);color:#fff}.tb-btn.p:hover{background:var(--ac2)}
+
+.cd{background:var(--cd-solid);border:1px solid var(--bd);border-radius:var(--r-lg);padding:22px;margin-bottom:18px;box-shadow:var(--sh-sm)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .cd{background:var(--bg-elev)}}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.g .cd{margin:0}
+
+.st{border-top:0;position:relative;overflow:hidden}
+.st::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c,var(--ac));border-radius:var(--r-lg) var(--r-lg) 0 0}
+.st b{display:block;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-top:4px}
+.st .lbl{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em}
+
+.tw{overflow-x:auto;max-width:100%;border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh-sm);background:var(--cd-solid);margin:16px 0}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:11.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);white-space:nowrap;transition:background .2s}
+th{color:#fff;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.03em;
+  background:var(--ac);position:sticky;top:0;z-index:10;text-align:center}
+
+th:nth-child(1), td:nth-child(1){position:sticky;left:0;z-index:11;background:var(--cd-solid)}
+th:nth-child(2), td:nth-child(2){position:sticky;left:65px;z-index:11;background:var(--cd-solid)}
+th:nth-child(1), th:nth-child(2){background:var(--ac);z-index:12}
+
+td{text-align:center}td:first-child,th:first-child{text-align:left}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--font-mono)}
+tbody tr:hover td{background:var(--ac-soft) !important}
+
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.f label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:500}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--cd-solid);border:1px solid var(--bd-strong);
+  border-radius:var(--r-sm);padding:9px 12px;width:100%}
+
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-size:10.5px;font-weight:700}
+.tag-blue{background:var(--ac-soft);color:var(--ac)}.tag-green{background:var(--ok-soft);color:var(--ok)}
+.tag-orange{background:var(--wa-soft);color:var(--wa)}.tag-red{background:var(--no-soft);color:var(--no)}
+.tag-gray{background:rgba(120,120,128,.12);color:var(--mu)}
+
+.callout{display:flex;gap:12px;padding:14px 18px;border-radius:var(--r);margin:16px 0;font-size:13px}
+.callout-info{background:var(--ac-soft);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent)}
+.callout-warning{background:var(--wa-soft);border:1px solid color-mix(in srgb,var(--wa) 20%,transparent)}
+
+.code-block{background:#1e1e2e;color:#cdd6f4;border-radius:var(--r);padding:18px 20px;margin:16px 0;
+  font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto}
+.pg-h{margin-bottom:20px}.pg-h h1{font-size:26px;font-weight:800;margin:0 0 4px}.pg-h p{color:var(--mu);margin:0;font-size:13.5px}
+.sec-title{display:flex;align-items:center;gap:10px;margin:24px 0 14px;font-size:17px;font-weight:700}
+.sec-title::before{content:"";width:4px;height:1.1em;background:var(--ac);border-radius:4px}
+.hide{display:none !important}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-card{background:var(--cd-solid);border:1px solid var(--bd);border-radius:var(--r-xl);width:100%;max-width:640px;max-height:90vh;overflow-y:auto;padding:28px}
+.modal-card .close{float:right;background:transparent;border:0;font-size:20px;color:var(--mu);cursor:pointer}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.search-wrap{flex:1;min-width:220px;position:relative}
+.search-wrap input{padding-left:36px}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--mu);font-size:16px}
+.col-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.col-toggle label{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 10px;border-radius:8px;background:rgba(120,120,128,.08);cursor:pointer}
+.col-toggle input{width:auto;margin:0}
+
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{display:none}.top{left:0}main{padding:70px 16px 40px}}
+
+@media print{
+  .no-print, aside, .top, .toolbar, .col-toggle, .modal{display:none !important}
+  .app{grid-template-columns:1fr}
+  main{padding:0;max-width:100%}
+  .cd{box-shadow:none;border:1px solid #ddd}
+  .tw{overflow:visible}
+  th{background:#333 !important;color:#fff !important}
+  td,th{border-color:#ddd !important}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside>
+    <div class="brand">
+      <div class="logo">HR</div>
+      <div>
+        <div style="font-weight:800;font-size:15px">HR Portal</div>
+        <div style="font-size:11px;color:var(--mu)">Adaptive Payroll Engine</div>
+      </div>
+    </div>
+
+    <div class="sl">Doanh nghiệp</div>
+    <div style="padding:0 10px 10px">
+      <select id="companyProfile" onchange="changeProfile()" style="font-size:13px;padding:8px 10px">
+        <option value="fdi">FDI / Liên doanh</option>
+        <option value="state">Doanh nghiệp Nhà nước</option>
+        <option value="private">Doanh nghiệp Tư nhân</option>
+        <option value="startup">Startup / Công nghệ</option>
+      </select>
+      <div id="profileDesc" style="font-size:12px;color:var(--mu);margin-top:6px;line-height:1.4"></div>
+    </div>
+
+    <div class="sl">Cẩm nang Luật &amp; Thuế 2026</div>
+    <button class="ni" data-page="legal_61" onclick="nav('legal_61')"><i class="ti ti-book"></i> 61 Khoản Thu Nhập &amp; BHXH</button>
+    <button class="ni" data-page="pay_scales_2026" onclick="nav('pay_scales_2026')"><i class="ti ti-table-alias"></i> Thang Bảng Lương 2026</button>
+
+    <div class="sl">Bảng Lương Full 38 Cột</div>
+    <button class="ni" data-page="payroll_v55" onclick="nav('payroll_v55')"><i class="ti ti-report-money"></i> Bảng Lương Full 38 Cột (24 NV)</button>
+    <button class="ni" data-page="formula_system" onclick="nav('formula_system')"><i class="ti ti-math-symbols"></i> Công Thức Lương Động</button>
+
+    <div class="sl">Tổng quan &amp; Cấu trúc</div>
+    <button class="ni" data-page="overview" onclick="nav('overview')"><i class="ti ti-layout-dashboard"></i> Tổng quan System</button>
+    <button class="ni" data-page="components" onclick="nav('components')"><i class="ti ti-coins"></i> Salary Components</button>
+    <button class="ni" data-page="structures" onclick="nav('structures')"><i class="ti ti-template"></i> Salary Structures</button>
+    <button class="ni" data-page="grades" onclick="nav('grades')"><i class="ti ti-chart-dots-3"></i> Salary Grades</button>
+
+    <div class="sl">Vận hành &amp; Governance</div>
+    <button class="ni" data-page="payroll" onclick="nav('payroll')"><i class="ti ti-cash"></i> Payroll Engine</button>
+    <button class="ni" data-page="hr_portal_spec" onclick="nav('hr_portal_spec')"><i class="ti ti-adjustments-horizontal"></i> HR Portal Specs &amp; RLS</button>
+    <button class="ni" data-page="sql" onclick="nav('sql')"><i class="ti ti-database"></i> SQL Blueprint</button>
+  </aside>
+
+  <section>
+    <div class="top no-print">
+      <div class="topbar">
+        <div class="tb-title" id="pageTitle">HR Portal — Compensation &amp; Payroll</div>
+        <div class="tb-actions">
+          <button class="tb-btn" onclick="importJSON()" title="Import JSON"><i class="ti ti-upload"></i> Import</button>
+          <button class="tb-btn" onclick="exportCurrentData()" title="Export JSON"><i class="ti ti-download"></i> Export</button>
+          <button class="tb-btn p" onclick="showModal('calcModal')"><i class="ti ti-calculator"></i> Gross → Net</button>
+        </div>
+      </div>
+    </div>
+    <main id="main">Loading...</main>
+  </section>
+</div>
+
+<input type="file" id="importFile" class="hide" accept=".json" onchange="handleImport(event)">
+
+<!-- CALCULATOR MODAL -->
+<div id="calcModal" class="modal hide" onclick="if(event.target===this)closeModal('calcModal')">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal('calcModal')"><i class="ti ti-x"></i></button>
+    <h3><i class="ti ti-calculator" style="color:var(--ac)"></i> Tính thử Gross → Net 2026</h3>
+    <div class="f" style="margin-top:16px">
+      <label>Lương Gross (VNĐ)<input type="number" id="calcGross" value="20000000" oninput="runCalc()"></label>
+      <label>Vùng lương tối thiểu
+        <select id="calcRegion" onchange="runCalc()">
+          <option value="1">Vùng I: 5.310.000đ (2026)</option>
+          <option value="2">Vùng II: 4.730.000đ</option>
+          <option value="3">Vùng III: 4.150.000đ</option>
+          <option value="4">Vùng IV: 3.720.000đ</option>
+        </select>
+      </label>
+      <label>Bảo hiểm (VNĐ)<input type="number" id="calcIns" value="20000000" oninput="runCalc()"></label>
+      <label>Người phụ thuộc<input type="number" id="calcDeps" value="0" oninput="runCalc()"></label>
+    </div>
+    <div id="calcResult" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// COMPANY PROFILES — Adaptive by Enterprise Type
+// ============================================================
+const COMPANY_PROFILES = {
+  fdi: {
+    name: "FDI / Liên doanh",
+    desc: "Thang lương thị trường, đầy đủ phụ cấp, KPI, thưởng doanh số, có công đoàn, bảo hiểm bổ sung có thể có.",
+    minWageRegion: 1,
+    hasUnion: true,
+    hasESOP: false,
+    salaryType: "market",
+    insuranceCapMultiplier: 20,
+    visibleColumns: ["pcCv","pcTn","pcBh1","pcBh2","pcBh3","cc","kpi","sp","ds","tnKhac","tnMien","dem","ot","bhxhNld","bhytNld","bhtnNld","tongBhNld","tnChiuThue","gtBT","npt","gtNpt","tnTinhThue","thue","net","bhxhDn","bhytDn","bhtnDn","tnldDn","kpcdDn","tongBhDn","tongCP","checkCp","anCa","anCaMien","anCaChiu","checkAnCa","tranBH","tranBHTN","trangThai","congThucTe","anCaTheoMuc","pcXang","pcDT"],
+    formulas: ["gross_to_net","bhxh_nld","bhyt_nld","bhtn_nld","thue_tncn","thuc_linh","kpcd_dn","bhxh_dn","bhyt_dn","bhtn_dn","tnld_dn","luong_cong","phat_cham_cong","pc_an_trua","thuong_chuyen_can","thuong_doanh_so"],
+    payScales: "market",
+    stateScale: false,
+    notes: "Phù hợp với các khoản phụ cấp xăng xe, điện thoại, ăn ca. Có thể có bảo hiểm bổ sung (pcBh1-3)."
+  },
+  state: {
+    name: "Doanh nghiệp Nhà nước",
+    desc: "Dùng hệ số lương Nhà nước, có quỹ phúc lợi, công đoàn bắt buộc, không có ESOP, phụ cấp theo chức danh quy định.",
+    minWageRegion: 1,
+    hasUnion: true,
+    hasESOP: false,
+    salaryType: "state_scale",
+    insuranceCapMultiplier: 20,
+    visibleColumns: ["heSo","luongCoSo","pcCv","pcTn","thamNien","cc","kpi","tnKhac","tnMien","bhxhNld","bhytNld","bhtnNld","tongBhNld","tnChiuThue","gtBT","npt","gtNpt","tnTinhThue","thue","net","bhxhDn","bhytDn","bhtnDn","tnldDn","kpcdDn","tongBhDn","tongCP","checkCp","anCa","anCaMien","checkAnCa","tranBH","tranBHTN","trangThai","congThucTe","quyPhucLoi"],
+    formulas: ["gross_to_net","bhxh_nld","bhyt_nld","bhtn_nld","thue_tncn","thuc_linh","kpcd_dn","bhxh_dn","bhyt_dn","bhtn_dn","tnld_dn","luong_theo_he_so","phat_cham_cong","thuong_chuyen_can"],
+    payScales: "state",
+    stateScale: true,
+    notes: "Lương = Hệ số × Lương cơ sở. Các phụ cấp chức vụ, trách nhiệm, thâm niên theo quy định."
+  },
+  private: {
+    name: "Doanh nghiệp Tư nhân",
+    desc: "Linh hoạt nhất: lương khoán, sản phẩm, không bắt buộc công đoàn, thang lương thị trường.",
+    minWageRegion: 1,
+    hasUnion: false,
+    hasESOP: false,
+    salaryType: "market",
+    insuranceCapMultiplier: 20,
+    visibleColumns: ["pcCv","pcTn","cc","kpi","sp","ds","tnKhac","tnMien","dem","ot","bhxhNld","bhytNld","bhtnNld","tongBhNld","tnChiuThue","gtBT","npt","gtNpt","tnTinhThue","thue","net","bhxhDn","bhytDn","bhtnDn","tongBhDn","tongCP","checkCp","anCa","anCaMien","checkAnCa","tranBH","tranBHTN","trangThai","congThucTe","pcXang"],
+    formulas: ["gross_to_net","bhxh_nld","bhyt_nld","bhtn_nld","thue_tncn","thuc_linh","bhxh_dn","bhyt_dn","bhtn_dn","luong_cong","phat_cham_cong","thuong_chuyen_can","thuong_doanh_so"],
+    payScales: "market",
+    stateScale: false,
+    notes: "Không có cột KPCĐ (vì không bắt buộc công đoàn). Tập trung lương khoán, sản phẩm, doanh số."
+  },
+  startup: {
+    name: "Startup / Công ngh",
+    desc: "Lương cơ bản thấp + thưởng/ESOP, ít phụ cấp, linh hoạt, thường không có công đoàn.",
+    minWageRegion: 1,
+    hasUnion: false,
+    hasESOP: true,
+    salaryType: "market",
+    insuranceCapMultiplier: 20,
+    visibleColumns: ["pcCv","cc","kpi","esop","tnKhac","tnMien","bhxhNld","bhytNld","bhtnNld","tongBhNld","tnChiuThue","gtBT","npt","gtNpt","tnTinhThue","thue","net","bhxhDn","bhytDn","bhtnDn","tongBhDn","tongCP","checkCp","anCa","anCaMien","checkAnCa","tranBH","tranBHTN","trangThai","congThucTe","pcXang","stockOption"],
+    formulas: ["gross_to_net","bhxh_nld","bhyt_nld","bhtn_nld","thue_tncn","thuc_linh","bhxh_dn","bhyt_dn","bhtn_dn","luong_cong","esop_calc","thuong_kpi"],
+    payScales: "market",
+    stateScale: false,
+    notes: "Có thêm cột ESOP và Stock Option. Lương thường thấp hơn FDI nhưng b bằng cổ phần."
+  }
+};
+
+// ============================================================
+// COLUMN DEFINITIONS (meta)
+// ============================================================
+const COLUMN_META = {
+  code:{label:"Mã NV", sticky:true, width:70},
+  name:{label:"Họ và tên", sticky:true, width:140},
+  dept:{label:"Bộ phận"},
+  pos:{label:"Chức danh"},
+  std:{label:"Công chuẩn", num:true},
+  act:{label:"Công hưởng", num:true},
+  pct:{label:"Tỷ lệ công", fmt:v=>(v*100).toFixed(1)+'%'},
+  heSo:{label:"Hệ số lương", num:true},
+  luongCoSo:{label:"Lương cơ sở", num:true},
+  lcb:{label:"LCB đóng BH", num:true},
+  pcCv:{label:"PC chức vụ BH", num:true},
+  pcTn:{label:"PC trách nhiệm BH", num:true},
+  thamNien:{label:"PC thâm niên", num:true},
+  pcBh1:{label:"PC BH 1", num:true},
+  pcBh2:{label:"PC BH 2", num:true},
+  pcBh3:{label:"PC BH 3", num:true},
+  grossFix:{label:"Tổng lương cố định", num:true, bold:true},
+  luongCong:{label:"Lương theo công", num:true},
+  cc:{label:"Chuyên cần", num:true},
+  kpi:{label:"KPI", num:true},
+  sp:{label:"Lương SP", num:true},
+  ds:{label:"Thưởng DS", num:true},
+  esop:{label:"ESOP (VNĐ)", num:true},
+  stockOption:{label:"Stock Option", num:true},
+  tnKhac:{label:"TN khác chịu thuế", num:true},
+  tnMien:{label:"TN khác miễn thuế", num:true},
+  dem:{label:"Giờ đêm", num:true},
+  ot:{label:"Giờ OT", num:true},
+  bhxhNld:{label:"BHXH NLĐ", num:true, neg:true},
+  bhytNld:{label:"BHYT NLĐ", num:true, neg:true},
+  bhtnNld:{label:"BHTN NLĐ", num:true, neg:true},
+  tongBhNld:{label:"Tổng BH NLĐ", num:true, neg:true, bold:true},
+  tnChiuThue:{label:"TN chịu thuế", num:true},
+  gtBT:{label:"GT bản thân", num:true},
+  npt:{label:"Số NPT", num:true},
+  gtNpt:{label:"GT NPT", num:true},
+  tnTinhThue:{label:"TN tính thuế", num:true},
+  thue:{label:"Thuế TNCN", num:true, neg:true},
+  net:{label:"THỰC NHẬN", num:true, bold:true, color:"ok"},
+  bhxhDn:{label:"BHXH DN", num:true},
+  bhytDn:{label:"BHYT DN", num:true},
+  bhtnDn:{label:"BHTN DN", num:true},
+  tnldDn:{label:"TNLĐ-BNN DN", num:true},
+  kpcdDn:{label:"KPCĐ DN", num:true},
+  quyPhucLoi:{label:"Quỹ phúc lợi", num:true},
+  tongBhDn:{label:"Tổng BH DN", num:true, bold:true},
+  tongCP:{label:"TỔNG CHI PHÍ DN", num:true, bold:true, color:"ac"},
+  checkCp:{label:"CHECK CP", tag:true},
+  anCa:{label:"Tiền ăn ca", num:true},
+  anCaMien:{label:"Ăn ca miễn TNCN", num:true},
+  anCaChiu:{label:"Ăn ca chịu TNCN", num:true},
+  checkAnCa:{label:"CHECK ĂN CA", tag:true},
+  tranBH:{label:"Trần BHXH/BHYT", num:true},
+  tranBHTN:{label:"Trần BHTN", num:true},
+  trangThai:{label:"Trạng thái NV"},
+  congThucTe:{label:"Công thực tế", num:true},
+  anCaTheoMuc:{label:"Ăn ca theo mức", num:true},
+  pcXang:{label:"PC xăng xe", num:true},
+  pcDT:{label:"PC điện thoại", num:true}
+};
+
+// ============================================================
+// DATA STORE
+// ============================================================
+const STATE = {
+  page: 'overview',
+  profile: 'fdi',
+  search: '',
+  deptFilter: '',
+  colVisibility: {},
+  incomeRules61: [
+    { stt:1, name:'Lương chính thức theo HĐLĐ', types:['fdi','private','startup','state'], bhxh:'Có (nếu thuộc đối tượng bắt buộc)', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'HĐLĐ, bảng công, bảng lương, chứng từ chi, hồ sơ BHXH', note:'Ghi rõ mức lương, chức danh, hình thức trả lương và các khoản bổ sung trong HĐLĐ' },
+    { stt:2, name:'Lương thử việc ghi trong HĐLĐ', types:['fdi','private','startup','state'], bhxh:'Xem xét theo loại HĐ và quy định hiện hành', tncn:'Có thể phát sinh nghĩa vụ thuế', tndn:'Được trừ nếu đủ điều kiện', docs:'HĐLĐ, nội dung thử việc, bảng công, bảng lương, đánh giá', note:'Phân biệt hợp đồng có nội dung thử việc với hợp đồng thử việc riêng' },
+    { stt:3, name:'Lương theo HĐ thử việc riêng', types:['fdi','private','startup'], bhxh:'Xem xét theo bản chất quan hệ lao động', tncn:'Có thể phát sinh nghĩa vụ thuế', tndn:'Được trừ nếu đủ hồ sơ', docs:'Hợp đồng thử việc, bảng công, chứng từ chi, đánh giá', note:'Tiền lương thử việc thường không thấp hơn 85% mức lương công việc đó' },
+    { stt:4, name:'Lương sản phẩm', types:['fdi','private'], bhxh:'Xem xét theo căn cứ đóng', tncn:'Có', tndn:'Được trừ nếu đáp ứng điều kiện', docs:'Quy chế lương, định mức, phiếu xác nhận sản lượng, bảng lương', note:'Quy định rõ đơn giá, định mức, tiêu chuẩn chất lượng và xử lý sản phẩm lỗi' },
+    { stt:5, name:'Lương khoán theo HĐLĐ', types:['private','fdi'], bhxh:'Có (nếu thuộc đối tượng bắt buộc)', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'HĐLĐ, định mức khoán, giao việc, nghiệm thu, bảng lương', note:'Không dùng tên gọi "khoán" để che giấu quan hệ lao động' },
+    { stt:6, name:'Lương theo giờ/ngày/ca', types:['fdi','private','startup','state'], bhxh:'Có (nếu thuộc đối tượng bắt buộc)', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'HĐLĐ, lịch ca, bảng chấm công theo giờ, bảng lương', note:'Theo dõi riêng giờ làm bình thường, giờ làm thêm và tiền lương tương ứng' },
+    { stt:7, name:'Lương KPI xác định trước, trả thường xuyên', types:['fdi','startup','state'], bhxh:'Có thể thuộc căn cứ đóng', tncn:'Có', tndn:'Được trừ nếu đáp ứng', docs:'Quy chế KPI, tiêu chí đánh giá, dữ liệu phê duyệt, bảng lương', note:'Rà soát nguy cơ tính đóng BHXH nếu khoản tiền cố định và trả ổn định' },
+    { stt:8, name:'Thưởng KPI phụ thuộc kết quả', types:['fdi','startup','private','state'], bhxh:'Xem xét theo bản chất khoản thưởng', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'Quy chế thưởng, kết quả KPI, quyết định thưởng, chứng từ', note:'Quy định rõ tiêu chí và kết quả đánh giá' },
+    { stt:9, name:'Hoa hồng / doanh số người lao động', types:['fdi','private'], bhxh:'Xem xét theo tính chất, cơ cấu tiền lương', tncn:'Có', tndn:'Đợc trừ nếu đáp ứng', docs:'Quy chế hoa hồng, dữ liệu doanh thu, đối soát, phê duyệt', note:'Xác định rõ doanh thu tính hoa hồng, hàng hoàn/hủy và công nợ xấu' },
+    { stt:10, name:'Tiền lương ngừng việc', types:['fdi','private','startup','state'], bhxh:'Xem xét theo quy định và cơ cấu tiền lương', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'Quyết định/biên bản ngừng việc, nguyên nhân, thỏa thuận, bảng lương', note:'Hồ sơ phải thể hiện rõ nguyên nhân ngừng việc và mức lương được trả' },
+    { stt:11, name:'Lương bổ sung xác định trước, trả thường xuyên', types:['fdi','private','state'], bhxh:'Có thể thuộc căn cứ đóng', tncn:'Có', tndn:'Được trừ nếu đáp ứng', docs:'HĐLĐ/phụ lục, quy chế lương, bảng lương, chứng từ chi', note:'Xem xét bản chất khoản chi, không chỉ dựa vào tên gọi' },
+    { stt:12, name:'Khoản bổ sung biến động theo năng suất', types:['fdi','private','state'], bhxh:'Xem xét theo tính ổn định', tncn:'Có', tndn:'Được trừ nếu đáp ứng', docs:'Quy chế, tiêu chí phát sinh, bảng xác nhận, quyết định, chứng từ', note:'Làm rõ cách tính và điều kiện hưởng' },
+    { stt:13, name:'Phụ cấp chức vụ / chức danh', types:['fdi','private','state'], bhxh:'Có thể thuộc căn cứ đóng', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'HĐLĐ/phụ lục, quyết định bổ nhiệm, bảng lương', note:'Thống nhất chức danh, thời gian và mức hưởng' },
+    { stt:14, name:'Phụ cấp trách nhiệm', types:['fdi','private','state'], bhxh:'Xem xét theo cơ cấu tiền lương', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'Quyết định giao trách nhiệm, quy chế, bảng lương', note:'Quy định rõ trách nhiệm, mức hưởng và thời gian hưởng' },
+    { stt:15, name:'Phụ cấp thâm niên', types:['state','fdi'], bhxh:'Xem xét theo căn cứ đóng', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'Quy chế, dữ liệu thi gian làm việc, bảng lương', note:'Quy định rõ cách tính và thời điểm hưởng' },
+    { stt:16, name:'Phụ cấp nặng nhọc, độc hại, nguy hiểm', types:['fdi','private','state'], bhxh:'Xem xét theo cơ cấu tiền lương', tncn:'Có (trừ TH miễn theo luật)', tndn:'Được trừ nếu đáp ứng', docs:'Danh mục vị trí, đánh giá điều kiện lao động, quyết định, bảng lương', note:'Không thay thế nghĩa vụ bảo đảm an toàn lao động và trang bị bảo hộ' },
+    { stt:17, name:'Phụ cấp khu vực / thu hút / lưu động', types:['fdi','private','state'], bhxh:'Xem xét theo căn cứ đóng', tncn:'Có (trừ TH miễn quy định)', tndn:'Được trừ nếu đủ điều kiện', docs:'Quy chế, địa bàn/vị trí, bảng phân công, bảng lương', note:'Gắn khoản phụ cấp với điều kiện làm việc thực tế' },
+    { stt:18, name:'Phụ cấp chuyên cần', types:['fdi','private','startup','state'], bhxh:'Xem xét cơ cấu lương và điều kiện đóng', tncn:'Có', tndn:'Được trừ nếu đủ điều kiện', docs:'Quy chế, tiêu chí ngày công, dữ liệu chấm công', note:'Tiêu chí hưởng phải minh bạch và có căn cứ xác định' },
+    { stt:19, name:'Tiền lương làm thêm giờ (OT)', types:['fdi','private','startup','state'], bhxh:'Xác định theo quy định áp dụng', tncn:'Phần trả cao hơn được xem xét miễn thuế', tndn:'Được trừ nếu đáp ứng', docs:'Phê duyệt OT, bảng chấm công, bảng tính hệ số, chứng từ chi', note:'Không mặc định toàn bộ OT miễn thuế TNCN; cần tách phần chênh lệch' },
+    { stt:20, name:'Tiền lương làm việc ban đêm', types:['fdi','private','startup','state'], bhxh:'Xác định theo quy định áp dụng', tncn:'Phần trả cao hơn làm ban đêm miễn thuế', tndn:'Được trừ nếu đáp ứng', docs:'Lịch ca, bảng chấm công, bảng tính tiền lương, phê duyệt', note:'Có dữ liệu giờ làm ban đêm thực tế và bảng tính riêng phần chênh lệch' }
+  ],
+
+  salaryScales2026: {
+    minWageRegion1: 5310000,
+    stateBaseSalary: 2340000,
+    groups: [
+      { id:1, title:'1. Giám đốc', grades:[9000000, 9450000, 9922500, 10418625, 10939556, 11486534, 12050861] },
+      { id:2, title:'2. Phó Giám đốc, Kế toán trưởng', grades:[7500000, 7875000, 8268750, 8682188, 9116297, 9572112, 10050717] },
+      { id:3, title:'3. Trưởng Phòng kinh doanh, Trưởng Phòng Hành chính nhân sự', grades:[6500000, 6825000, 7166250, 7524563, 7900791, 8295830, 8710622] },
+      { id:4, title:'4. Nhân viên Kế toán, Kinh doanh, Kỹ thuật, Văn phòng', grades:[6007600, 6307980, 6623379, 6954548, 7302275, 7667389, 8050759] },
+      { id:5, title:'5. Nhân viên tạp vụ, Nhân viên bảo vệ', grades:[5310000, 5575500, 5854275, 6146989, 6454338, 6777055, 7115908] }
+    ],
+    stateGroups: [
+      { id:1, title:'Chuyên viên chính (mã 01.003)', coeff:[4.98,5.16,5.42] },
+      { id:2, title:'Chuyên viên (mã 01.004)', coeff:[4.40,4.58,4.76] },
+      { id:3, title:'Cán sự (mã 01.005)', coeff:[3.00,3.25,3.50,3.75] },
+      { id:4, title:'Nhân viên bảo vệ (mã 08.006)', coeff:[1.65,1.80,2.05] },
+      { id:5, title:'Lái xe (mã 07.009)', coeff:[2.34,2.60,2.86] }
+    ]
+  },
+
+  payrollV55Full: [
+    { code:'NV001', name:'Nguyễn Thu Hà', dept:'Ban Giám đốc', pos:'Giám đốc', std:27.0, act:27.0, pct:1.0, lcb:20120000, pcCv:3000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:23120000, luongCong:23120000, cc:1000000, kpi:4770000, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:1849600, bhytNld:346800, bhtnNld:231200, tongBhNld:2427600, tnChiuThue:30527037, gtBT:15500000, npt:1, gtNpt:6200000, tnTinhThue:6300437, thue:319072, net:28935021, bhxhDn:3930400, bhytDn:693600, bhtnDn:231200, tnldDn:115600, kpcdDn:462400, tongBhDn:5433200, tongCP:37115793, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:481481, pcDT:1155556 },
+    { code:'NV002', name:'Trần Minh Phương', dept:'Kinh doanh', pos:'Nhân viên Kinh doanh', std:27.0, act:27.0, pct:1.0, lcb:7720000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7720000, luongCong:7720000, cc:500000, kpi:980421, sp:0, ds:6300000, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:617600, bhytNld:115800, bhtnNld:77200, tongBhNld:810600, tnChiuThue:16704125, gtBT:15500000, npt:1, gtNpt:6200000, tnTinhThue:0, thue:0, net:16726858, bhxhDn:1312400, bhytDn:231600, bhtnDn:77200, tnldDn:38600, kpcdDn:154400, tongBhDn:1814200, tongCP:19351658, checkCp:'OK', anCa:833333, anCaMien:833333, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:25.0, anCaTheoMuc:833333, pcXang:277778, pcDT:925926 },
+    { code:'NV003', name:'Lê Quang Huy', dept:'Kinh doanh', pos:'Nhân viên Kinh doanh', std:27.0, act:26.0, pct:0.963, lcb:7350000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7350000, luongCong:7077778, cc:500000, kpi:992500, sp:0, ds:2600000, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:588000, bhytNld:110250, bhtnNld:73500, tongBhNld:771750, tnChiuThue:12349907, gtBT:15500000, npt:1, gtNpt:6200000, tnTinhThue:0, thue:0, net:12394034, bhxhDn:1249500, bhytDn:220500, bhtnDn:73500, tnldDn:36750, kpcdDn:147000, tongBhDn:1727250, tongCP:14893824, checkCp:'OK', anCa:816667, anCaMien:816667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'1.0 Đang làm', congThucTe:24.5, anCaTheoMuc:816667, pcXang:272222, pcDT:907407 },
+    { code:'NV004', name:'Phạm Ngọc Lan', dept:'Sản xuất', pos:'Quản đốc / Tổ trưởng', std:27.0, act:26.0, pct:0.963, lcb:9450000, pcCv:800000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:10250000, luongCong:9670370, cc:500000, kpi:1901898, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:820000, bhytNld:153750, bhtnNld:102500, tongBhNld:1076250, tnChiuThue:12827824, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:12584907, bhxhDn:1742500, bhytDn:307500, bhtnDn:102500, tnldDn:51250, kpcdDn:205000, tongBhDn:2408750, tongCP:16069907, checkCp:'OK', anCa:833333, anCaMien:833333, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'1.0 Đang làm', congThucTe:25.0, anCaTheoMuc:833333, pcXang:277778, pcDT:277778 },
+    { code:'NV005', name:'Đỗ Văn Nam', dept:'Sản xuất', pos:'Công nhân sản xuất', std:27.0, act:27.0, pct:1.0, lcb:7060000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7060000, luongCong:7060000, cc:500000, kpi:782400, sp:6440000, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:564800, bhytNld:105900, bhtnNld:70600, tongBhNld:741300, tnChiuThue:10071289, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:15196656, bhxhDn:1200200, bhytDn:211800, bhtnDn:70600, tnldDn:35300, kpcdDn:141200, tongBhDn:1609100, tongCP:17597056, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:0 },
+    { code:'NV006', name:'Nguyễn Đức Long', dept:'Kỹ thuật XD', pos:'Chỉ huy trưởng', std:27.0, act:27.0, pct:1.0, lcb:12000000, pcCv:1500000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:13500000, luongCong:13500000, cc:700000, kpi:2933654, sp:2160000, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:1080000, bhytNld:202500, bhtnNld:135000, tongBhNld:1417500, tnChiuThue:20738125, gtBT:15500000, npt:1, gtNpt:6200000, tnTinhThue:0, thue:0, net:20663684, bhxhDn:2295000, bhytDn:405000, bhtnDn:135000, tnldDn:67500, kpcdDn:270000, tongBhDn:3172500, tongCP:25253684, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:481481, pcDT:962963 },
+    { code:'NV007', name:'Vũ Hoàng Anh', dept:'Kỹ thuật XD', pos:'Kỹ thuật viên', std:27.0, act:27.0, pct:1.0, lcb:7720000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7720000, luongCong:7720000, cc:700000, kpi:1459737, sp:2000000, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:617600, bhytNld:115800, bhtnNld:77200, tongBhNld:810600, tnChiuThue:12435293, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:12458026, bhxhDn:1312400, bhytDn:231600, bhtnDn:77200, tnldDn:38600, kpcdDn:154400, tongBhDn:1814200, tongCP:15082826, checkCp:'OK', anCa:833333, anCaMien:833333, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:25.0, anCaTheoMuc:833333, pcXang:277778, pcDT:277778 },
+    { code:'NV008', name:'Phan Văn Hùng', dept:'Sản xuất', pos:'Công nhân sản xuất', std:27.0, act:27.0, pct:1.0, lcb:6400000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:6400000, luongCong:6400000, cc:400000, kpi:776882, sp:2880000, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:512000, bhytNld:96000, bhtnNld:64000, tongBhNld:672000, tnChiuThue:10745771, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:11091549, bhxhDn:1088000, bhytDn:192000, bhtnDn:64000, tnldDn:32000, kpcdDn:128000, tongBhDn:1504000, tongCP:13267549, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:0 },
+    { code:'NV009', name:'Bùi Thị Mai', dept:'Sản xuất', pos:'Công nhân sản xuất', std:27.0, act:26.5, pct:0.981, lcb:6090000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:6000000, luongCong:5977222, cc:400000, kpi:785600, sp:2881200, ds:0, tnKhac:0, tnMien:0, dem:8.0, ot:8.0, bhxhNld:487200, bhytNld:91350, bhtnNld:60900, tongBhNld:639450, tnChiuThue:10101800, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:10718350, bhxhDn:1035300, bhytDn:182700, bhtnDn:60900, tnldDn:30450, kpcdDn:121800, tongBhDn:1431150, tongCP:12788950, checkCp:'OK', anCa:850000, anCaMien:850000, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'0.5 Đang làm', congThucTe:25.5, anCaTheoMuc:850000, pcXang:283333, pcDT:0 },
+    { code:'NV010', name:'Đặng Quốc Việt', dept:'Sản xuất', pos:'Công nhân sản xuất', std:27.0, act:27.0, pct:1.0, lcb:5800000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:5800000, luongCong:5800000, cc:400000, kpi:773518, sp:2856000, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:464000, bhytNld:87000, bhtnNld:58000, tongBhNld:609000, tnChiuThue:10118407, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:10590889, bhxhDn:986000, bhytDn:174000, bhtnDn:58000, tnldDn:29000, kpcdDn:116000, tongBhDn:1363000, tongCP:12662889, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:0 },
+    { code:'NV011', name:'Trịnh Thu Trang', dept:'Kho', pos:'Thủ kho', std:27.0, act:27.0, pct:1.0, lcb:7880000, pcCv:0, pcTn:500000, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:8380000, luongCong:8380000, cc:500000, kpi:956914, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:630400, bhytNld:118200, bhtnNld:78800, tongBhNld:827400, tnChiuThue:10414692, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:11169626, bhxhDn:1339600, bhytDn:236400, bhtnDn:78800, tnldDn:39400, kpcdDn:157600, tongBhDn:1969300, tongCP:14018826, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:288889 },
+    { code:'NV014', name:'Lương Văn Quân', dept:'Ban Giám đốc', pos:'Phó Giám đốc', std:27.0, act:27.0, pct:1.0, lcb:12600000, pcCv:2000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:14600000, luongCong:14600000, cc:0, kpi:3806000, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:1168000, bhytNld:219000, bhtnNld:146000, tongBhNld:1533000, tnChiuThue:19850444, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:2817444, thue:140872, net:19332128, bhxhDn:2482000, bhytDn:438000, bhtnDn:146000, tnldDn:73000, kpcdDn:292000, tongBhDn:3431000, tongCP:24437000, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:481481, pcDT:962963 },
+    { code:'NV015', name:'Nguyễn Thị Hồng Nhung', dept:'Kế toán', pos:'Kế toán trưởng', std:27.0, act:27.0, pct:1.0, lcb:10000000, pcCv:1000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:11000000, luongCong:11000000, cc:0, kpi:2932500, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:880000, bhytNld:165000, bhtnNld:110000, tongBhNld:1155000, tnChiuThue:15184352, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:15184908, bhxhDn:1870000, bhytDn:330000, bhtnDn:110000, tnldDn:55000, kpcdDn:220000, tongBhDn:2585000, tongCP:18924908, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:288889, pcDT:962963 },
+    { code:'NV016', name:'Đào Thu Hương', dept:'Kế toán', pos:'Nhân viên Kế toán', std:27.0, act:27.0, pct:1.0, lcb:8400000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:8400000, luongCong:8400000, cc:0, kpi:1951000, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:672000, bhytNld:126000, bhtnNld:84000, tongBhNld:882000, tnChiuThue:10628775, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:10913445, bhxhDn:1428000, bhytDn:252000, bhtnDn:84000, tnldDn:42000, kpcdDn:168000, tongBhDn:1974000, tongCP:13789445, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:288889 },
+    { code:'NV017', name:'Vũ Thị Thanh Hải', dept:'Hành chính - NS', pos:'Trưởng phòng HR', std:27.0, act:27.0, pct:1.0, lcb:10500000, pcCv:1000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:11500000, luongCong:11500000, cc:0, kpi:2913000, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:920000, bhytNld:172500, bhtnNld:115000, tongBhNld:1207500, tnChiuThue:10664852, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:15612908, bhxhDn:1955000, bhytDn:345000, bhtnDn:115000, tnldDn:57500, kpcdDn:230000, tongBhDn:2702500, tongCP:19522508, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:288889, pcDT:962963 },
+    { code:'NV018', name:'Phạm Thị Ngọc Ánh', dept:'Hành chính - NS', pos:'Nhân viên Nhân sự', std:27.0, act:27.0, pct:1.0, lcb:7500000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7500000, luongCong:7500000, cc:0, kpi:1456386, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:600000, bhytNld:112500, bhtnNld:75000, tongBhNld:787500, tnChiuThue:9534164, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:9613331, bhxhDn:1275000, bhytDn:225000, bhtnDn:75000, tnldDn:37500, kpcdDn:150000, tongBhDn:1762500, tongCP:12163331, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:288889 },
+    { code:'NV019', name:'Ngô Thị Kim Oanh', dept:'Hành chính - NS', pos:'Nhân viên Hành chính', std:27.0, act:27.0, pct:1.0, lcb:6830000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:6830000, luongCong:6830000, cc:0, kpi:786400, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:546400, bhytNld:102450, bhtnNld:68300, tongBhNld:717150, tnChiuThue:8194175, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:8343695, bhxhDn:1161100, bhytDn:204900, bhtnDn:68300, tnldDn:34150, kpcdDn:136600, tongBhDn:1605050, tongCP:10665895, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:288889 },
+    { code:'NV020', name:'Trần Đức Mạnh', dept:'Kinh doanh', pos:'Trưởng phòng Kinh doanh', std:27.0, act:27.0, pct:1.0, lcb:11030000, pcCv:1000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:12030000, luongCong:12030000, cc:0, kpi:2920500, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:962400, bhytNld:180450, bhtnNld:120300, tongBhNld:1263150, tnChiuThue:16483633, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:16576239, bhxhDn:2045100, bhytDn:360900, bhtnDn:120300, tnldDn:60150, kpcdDn:240600, tongBhDn:2827050, tongCP:20666439, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:288889, pcDT:1444444 },
+    { code:'NV021', name:'Lê Thị Bích Ngọc', dept:'Kinh doanh', pos:'Nhân viên CSKH', std:27.0, act:27.0, pct:1.0, lcb:6500000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:6500000, luongCong:6500000, cc:0, kpi:958253, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:520000, bhytNld:97500, bhtnNld:65000, tongBhNld:682500, tnChiuThue:8228633, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:9412800, bhxhDn:1105000, bhytDn:195000, bhtnDn:65000, tnldDn:32500, kpcdDn:130000, tongBhDn:1527500, tongCP:10622800, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:481481 },
+    { code:'NV022', name:'Đinh Quang Minh', dept:'Marketing', pos:'Trưởng phòng Marketing', std:27.0, act:27.0, pct:1.0, lcb:10000000, pcCv:1000000, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:11000000, luongCong:11000000, cc:0, kpi:2937000, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:880000, bhytNld:165000, bhtnNld:110000, tongBhNld:1155000, tnChiuThue:15188852, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:15188408, bhxhDn:1870000, bhytDn:330000, bhtnDn:110000, tnldDn:55000, kpcdDn:220000, tongBhDn:2585000, tongCP:18925408, checkCp:'OK', anCa:1155556, anCaMien:1155556, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:1155556, pcXang:288889, pcDT:962963 },
+    { code:'NV023', name:'Hà Thị Thu Uyên', dept:'Marketing', pos:'Nhân viên Marketing', std:27.0, act:27.0, pct:1.0, lcb:7880000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7880000, luongCong:7880000, cc:0, kpi:1443750, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:630400, bhytNld:118200, bhtnNld:78800, tongBhNld:827400, tnChiuThue:10094120, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:10133387, bhxhDn:1339600, bhytDn:236400, bhtnDn:78800, tnldDn:39400, kpcdDn:157600, tongBhDn:1651800, tongCP:12812587, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:481481 },
+    { code:'NV024', name:'Cao Văn Tùng', dept:'Mua hàng', pos:'Nhân viên Mua hàng', std:27.0, act:27.0, pct:1.0, lcb:7350000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7350000, luongCong:7350000, cc:0, kpi:1424939, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:588000, bhytNld:110250, bhtnNld:73500, tongBhNld:771750, tnChiuThue:9545309, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:9640236, bhxhDn:1249500, bhytDn:220500, bhtnDn:73500, tnldDn:36750, kpcdDn:147000, tongBhDn:1727250, tongCP:12139226, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:481481 },
+    { code:'NV025', name:'Nguyễn Văn Hải', dept:'Hành chính - NS', pos:'Lái xe', std:27.0, act:27.0, pct:1.0, lcb:7540000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:7540000, luongCong:7540000, cc:0, kpi:783200, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:603200, bhytNld:113100, bhtnNld:75400, tongBhNld:791700, tnChiuThue:8612009, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:8687056, bhxhDn:1281800, bhytDn:226200, bhtnDn:75400, tnldDn:37700, kpcdDn:150800, tongBhDn:1771900, tongCP:11250856, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:288889, pcDT:0 },
+    { code:'NV026', name:'Trương Văn Bình', dept:'Hành chính - NS', pos:'Bảo vệ', std:27.0, act:27.0, pct:1.0, lcb:6070000, pcCv:0, pcTn:0, pcBh1:0, pcBh2:0, pcBh3:0, grossFix:6070000, luongCong:6070000, cc:0, kpi:487750, sp:0, ds:0, tnKhac:0, tnMien:0, dem:0, ot:0, bhxhNld:485600, bhytNld:91050, bhtnNld:60700, tongBhNld:637350, tnChiuThue:6507750, gtBT:15500000, npt:0, gtNpt:0, tnTinhThue:0, thue:0, net:6787087, bhxhDn:1031900, bhytDn:182100, bhtnDn:60700, tnldDn:30350, kpcdDn:121400, tongBhDn:1426400, tongCP:8850887, checkCp:'OK', anCa:866667, anCaMien:866667, anCaChiu:0, checkAnCa:'OK - THEO QUY CHẾ', tranBH:46800000, tranBHTN:106200000, trangThai:'Đang làm', congThucTe:26.0, anCaTheoMuc:866667, pcXang:0, pcDT:0 }
+  ],
+
+  formulasList: [
+    { code:'gross_to_net', name:'Gross → Net', syntax:'TongThuNhap - TongBH_NLD - ThueTNCN', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'bhxh_nld', name:'BHXH người lao động', syntax:'Round(Min(LCB, TranBH) * 0.08, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'bhyt_nld', name:'BHYT người lao động', syntax:'Round(Min(LCB, TranBH) * 0.015, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'bhtn_nld', name:'BHTN người lao động', syntax:'Round(Min(LCB, TranBHTN) * 0.01, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'thue_tncn', name:'Thuế TNCN', syntax:'Round(TinhThueTNCN(TNChiuThue - GTBT - GTNPT), 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'thuc_linh', name:'Thực lĩnh', syntax:'TongKhoanThan - TongKhoanTru', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'kpcd_dn', name:'KPCĐ doanh nghiệp', syntax:'IF hasUnion THEN Round(GrossFix * 0.02, 0) ELSE 0', status:'Conditional', types:['fdi','state'] },
+    { code:'bhxh_dn', name:'BHXH doanh nghiệp', syntax:'Round(Min(LCB, TranBH) * 0.17, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'bhyt_dn', name:'BHYT doanh nghiệp', syntax:'Round(Min(LCB, TranBH) * 0.03, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'bhtn_dn', name:'BHTN doanh nghiệp', syntax:'Round(Min(LCB, TranBHTN) * 0.01, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'tnld_dn', name:'TNLĐ-BNN doanh nghiệp', syntax:'Round(Min(LCB, TranBH) * 0.005, 0)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'luong_cong', name:'Lương theo ngày công', syntax:'Round(GrossFix / StdDays * ActDays, 0)', status:'Đang dùng', types:['fdi','private','startup'] },
+    { code:'luong_theo_he_so', name:'Lương theo hệ số', syntax:'Round(HeSo * LuongCoSo, 0)', status:'DNNN only', types:['state'] },
+    { code:'phat_cham_cong', name:'Phạt chậm công', syntax:'LayTienPhatChamCong()', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'pc_an_trua', name:'Phụ cấp ăn trưa', syntax:'Min(ActDays * MucAnTruaNgay, MucAnTruaToiDa)', status:'Đang dùng', types:['fdi','private'] },
+    { code:'thuong_chuyen_can', name:'Thưởng chuyên cần', syntax:'LayBacThang("THUONG_CHUYEN_CAN", NgayCong)', status:'Đang dùng', types:['fdi','private','startup','state'] },
+    { code:'thuong_doanh_so', name:'Thưởng doanh số', syntax:'LayYeuTo("THUONG_DOANH_SO")', status:'Đang dùng', types:['fdi','private'] },
+    { code:'esop_calc', name:'ESOP / Cổ phần', syntax:'IF hasESOP THEN LayGiaTriESOP() ELSE 0', status:'Startup only', types:['startup'] },
+    { code:'thuong_kpi', name:'Thưởng KPI Startup', syntax:'KPI_HeSo * LuongCoBan', status:'Startup only', types:['startup'] }
+  ]
+};
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const vnd = n => Math.round(Number(n) || 0).toLocaleString('vi-VN') + ' ₫';
+
+function showModal(id) { document.getElementById(id).classList.remove('hide'); }
+function closeModal(id) { document.getElementById(id).classList.add('hide'); }
+
+function calculateTax(taxableIncome) {
+  let remaining = Math.max(0, taxableIncome);
+  let tax = 0;
+  const brackets = [
+    { limit: 5000000, rate: 0.05 },
+    { limit: 5000000, rate: 0.10 },
+    { limit: 8000000, rate: 0.15 },
+    { limit: 14000000, rate: 0.20 },
+    { limit: 20000000, rate: 0.25 },
+    { limit: 28000000, rate: 0.30 },
+    { limit: Infinity, rate: 0.35 }
+  ];
+  for (const b of brackets) {
+    const taxable = Math.min(remaining, b.limit);
+    tax += taxable * b.rate;
+    remaining -= taxable;
+    if (remaining <= 0) break;
+  }
+  return Math.round(tax);
+}
+
+function runCalc() {
+  const gross = +document.getElementById('calcGross').value || 0;
+  const insBase = +document.getElementById('calcIns').value || gross;
+  const deps = +document.getElementById('calcDeps').value || 0;
+  const region = +document.getElementById('calcRegion').value || 1;
+  const regionWages = {1:5310000, 2:4730000, 3:4150000, 4:3720000};
+  const cap = (regionWages[region] || 5310000) * 20;
+  const base = Math.min(insBase, cap);
+  const bhxh = Math.round(base * 0.08);
+  const bhyt = Math.round(base * 0.015);
+  const bhtn = Math.round(base * 0.01);
+  const taxable = gross - bhxh - bhyt - bhtn - 15500000 - deps * 6200000;
+  const tax = calculateTax(Math.max(0, taxable));
+  const net = gross - bhxh - bhyt - bhtn - tax;
+  document.getElementById('calcResult').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><div style="color:var(--mu);font-size:11px">Gross</div><div style="font-size:16px;font-weight:700">${vnd(gross)}</div></div>
+      <div><div style="color:var(--mu);font-size:11px">BHXH (8%)</div><div style="font-size:15px;font-weight:600;color:var(--no)">-${vnd(bhxh)}</div></div>
+      <div><div style="color:var(--mu);font-size:11px">BHYT (1.5%)</div><div style="font-size:15px;font-weight:600;color:var(--no)">-${vnd(bhyt)}</div></div>
+      <div><div style="color:var(--mu);font-size:11px">BHTN (1%)</div><div style="font-size:15px;font-weight:600;color:var(--no)">-${vnd(bhtn)}</div></div>
+      <div><div style="color:var(--mu);font-size:11px">Thuế TNCN</div><div style="font-size:15px;font-weight:600;color:var(--no)">-${vnd(tax)}</div></div>
+      <div style="background:var(--ok-soft);padding:10px;border-radius:var(--r-sm)">
+        <div style="color:var(--mu);font-size:11px">THỰC NHẬN</div>
+        <div style="font-size:18px;font-weight:800;color:var(--ok)">${vnd(net)}</div>
+      </div>
+    </div>`;
+}
+
+function getProfile() { return COMPANY_PROFILES[STATE.profile] || COMPANY_PROFILES.fdi; }
+
+function changeProfile() {
+  STATE.profile = document.getElementById('companyProfile').value;
+  const p = getProfile();
+  document.getElementById('profileDesc').textContent = p.desc;
+  // Reset column visibility based on profile
+  Object.keys(STATE.colVisibility).forEach(k=> delete STATE.colVisibility[k]);
+  p.visibleColumns.forEach(c=> STATE.colVisibility[c]=true);
+  render();
+}
+
+function nav(page) {
+  STATE.page = page;
+  document.querySelectorAll('.ni').forEach(b => b.classList.toggle('on', b.dataset.page === page));
+  render();
+}
+
+function exportCurrentData() {
+  const blob = new Blob([JSON.stringify(STATE, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'hr-portal-adaptive-2026.json'; a.click();
+}
+function importJSON(){ document.getElementById('importFile').click(); }
+function handleImport(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); Object.assign(STATE,d); document.getElementById('companyProfile').value=STATE.profile; changeProfile(); alert('Import thành công!'); }catch(err){ alert('Lỗi import: '+err.message); } };
+  r.readAsText(f);
+}
+
+// Validation logic for CHECK columns
+function validateRow(r, profile) {
+  const errors = [];
+  const expectedGross = r.lcb + r.pcCv + r.pcTn + r.pcBh1 + r.pcBh2 + r.pcBh3;
+  if (Math.abs(expectedGross - r.grossFix) > 10) errors.push('GrossFix mismatch');
+  const expectedBhNld = r.bhxhNld + r.bhytNld + r.bhtnNld;
+  if (Math.abs(expectedBhNld - r.tongBhNld) > 10) errors.push('BH_NLD mismatch');
+  const expectedNet = r.tnChiuThue - r.tongBhNld - r.thue;
+  if (Math.abs(expectedNet - r.net) > 10) errors.push('Net mismatch');
+  if (profile.hasUnion && r.kpcdDn === 0) errors.push('Missing KPCĐ');
+  if (!profile.hasUnion && r.kpcdDn > 0) errors.push('Unexpected KPCĐ');
+  return errors;
+}
+
+function renderPayrollTable() {
+  const p = getProfile();
+  const visible = p.visibleColumns.filter(c => STATE.colVisibility[c] !== false);
+  const rows = STATE.payrollV55Full.filter(r => {
+    const s = STATE.search.toLowerCase();
+    const match = !s || r.name.toLowerCase().includes(s) || r.code.toLowerCase().includes(s) || r.dept.toLowerCase().includes(s);
+    const dept = !STATE.deptFilter || r.dept === STATE.deptFilter;
+    return match && dept;
+  });
+
+  const depts = [...new Set(STATE.payrollV55Full.map(r=>r.dept))];
+
+  const totalGross = rows.reduce((s, r) => s + r.grossFix, 0);
+  const totalNet = rows.reduce((s, r) => s + r.net, 0);
+  const totalBhDn = rows.reduce((s, r) => s + r.tongBhDn, 0);
+
+  // Column toggle UI
+  const colToggleHtml = `<div class="col-toggle no-print">
+    <strong style="font-size:12px">Hiển thị cột:</strong>
+    ${p.visibleColumns.map(c => {
+      const meta = COLUMN_META[c] || {label:c};
+      return `<label><input type="checkbox" ${STATE.colVisibility[c]!==false?'checked':''} onchange="toggleCol('${c}')"> ${esc(meta.label)}</label>`;
+    }).join('')}
+  </div>`;
+
+  const toolbar = `<div class="toolbar no-print">
+    <div class="search-wrap"><i class="ti ti-search"></i><input type="text" placeholder="Tìm theo tên, mã, bộ phận..." value="${esc(STATE.search)}" oninput="STATE.search=this.value;render();"></div>
+    <select onchange="STATE.deptFilter=this.value;render();"><option value="">Tất cả bộ phận</option>${depts.map(d=>`<option value="${esc(d)}" ${STATE.deptFilter===d?'selected':''}>${esc(d)}</option>`).join('')}</select>
+    <button class="tb-btn" onclick="window.print()"><i class="ti ti-printer"></i> In</button>
+  </div>`;
+
+  const summary = `<div class="g">
+    <div class="cd st"><div class="lbl">Tổng NV hiển thị</div><b>${rows.length}</b></div>
+    <div class="cd st"><div class="lbl">Tổng Quỹ Lương Cố Định</div><b>${vnd(totalGross)}</b></div>
+    <div class="cd st"><div class="lbl">Tổng Thực Nhận (Net)</div><b>${vnd(totalNet)}</b></div>
+    <div class="cd st"><div class="lbl">Tổng BH &amp; KPCĐ Doanh Nghiệp</div><b>${vnd(totalBhDn)}</b></div>
+  </div>`;
+
+  const thead = `<thead><tr>` + visible.map(c => {
+    const meta = COLUMN_META[c] || {label:c};
+    return `<th class="${meta.num?'num':''}">${esc(meta.label)}</th>`;
+  }).join('') + `</tr></thead>`;
+
+  const tbody = `<tbody>` + rows.map(r => {
+    const errs = validateRow(r, p);
+    const rowClass = errs.length ? ' style="background:var(--no-soft)"' : '';
+    return `<tr${rowClass}>` + visible.map(c => {
+      const meta = COLUMN_META[c] || {label:c};
+      let val = r[c];
+      if (val == null) val = profileSpecificValue(r, c, p);
+      if (meta.fmt) val = meta.fmt(val);
+      else if (meta.num) val = vnd(val);
+      const style = [];
+      if (meta.num) style.push('text-align:right');
+      if (meta.bold) style.push('font-weight:700');
+      if (meta.color==='ok') style.push('color:var(--ok)');
+      if (meta.color==='ac') style.push('color:var(--ac)');
+      if (meta.neg && typeof r[c]==='number' && r[c]>0) val = '-' + val;
+      if (meta.tag) {
+        const ok = !errs.length || (c==='checkCp' && !errs.filter(e=>!e.includes('AnCa')).length) || (c==='checkAnCa' && !errs.filter(e=>e.includes('AnCa')).length);
+        return `<td><span class="tag ${ok?'tag-green':'tag-red'}">${ok?'OK':'LỖI'}</span></td>`;
+      }
+      return `<td class="${meta.num?'num':''}" style="${style.join(';')}" title="${errs.join(', ')}">${esc(val)}</td>`;
+    }).join('') + `</tr>`;
+  }).join('') + `</tbody>`;
+
+  return toolbar + colToggleHtml + summary + `<div class="tw"><table>${thead}${tbody}</table></div>`;
+}
+
+function profileSpecificValue(r, col, profile) {
+  if (col==='heSo') return profile.stateScale ? '4.40' : '-';
+  if (col==='luongCoSo') return profile.stateScale ? '2.340.000 ₫' : '-';
+  if (col==='esop') return profile.hasESOP ? '0' : '-';
+  if (col==='stockOption') return profile.hasESOP ? '0' : '-';
+  if (col==='quyPhucLoi') return profile.stateScale ? '0' : '-';
+  if (col==='thamNien') return profile.stateScale ? '0' : '-';
+  return '-';
+}
+
+function toggleCol(c) {
+  STATE.colVisibility[c] = STATE.colVisibility[c] === false ? true : false;
+  render();
+}
+
+const PAGES = {
+  payroll_v55: () => {
+    return `<div class="pg-h">
+      <h1>Bảng Lương Tổng Hợp — Adaptive Payroll Engine</h1>
+      <p>Kỳ lương: <strong>Tháng 01/2026</strong> | Loại hình: <strong>${esc(getProfile().name)}</strong> | Trạng thái: <strong>ĐANG LÀM</strong></p>
+    </div>` + renderPayrollTable();
+  },
+
+  legal_61: () => {
+    const p = getProfile();
+    const filtered = STATE.incomeRules61.filter(r => r.types.includes(STATE.profile));
+    return `<div class="pg-h">
+      <h1>Cẩm Nang 61 Khoản Thu Nhập, BHXH &amp; Thuế TNCN</h1>
+      <p>Đang lọc theo loại hình: <strong>${esc(p.name)}</strong> — ${filtered.length} khoản áp dụng</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>STT</th><th>Khoản thu nhập / Phúc lợi</th><th>BHXH</th><th>Thuế TNCN</th><th>Chi phí TNDN</th><th>Hồ sơ cần có</th><th>Lưu ý</th></tr>
+        </thead>
+        <tbody>
+          ${filtered.map(r => `
+            <tr>
+              <td class="num"><strong>${r.stt}</strong></td>
+              <td style="text-align:left"><strong>${esc(r.name)}</strong></td>
+              <td><span class="tag ${r.bhxh.includes('Có') ? 'tag-green' : r.bhxh.includes('Không') ? 'tag-gray' : 'tag-orange'}">${esc(r.bhxh)}</span></td>
+              <td><span class="tag ${r.tncn.includes('Có') ? 'tag-red' : 'tag-green'}">${esc(r.tncn)}</span></td>
+              <td><span class="tag tag-blue">${esc(r.tndn)}</span></td>
+              <td style="text-align:left;white-space:normal;max-width:250px;font-size:11.5px">${esc(r.docs)}</td>
+              <td style="text-align:left;white-space:normal;max-width:250px;font-size:11.5px;color:var(--mu)">${esc(r.note)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  },
+
+  pay_scales_2026: () => {
+    const p = getProfile();
+    if (p.stateScale) {
+      return `<div class="pg-h">
+        <h1>Thang Bảng Lương Nhà nước 2026</h1>
+        <p>Lương cơ sở: <strong>${vnd(STATE.salaryScales2026.stateBaseSalary)}</strong> | Áp dụng hệ số lương theo Nghị định</p>
+      </div>
+      <div class="cd">
+        <div class="sec-title">Bảng hệ số lương Nhà nước</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Chức danh / Nhóm</th><th>Hệ số I</th><th>Hệ số II</th><th>Hệ số III</th><th>Hệ số IV</th></tr></thead>
+            <tbody>
+              ${STATE.salaryScales2026.stateGroups.map(g=>`<tr>
+                <td style="text-align:left"><strong>${esc(g.title)}</strong></td>
+                ${g.coeff.map(c=>`<td class="num">${c}</td>`).join('')}
+                ${g.coeff.length<4?'<td class="num">-</td>'.repeat(4-g.coeff.length):''}
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-info" style="margin-top:12px">
+          <i class="ti ti-info-circle" style="font-size:18px;color:var(--ac)"></i>
+          <div>Lương = Hệ số × Lương cơ sở (${vnd(STATE.salaryScales2026.stateBaseSalary)}). Các phụ cấp chức vụ, trách nhiệm, thâm niên tính theo % lương cơ sở theo quy định.</div>
+        </div>
+      </div>`;
+    }
+    return `<div class="pg-h">
+      <h1>Thang Bảng Lương Thị Trường 2026</h1>
+      <p>Áp dụng mức lương tối thiểu Vùng I từ 01/01/2026: <strong>${vnd(STATE.salaryScales2026.minWageRegion1)}</strong></p>
+    </div>
+    <div class="cd">
+      <div class="sec-title">Bảng hệ số &amp; mức lương 7 bậc theo nhóm chức danh</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Nhóm chức danh / Vị trí</th><th>Bậc I</th><th>Bậc II</th><th>Bậc III</th><th>Bậc IV</th><th>Bậc V</th><th>Bậc VI</th><th>Bậc VII</th></tr></thead>
+          <tbody>
+            ${STATE.salaryScales2026.groups.map(g => `<tr>
+              <td style="text-align:left"><strong>${esc(g.title)}</strong></td>
+              ${g.grades.map((val, idx) => `<td class="num" ${idx===0 && g.id===5 ? 'style="background:var(--wa-soft);font-weight:700;color:var(--wa)"' : ''}>${vnd(val)}</td>`).join('')}
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  },
+
+  formula_system: () => {
+    const p = getProfile();
+    const filtered = STATE.formulasList.filter(f => f.types.includes(STATE.profile));
+    return `<div class="pg-h">
+      <h1>Hệ Thống Công Thức Lương Động — ${esc(p.name)}</h1>
+      <p>Các công thức được kích hoạt dựa trên loại hình doanh nghiệp đã chọn.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Mã Công Thức</th><th>Tên Công Thức</th><th>Cú Pháp / Hàm Nội Dung</th><th>Trạng Thái</th></tr></thead>
+        <tbody>
+          ${filtered.map(f => `
+            <tr>
+              <td><span class="tag tag-blue">${esc(f.code)}</span></td>
+              <td style="text-align:left"><strong>${esc(f.name)}</strong></td>
+              <td style="text-align:left"><code style="font-size:12px;background:rgba(120,120,128,.1);padding:3px 8px;border-radius:6px;color:var(--ac)">${esc(f.syntax)}</code></td>
+              <td><span class="tag ${f.status.includes('dùng')?'tag-green':'tag-orange'}">${esc(f.status)}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  },
+
+  overview: () => {
+    const p = getProfile();
+    return `<div class="pg-h"><h1>Tổng quan Adaptive Payroll Engine</h1><p>Hệ thống quản trị Nhân sự - Tiền lương - Thuế - Bảo hiểm đa loại hình</p></div>
+    <div class="g">
+      <div class="cd st" style="--c:var(--ac)"><div class="lbl">Loại hình hiện tại</div><b>${esc(p.name)}</b></div>
+      <div class="cd st" style="--c:var(--ok)"><div class="lbl">Cột hiển thị</div><b>${p.visibleColumns.length}</b></div>
+      <div class="cd st" style="--c:var(--wa)"><div class="lbl">Công thức kích hoạt</div><b>${p.formulas.length}</b></div>
+      <div class="cd st" style="--c:var(--no)"><div class="lbl">Công đoàn</div><b>${p.hasUnion?'Có':'Không'}</b></div>
+    </div>
+    <div class="cd">
+      <div class="sec-title">Đặc điểm loại hình</div>
+      <p>${esc(p.notes)}</p>
+      <div class="callout callout-info" style="margin-top:12px">
+        <i class="ti ti-info-circle" style="font-size:18px;color:var(--ac)"></i>
+        <div>Chuyển đổi loại hình doanh nghiệp ở sidebar bên trái để tự động điều chỉnh cột bảng lương, công thức tính và cẩm nang pháp lý phù hợp.</div>
+      </div>
+    </div>`;
+  },
+
+  components: () => `<div class="pg-h"><h1>Salary Components</h1><p>Các thành phần lương theo loại hình ${esc(getProfile().name)}</p></div>
+    <div class="cd">
+      <div class="sec-title">Thành phần lương cố định</div>
+      <ul style="line-height:2">
+        <li><strong>Lương chính thức (LCB):</strong> Mức lương thỏa thuận trong HĐLĐ, căn cứ đóng BHXH.</li>
+        <li><strong>Phụ cấp chức vụ:</strong> Gắn với chức danh, có thể tính đóng BHXH nếu cố định.</li>
+        <li><strong>Phụ cấp trách nhiệm:</strong> Theo mức độ quản lý, phạm vi ảnh hưởng.</li>
+        ${getProfile().stateScale?'<li><strong>Hệ số lương:</strong> Áp dụng theo Nghị định lương Nhà nước.</li>':''}
+      </ul>
+      <div class="sec-title">Thành phần lương biến động</div>
+      <ul style="line-height:2">
+        <li><strong>KPI / Thưởng:</strong> Theo kết quả đánh giá định kỳ.</li>
+        <li><strong>Hoa hồng / Doanh số:</strong> Phổ biến ở FDI và DN tư nhân kinh doanh.</li>
+        <li><strong>Lương sản phẩm / Khoán:</strong> Tính theo định mức, sản lượng.</li>
+        ${getProfile().hasESOP?'<li><strong>ESOP / Stock Option:</strong> Phần cổ phần dành cho nhân sự chủ chốt.</li>':''}
+      </ul>
+      <div class="sec-title">Các khoản trích theo lương</div>
+      <ul style="line-height:2">
+        <li><strong>BHXH (8% NLĐ, 17% DN):</strong> Trên lương đóng, không vượt trần 20× lương tối thiểu vùng.</li>
+        <li><strong>BHYT (1.5% NLĐ, 3% DN):</strong> Tương tự BHXH về trần.</li>
+        <li><strong>BHTN (1% NLĐ &amp; DN):</strong> Trần 20× lương tối thiểu vùng.</li>
+        <li><strong>TNLĐ-BNN (0.5% DN):</strong> Bắt buộc cho mọi loại hình.</li>
+        ${getProfile().hasUnion?'<li><strong>KPCĐ (2% DN):</strong> Nếu có tổ chức công đoàn cơ sở.</li>':''}
+      </ul>
+    </div>`,
+
+  structures: () => `<div class="pg-h"><h1>Salary Structures</h1><p>Cấu trúc phương án lương theo loại hình ${esc(getProfile().name)}</p></div>
+    <div class="cd">
+      <div class="sec-title">Cấu trúc lương mặc định</div>
+      <div class="code-block">Gross Income = LCB + PC chức vụ + PC trách nhiệm + PC khác + Thưởng/KPI + Lương SP/DS + PC xăng xe + PC điện thoại + Ăn ca
+Net Income = Gross Income - BHXH_NLD - BHYT_NLD - BHTN_NLD - Thuế TNCN
+Total Employer Cost = Gross Income + BHXH_DN + BHYT_DN + BHTN_DN + TNLĐ_DN + KPCĐ_DN (nếu có)</div>
+      <div class="sec-title">Cấu trúc theo loại hình</div>
+      <table style="font-size:13px">
+        <thead><tr><th>Loại hình</th><th>Cố định</th><th>Biến động</th><th>Đặc thù</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FDI</strong></td><td>LCB + PC chức vụ + PC BH bổ sung</td><td>KPI + Doanh số + Thưởng</td><td>Có KPCĐ, phụ cấp đa dạng</td></tr>
+          <tr><td><strong>DNNN</strong></td><td>Hệ số × Lương cơ sở + PC chức vụ</td><td>KPI + Thưởng thành tích</td><td>Quỹ phúc lợi, KPCĐ bắt buộc</td></tr>
+          <tr><td><strong>Tư nhân</strong></td><td>LCB + PC cơ bản</td><td>Khoán + SP + Doanh số</td><td>Không KPCĐ, linh hoạt cao</td></tr>
+          <tr><td><strong>Startup</strong></td><td>LCB thấp + PC tối thiểu</td><td>ESOP + KPI + Stock Option</td><td>Ưu tiên cổ phần, ít phụ cấp</td></tr>
+        </tbody>
+      </table>
+    </div>`,
+
+  grades: () => `<div class="pg-h"><h1>Salary Grades</h1><p>Hệ thống bậc lương và nấc thang phát triển</p></div>
+    <div class="cd">
+      <div class="sec-title">Nguyên tắc xếp bậc</div>
+      <ul style="line-height:2">
+        <li>Bậc lương phải gắn với <strong>mô tả công việc</strong> và <strong>bộ năng lực</strong> (competency framework).</li>
+        <li>Mỗi bậc có khoảng lương tối thiểu - tối đa (pay range), tỷ lệ giữa max/min khoảng 1.5 - 2.0.</li>
+        <li>Thời gian xét nâng bậc: Tối thiểu 2-3 năm với nhân viên, 3-5 năm với quản lý.</li>
+        <li>Có thể áp dụng <strong>bậc lương thị trường</strong> (FDI, Startup) hoặc <strong>bậc hệ số</strong> (DNNN).</li>
+      </ul>
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle" style="font-size:18px;color:var(--wa)"></i>
+        <div>Đảm bảo mức lương tối thiểu của bậc thấp nhất không thấp hơn lương tối thiểu vùng (${vnd(STATE.salaryScales2026.minWageRegion1)} cho Vùng I năm 2026).</div>
+      </div>
+    </div>`,
+
+  payroll: () => `<div class="pg-h"><h1>Payroll Engine</h1><p>Luồng xử lý bảng lương và các bước kiểm soát</p></div>
+    <div class="cd">
+      <div class="sec-title">Luồng xử lý bảng lương (Payroll Run)</div>
+      <ol style="line-height:2.2">
+        <li><strong>Chuẩn bị dữ liệu đầu vào:</strong> Bảng chấm công, dữ liệu nghỉ phép, OT, doanh số, KPI.</li>
+        <li><strong>Tính lương theo công thức:</strong> Áp dụng công thức động theo phương án lương và loại hình DN.</li>
+        <li><strong>Kiểm tra trần BHXH/BHYT/BHTN:</strong> Đối chiếu với mức trần 20× lương tối thiểu vùng.</li>
+        <li><strong>Tính thuế TNCN:</strong> Biểu thuế lũy tiến từng phần, giảm trừ gia cảnh.</li>
+        <li><strong>Tính chi phí doanh nghiệp:</strong> Cộng các khoản trích BHXH, BHYT, BHTN, TNLĐ, KPCĐ (nếu có).</li>
+        <li><strong>Validate:</strong> Kiểm tra tổng chi phí, đối chiếu Gross/Net, phát hiện bất thường.</li>
+        <li><strong>Phê duyệt &amp; Khóa bảng lương:</strong> Khóa dữ liệu, không cho phép chỉnh sửa sau khi phát lương.</li>
+        <li><strong>Xuất chứng từ:</strong> Bảng lương, phiếu lương cá nhân, chứng từ kế toán.</li>
+      </ol>
+      <div class="sec-title">Kiểm soát nội bộ</div>
+      <ul style="line-height:2">
+        <li>Phân quyền: HR nhập dữ liệu, Kế toán kiểm tra, Giám đốc phê duyệt.</li>
+        <li>Log thay đổi: Ghi nhận ai thay đổi, thay đổi gì, khi nào.</li>
+        <li>Backup: Tự động snapshot trước mỗi kỳ lương.</li>
+      </ul>
+    </div>`,
+
+  hr_portal_spec: () => `<div class="pg-h"><h1>HR Portal Specifications &amp; RLS</h1><p>Thiết kế hệ thống, phân quyền và bảo mật</p></div>
+    <div class="cd">
+      <div class="sec-title">Role-Based Access Control (RBAC)</div>
+      <table style="font-size:13px">
+        <thead><tr><th>Vai trò</th><th>Bảng lương</th><th>Công thức</th><th>Pháp lý</th><th>Quản trị</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nhân viên</strong></td><td>Chỉ xem phiếu lương của mình</td><td>Không</td><td>Xem</td><td>Không</td></tr>
+          <tr><td><strong>Trưởng phòng</strong></td><td>Xem bảng lương phòng mình</td><td>Không</td><td>Xem</td><td>Không</td></tr>
+          <tr><td><strong>HR Specialist</strong></td><td>Nhập &amp; sửa (chưa khóa)</td><td>Xem</td><td>Xem &amp; sửa</td><td>Một phn</td></tr>
+          <tr><td><strong>Kế toán trưởng</strong></td><td>Kiểm tra &amp; điều chỉnh</td><td>Xem &amp; sửa</td><td>Xem</td><td>Một phần</td></tr>
+          <tr><td><strong>Giám đốc</strong></td><td>Xem toàn bộ &amp; phê duyệt</td><td>Xem</td><td>Xem</td><td>Toàn quyền</td></tr>
+          <tr><td><strong>Admin</strong></td><td>Toàn quyền</td><td>Toàn quyền</td><td>Toàn quyền</td><td>Toàn quyền</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">Row-Level Security (RLS)</div>
+      <ul style="line-height:2">
+        <li><strong>RLS by Department:</strong> Nhân viên chỉ thấy dữ liệu phòng ban của mình.</li>
+        <li><strong>RLS by Employee:</strong> Mỗi người chỉ xem được phiếu lương có mã NV của chính mình.</li>
+        <li><strong>RLS by Role:</strong> Giám đốc xem tất cả, trưởng phòng xem phòng mình.</li>
+        <li><strong>Audit Log:</strong> Ghi nhận truy vấn dữ liệu nhạy cảm (lương, thuế).</li>
+      </ul>
+      <div class="callout callout-warning">
+        <i class="ti ti-shield-lock" style="font-size:18px;color:var(--wa)"></i>
+        <div>Dữ liệu lương và thuế TNCN là dữ liệu nhạy cảm cấp độ cao. Yêu cầu mã hóa lưu trữ (encryption at rest) và truyền tải (TLS 1.3).</div>
+      </div>
+    </div>`,
+
+  sql: () => `<div class="pg-h"><h1>SQL Database Blueprint</h1><p>Thiết kế cơ sở dữ liệu cho hệ thống lương đa loại hình</p></div>
+    <div class="cd">
+      <div class="sec-title">Sơ đồ thực thể chính</div>
+      <div class="code-block">-- Bảng loại hình doanh nghiệp (Company Profiles)
+CREATE TABLE company_profiles (
+    profile_code VARCHAR(20) PRIMARY KEY,  -- 'fdi', 'state', 'private', 'startup'
+    profile_name NVARCHAR(100),
+    has_union BIT,
+    has_esop BIT,
+    salary_type VARCHAR(20),               -- 'market', 'state_scale'
+    insurance_cap_multiplier DECIMAL(4,1),
+    min_wage_region INT,
+    created_at DATETIME DEFAULT GETDATE()
+);
+
+-- Bảng nhân viên
+CREATE TABLE employees (
+    employee_id VARCHAR(20) PRIMARY KEY,
+    full_name NVARCHAR(100),
+    department NVARCHAR(50),
+    position NVARCHAR(50),
+    profile_code VARCHAR(20) REFERENCES company_profiles(profile_code),
+    base_salary DECIMAL(18,0),
+    coefficient DECIMAL(4,2),              -- Dùng cho DNNN
+    status NVARCHAR(30),
+    join_date DATE
+);
+
+-- Bảng phương án lương (Salary Structure)
+CREATE TABLE salary_structures (
+    structure_id INT PRIMARY KEY IDENTITY,
+    profile_code VARCHAR(20) REFERENCES company_profiles(profile_code),
+    component_code VARCHAR(30),            -- 'lcb', 'pcCv', 'kpi', 'esop'...
+    component_name NVARCHAR(100),
+    formula_text NVARCHAR(500),
+    is_visible BIT DEFAULT 1,
+    is_mandatory BIT DEFAULT 0
+);
+
+-- Bảng bảng lương chi tiết (Payroll Lines)
+CREATE TABLE payroll_lines (
+    payroll_id INT PRIMARY KEY IDENTITY,
+    employee_id VARCHAR(20) REFERENCES employees(employee_id),
+    payroll_month INT,
+    payroll_year INT,
+    standard_days DECIMAL(4,1),
+    actual_days DECIMAL(4,1),
+    base_salary DECIMAL(18,0),
+    gross_fixed DECIMAL(18,0),
+    gross_variable DECIMAL(18,0),
+    bhxh_nld DECIMAL(18,0),
+    bhyt_nld DECIMAL(18,0),
+    bhtn_nld DECIMAL(18,0),
+    tax_tncn DECIMAL(18,0),
+    net_pay DECIMAL(18,0),
+    employer_cost DECIMAL(18,0),
+    validation_status NVARCHAR(10),
+    created_at DATETIME DEFAULT GETDATE()
+);
+
+-- Bảng audit log
+CREATE TABLE audit_logs (
+    log_id BIGINT PRIMARY KEY IDENTITY,
+    user_id VARCHAR(50),
+    action NVARCHAR(50),
+    table_name VARCHAR(50),
+    record_id VARCHAR(50),
+    old_value NVARCHAR(MAX),
+    new_value NVARCHAR(MAX),
+    action_time DATETIME DEFAULT GETDATE()
+);
+
+-- View RLS: chỉ hiển thị nhân viên cùng phòng (ví dụ SQL Server)
+CREATE VIEW vw_payroll_rls AS
+SELECT p.* FROM payroll_lines p
+JOIN employees e ON p.employee_id = e.employee_id
+WHERE e.department = (SELECT department FROM employees WHERE employee_id = CURRENT_USER_ID());
+</div>
+      <div class="sec-title">Lưu ý thiết kế</div>
+      <ul style="line-height:2">
+        <li>Tách <strong>master data</strong> (nhân viên, phương án lương) khỏi <strong>transaction data</strong> (bảng lương từng tháng).</li>
+        <li>Lưu công thức dưới dạng text để dễ điều chỉnh theo loại hình doanh nghiệp mà không cần sửa code.</li>
+        <li>Dùng <strong>JSON column</strong> (nếu DB hỗ trợ) để lưu các phụ cấp động không cố định cột.</li>
+        <li>Index trên (employee_id, payroll_month, payroll_year) để truy vấn nhanh.</li>
+      </ul>
+    </div>`
+};
+
+function render() {
+  const m = document.getElementById('main');
+  const titles = {
+    legal_61: 'Cẩm Nang Thu Nhập & BHXH',
+    pay_scales_2026: 'Thang Bảng Lương 2026',
+    payroll_v55: 'Bảng Lương Full 38 Cột',
+    formula_system: 'Công Thức Lương Động',
+    overview: 'Tổng quan System',
+    components: 'Salary Components',
+    structures: 'Salary Structures',
+    grades: 'Salary Grades',
+    payroll: 'Payroll Engine',
+    hr_portal_spec: 'HR Portal Specs & RLS',
+    sql: 'SQL Blueprint'
+  };
+  document.getElementById('pageTitle').textContent = titles[STATE.page] || 'HR Portal';
+  m.innerHTML = PAGES[STATE.page] ? PAGES[STATE.page]() : '<div class="cd">Trang đang tải...</div>';
+}
+
+// Init
+document.getElementById('companyProfile').value = STATE.profile;
+changeProfile();
+runCalc();
+</script>
+</body>
+</html>
