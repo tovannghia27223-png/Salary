@@ -1,405 +1,119 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HR Portal — Adaptive Payroll Engine for All Enterprise Types</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Portal — Compensation & Performance Demo</title>
 <style>
-#ap-root{font:14px/1.5 Arial,sans-serif;color:#18324f}
-#ap-launch{position:fixed;right:22px;bottom:22px;z-index:99990;border:0;border-radius:14px;background:#1769aa;color:white;padding:13px 18px;font-weight:700;box-shadow:0 5px 22px #173b5c35;cursor:pointer}
-#ap-overlay{display:none;position:fixed;inset:0;z-index:99991;background:#f3f7fc;overflow:auto}
-#ap-root *{box-sizing:border-box}
-#ap-head{position:sticky;top:0;z-index:3;background:#fff;border-bottom:1px solid #dce6f1;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-#ap-head h2{margin:0;color:#174b7c;font-size:20px}
-#ap-close{border:0;background:#eaf2fa;border-radius:9px;padding:9px 13px;cursor:pointer}
-.ap-wrap{max-width:1500px;margin:auto;padding:20px}
-.ap-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.ap-nav button,.ap-btn{border:1px solid #cbdced;background:#fff;color:#245477;padding:9px 13px;border-radius:9px;cursor:pointer}
-.ap-nav button.active,.ap-btn.primary{background:#1769aa;color:white;border-color:#1769aa}
-.ap-card{background:white;border:1px solid #dce6f1;border-radius:14px;padding:17px;margin-bottom:14px;box-shadow:0 3px 12px #18324f08}
-.ap-card h3{margin:0 0 12px;color:#205783}
-.ap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
-.ap-field label{display:block;font-size:12px;color:#61788f;margin-bottom:4px}
-.ap-field input,.ap-field select,.ap-field textarea{width:100%;padding:9px;border:1px solid #cbd9e7;border-radius:8px;background:#fff;color:#18324f}
-.ap-field textarea{min-height:70px}
-.ap-table-wrap{overflow:auto;max-width:100%;border:1px solid #e0e8f0;border-radius:9px}
-.ap-table{border-collapse:collapse;width:100%;min-width:900px;font-size:12px}
-.ap-table th,.ap-table td{padding:9px 10px;border-bottom:1px solid #e8eef5;text-align:left;white-space:nowrap}
-.ap-table th{background:#edf4fb;color:#285779;position:sticky;top:0}
-.ap-table input,.ap-table select{width:100%;min-width:85px;padding:6px;border:1px solid #d4e0ec;border-radius:6px}
-.ap-muted{color:#70859a;font-size:12px}
-.ap-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.ap-kpi{background:#edf5fc;padding:14px;border-radius:11px}
-.ap-kpi small{color:#637c94;display:block}
-.ap-kpi strong{font-size:20px;color:#155c93}
-.ap-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.ap-danger{color:#a33;border-color:#e8caca}
-.ap-tag{display:inline-block;padding:3px 7px;background:#edf5fc;border-radius:6px;color:#28618d;font-size:11px}
-@media(max-width:650px){.ap-wrap{padding:10px}#ap-head{padding:12px}.ap-card{padding:12px}}
+:root{--bg:#f4f7fb;--panel:#fff;--ink:#172b4d;--muted:#718096;--line:#e4ebf4;--blue:#2563eb;--blue2:#eaf2ff;--green:#0f9f6e;--amber:#b7791f;--red:#c53030;--nav:#102a56;--shadow:0 8px 28px rgba(22,45,85,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;font-weight:650}button.secondary{background:#eef3fa;color:#28415f}button.ghost{background:transparent;color:var(--blue);border:1px solid var(--line)}button.danger{background:#fff0f0;color:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}.sidebar{background:var(--nav);color:#dce8fb;padding:22px 15px;display:flex;flex-direction:column;gap:22px}.brand{display:flex;gap:10px;align-items:center;padding:4px 10px}.brandmark{width:35px;height:35px;border-radius:11px;background:linear-gradient(135deg,#65a5ff,#2362d5);display:grid;place-items:center;color:white;font-weight:900}.brand strong{font-size:16px;color:#fff;letter-spacing:.2px}.brand small{display:block;color:#9db5d8;font-size:11px}.navgroup{margin:3px 10px 7px;color:#829bbd;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;font-weight:800}.nav button{display:flex;gap:11px;align-items:center;width:100%;text-align:left;background:transparent;color:#c6d5ea;padding:11px 12px;margin:2px 0;font-weight:550;border-radius:9px}.nav button.active,.nav button:hover{background:#1c4177;color:#fff}.nav .ico{width:19px;text-align:center}.sidefoot{margin-top:auto;border-top:1px solid #29466f;padding:15px 10px;color:#91a9c9;font-size:11px}
+.main{min-width:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}.crumb{font-weight:750;font-size:15px}.topright{display:flex;gap:12px;align-items:center;color:var(--muted)}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e6efff;color:#2457a5;font-weight:800}.content{padding:27px 30px;max-width:1600px;margin:auto}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:22px}.eyebrow{color:var(--blue);font-weight:800;font-size:11px;letter-spacing:1px;text-transform:uppercase}.pagehead h1{margin:3px 0 4px;font-size:25px;letter-spacing:-.5px}.sub{color:var(--muted);margin:0}.actions{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--shadow);min-width:0}.statlabel{color:var(--muted);font-size:12px;font-weight:650}.statvalue{font-size:27px;font-weight:800;letter-spacing:-.8px;margin:6px 0}.statfoot{font-size:11px;color:var(--green)}.twocol{grid-template-columns:1.35fr 1fr}.threecol{grid-template-columns:repeat(3,minmax(0,1fr))}.card h3{margin:0 0 13px;font-size:15px}.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.cardhead h3{margin:0}.muted{color:var(--muted)}.pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:750;background:#edf3fb;color:#526984}.pill.green{background:#e6f7ef;color:#087c52}.pill.amber{background:#fff5df;color:#946200}.pill.red{background:#ffeded;color:#b42318}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:720px;background:#fff}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}th{background:#f7f9fc;color:#60728b;font-size:11px;text-transform:uppercase;letter-spacing:.45px}td{font-size:12px}tr:last-child td{border-bottom:0}.right{text-align:right}.bar{height:7px;background:#edf1f7;border-radius:20px;overflow:hidden;min-width:80px}.bar span{display:block;height:100%;background:linear-gradient(90deg,#3c83f6,#1d5fd1);border-radius:20px}.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow:auto}.tabs button{background:transparent;color:#63758c;border-radius:0;padding:10px 13px;border-bottom:2px solid transparent;white-space:nowrap}.tabs button.active{color:var(--blue);border-bottom-color:var(--blue)}.fieldgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:11px;color:#65758b;font-weight:750}.field input,.field select{border:1px solid #dce5f0;border-radius:8px;padding:9px 10px;background:#fff;color:var(--ink);min-width:0;width:100%}.field input:focus,.field select:focus{outline:2px solid #c9ddff;border-color:#76a8f5}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.notice{padding:12px 14px;border-radius:10px;background:#f0f6ff;color:#36577f;border:1px solid #dceaff;font-size:12px;margin:12px 0}.notice.warn{background:#fff8e8;border-color:#f4e5bd;color:#805d13}.kpirow{display:grid;grid-template-columns:1.3fr 1fr 90px;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.kpirow:last-child{border:0}.score{font-size:19px;font-weight:850}.empty{padding:35px;text-align:center;color:var(--muted)}.hidden{display:none!important}.small{font-size:11px}.footnote{font-size:11px;color:var(--muted);margin-top:10px}.tag{font-size:10px;font-weight:800;color:#47627f;background:#edf3fa;border-radius:5px;padding:3px 6px}.modalback{position:fixed;inset:0;background:#102a5666;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modalback.show{display:flex}.modal{background:#fff;border-radius:15px;width:min(650px,100%);max-height:90vh;overflow:auto;padding:22px;box-shadow:0 20px 60px #102a5640}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modalhead h2{font-size:18px;margin:0}.close{background:#eef3fa;color:#526984;padding:6px 10px}.formactions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.mono{font-variant-numeric:tabular-nums}.mobilemenu{display:none}
+@media(max-width:1050px){.app{grid-template-columns:205px 1fr}.stats{grid-template-columns:repeat(2,1fr)}.twocol{grid-template-columns:1fr}.fieldgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.app{display:block}.sidebar{display:none}.topbar{padding:0 15px}.content{padding:18px 14px}.pagehead{display:block}.actions{margin-top:13px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.statvalue{font-size:22px}.fieldgrid,.threecol{grid-template-columns:1fr}.mobilemenu{display:inline-block}.topright .companylabel{display:none}}
 </style>
-
-<div id="ap-root">
-<button id="ap-launch" onclick="AP.open()">Payroll Engine</button>
-<div id="ap-overlay">
- <header id="ap-head">
-  <div><h2>HR PORTAL · PAYROLL ENGINE</h2><div class="ap-muted">Compensation Management · Salary Structure · Payroll Calculation</div></div>
-  <button id="ap-close" onclick="AP.close()">Đóng ✕</button>
- </header>
- <main class="ap-wrap">
-  <div class="ap-card">
-   <div class="ap-grid">
-    <div class="ap-field"><label>Doanh nghiệp đang làm việc</label><select id="ap-company" onchange="AP.switchCompany()"></select></div>
-    <div class="ap-field"><label>Kỳ lương</label><input id="ap-period" type="month"></div>
-    <div class="ap-field"><label>Ngày tính lương</label><input id="ap-date" type="date"></div>
-   </div>
-  </div>
-  <nav class="ap-nav">
-   <button data-tab="overview" class="active" onclick="AP.tab('overview')">Tổng quan</button>
-   <button data-tab="company" onclick="AP.tab('company')">Doanh nghiệp</button>
-   <button data-tab="structure" onclick="AP.tab('structure')">Cấu trúc & thang lương</button>
-   <button data-tab="policy" onclick="AP.tab('policy')">Quy chế lương</button>
-   <button data-tab="employees" onclick="AP.tab('employees')">Dữ liệu nhân viên</button>
-   <button data-tab="engine" onclick="AP.tab('engine')">Payroll Engine</button>
-   <button data-tab="settings" onclick="AP.tab('settings')">Tham số tính lương</button>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brandmark">HR</div><div><strong>HR PORTAL</strong><small>People & Performance</small></div></div>
+  <nav class="nav">
+    <div class="navgroup">Workspace</div>
+    <button class="active" data-page="dashboard"><span class="ico">⌂</span> Tổng quan</button>
+    <button data-page="employees"><span class="ico">♙</span> Nhân sự</button>
+    <div class="navgroup">Compensation</div>
+    <button data-page="structure"><span class="ico">▤</span> Cấu trúc & thang lương</button>
+    <button data-page="payroll"><span class="ico">▦</span> Payroll Engine</button>
+    <button data-page="kpi"><span class="ico">◎</span> Đánh giá KPI</button>
+    <div class="navgroup">Administration</div>
+    <button data-page="policies"><span class="ico">⚙</span> Quy chế & pháp lý</button>
+    <button data-page="reports"><span class="ico">▥</span> Báo cáo</button>
   </nav>
-  <section id="ap-content"></section>
- </main>
+  <div class="sidefoot">DEMO BUILD 0.1 · Local browser storage<br>Không kết nối dữ liệu thật</div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:10px"><button class="mobilemenu secondary" onclick="toggleMobileNav()">☰</button><div class="crumb" id="crumb">Tổng quan</div></div>
+    <div class="topright"><span class="companylabel" id="companyLabel">Công ty Demo Việt Nam</span><span class="pill green">Demo mode</span><div class="avatar">HR</div></div>
+  </header>
+  <div class="content" id="content"></div>
+</main>
 </div>
-</div>
-
+<div class="modalback" id="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalhead"><h2 id="modalTitle">Thông tin</h2><button class="close" onclick="closeModal()">✕</button></div><div id="modalBody"></div></div></div>
 <script>
-(function(){
-"use strict";
-const KEY="HRPORTAL_ADAPTIVE_PAYROLL_V1";
-const money=n=>new Intl.NumberFormat("vi-VN",{maximumFractionDigits:0}).format(Number(n)||0);
-const num=v=>Number(v)||0;
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const today=new Date().toISOString().slice(0,10);
-const defaultCompany=()=>({
- id:"company_"+Date.now(),name:"Doanh nghiệp mẫu",industry:"Khác",currency:"VND",
- grades:Array.from({length:15},(_,i)=>({code:"G"+(i+1),min:(i+1)*5000000,max:(i+1)*7000000})),
- settings:{
-  standardDays:26,siRate:8,hiRate:1.5,uiRate:1,
-  employerSi:17.5,employerHi:3,employerUi:1,accident:0.5,union:2,
-  siHiCap:20,uiCap:20,personalDeduction:15500000,
-  dependentDeduction:6200000,
-  pitBrackets:[
-   {limit:10000000,rate:5},
-   {limit:30000000,rate:10},
-   {limit:60000000,rate:20},
-   {limit:100000000,rate:30},
-   {limit:null,rate:35}
-  ]
- },
+const KEY='hrportal_compensation_demo_v1';
+const defaultState={
+ company:'Công ty Demo Việt Nam',period:'2026-11',
+ rules:{standardDays:26,siEmployee:8,hiEmployee:1.5,uiEmployee:1,siEmployer:17.5,hiEmployer:3,uiEmployer:1,accident:0.5,union:2,personalDeduction:15500000,dependentDeduction:6200000,siCapMultiplier:20,uiCapMultiplier:20,referenceBase:2530000,mealTaxFree:730000,otWeekday:150,otWeekend:200,otHoliday:300},
  components:[
-  {code:"BASE",name:"Lương theo hợp đồng",type:"fixed",method:"monthly",amount:10000000,taxable:true,insurance:true,active:true,policy:"Theo hợp đồng lao động"},
-  {code:"POSITION",name:"Phụ cấp chức vụ",type:"fixed",method:"monthly",amount:1000000,taxable:true,insurance:true,active:true,policy:"Theo quyết định bổ nhiệm"},
-  {code:"RESP",name:"Phụ cấp trách nhiệm",type:"fixed",method:"monthly",amount:500000,taxable:true,insurance:true,active:true,policy:"Theo trách nhiệm được giao"},
-  {code:"MEAL",name:"Hỗ trợ ăn ca",type:"benefit",method:"monthly",amount:730000,taxable:false,insurance:false,active:true,policy:"Theo quy chế phúc lợi; cần xác minh điều kiện miễn thuế"},
-  {code:"PHONE",name:"Hỗ trợ điện thoại",type:"benefit",method:"monthly",amount:300000,taxable:false,insurance:false,active:true,policy:"Theo quy chế và chứng từ"},
-  {code:"FUEL",name:"Hỗ trợ xăng xe",type:"benefit",method:"monthly",amount:300000,taxable:true,insurance:false,active:true,policy:"Theo quy chế công ty"},
-  {code:"ATTEND",name:"Thưởng chuyên cần",type:"variable",method:"attendance",amount:500000,taxable:true,insurance:false,active:true,policy:"Đủ điều kiện ngày công theo quy chế"},
-  {code:"KPI",name:"Thưởng KPI",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo kết quả đánh giá KPI"},
-  {code:"PRODUCT",name:"Lương sản phẩm",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo sản lượng nghiệm thu"},
-  {code:"SALES",name:"Thưởng doanh số",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo chính sách kinh doanh"},
-  {code:"NIGHT",name:"Tiền làm đêm",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo giờ làm đêm đã xác nhận"},
-  {code:"OT",name:"Tiền tăng ca",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo giờ tăng ca và loại ngày"},
-  {code:"OTHER_TAX",name:"Khoản thu nhập khác chịu thuế",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Theo chứng từ và quy chế"},
-  {code:"OTHER_EXEMPT",name:"Khoản thu nhập khác miễn thuế",type:"benefit",method:"manual",amount:0,taxable:false,insurance:false,active:true,policy:"Chỉ miễn thuế khi đủ điều kiện pháp luật"},
-  {code:"DEDUCT",name:"Khấu trừ khác",type:"deduction",method:"manual",amount:0,taxable:false,insurance:false,active:true,policy:"Phải có căn cứ khấu trừ hợp lệ"}
+  {code:'BASE',name:'Lương theo công việc',type:'fixed',amount:12000000,taxable:true,insurable:true,active:true},
+  {code:'POS',name:'Phụ cấp chức vụ',type:'fixed',amount:1500000,taxable:true,insurable:true,active:true},
+  {code:'RESP',name:'Phụ cấp trách nhiệm',type:'fixed',amount:500000,taxable:true,insurable:true,active:true},
+  {code:'MEAL',name:'Hỗ trợ ăn giữa ca',type:'benefit',amount:730000,taxable:false,insurable:false,active:true},
+  {code:'PHONE',name:'Hỗ trợ điện thoại',type:'benefit',amount:300000,taxable:true,insurable:false,active:true},
+  {code:'KPI',name:'Thưởng KPI',type:'variable',amount:0,taxable:true,insurable:false,active:true}
  ],
- employees:[{
-  code:"NV001",name:"Nguyễn Văn A",department:"Nhân sự",title:"Chuyên viên HR",
-  grade:"G3",status:"active",standardDays:26,paidDays:26,
-  dependents:1,nightHours:0,otHours:0,
-  attendanceBonus:500000,kpi:1000000,product:0,sales:0,
-  otherTax:0,otherExempt:0,meal:730000,fuel:300000,phone:300000,
-  deduction:0,insuranceBase:10000000
- }]
-});
-
-let db;
-try{db=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){db=null}
-if(!db||!Array.isArray(db.companies))db={companies:[defaultCompany()],active:null};
-if(!db.active)db.active=db.companies[0].id;
-let results=[];
-const current=()=>db.companies.find(c=>c.id===db.active)||db.companies[0];
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
-const val=id=>document.getElementById(id)?.value??"";
-const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v};
-const field=(label,id,value,type="text")=>`<div class="ap-field"><label>${label}</label><input id="${id}" type="${type}" value="${esc(value??"")}"></div>`;
-const btn=(label,fn,cls="ap-btn")=>`<button class="${cls}" onclick="${fn}">${label}</button>`;
-const table=(heads,rows)=>`<div class="ap-table-wrap"><table class="ap-table"><thead><tr>${heads.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
-function companyOptions(){
- const s=document.getElementById("ap-company");if(!s)return;
- s.innerHTML=db.companies.map(c=>`<option value="${esc(c.id)}" ${c.id===db.active?"selected":""}>${esc(c.name)}</option>`).join("");
-}
-function render(){
- companyOptions();
- const c=current();if(!c)return;
- const tab=document.querySelector("#ap-overlay .ap-nav button.active")?.dataset.tab||"overview";
- const root=document.getElementById("ap-content");
- const views={overview,company,structure,policy,employees,engine,settings};
- root.innerHTML=views[tab]();
-}
-function overview(){
- const c=current();const total=c.employees.length;
- return `<div class="ap-card"><h3>Tổng quan kỳ lương</h3>
- <div class="ap-kpis">
- <div class="ap-kpi"><small>Doanh nghiệp</small><strong>${esc(c.name)}</strong></div>
- <div class="ap-kpi"><small>Nhân viên</small><strong>${total}</strong></div>
- <div class="ap-kpi"><small>Khoản lương đang cấu hình</small><strong>${c.components.filter(x=>x.active).length}</strong></div>
- <div class="ap-kpi"><small>Nhóm thang lương</small><strong>G1–G15</strong></div>
- </div></div>
- <div class="ap-card"><h3>Luồng nghiệp vụ Payroll</h3>
- <p>1. Khai báo doanh nghiệp → 2. Xây dựng cấu trúc lương → 3. Ban hành quy chế → 4. Nhập dữ liệu nhân viên → 5. Tính lương → 6. Kiểm tra → 7. Xuất bảng lương.</p>
- <p class="ap-muted">Bản demo đang dùng dữ liệu trình duyệt. Chưa kết nối dữ liệu thật từ Supabase.</p></div>
- <div class="ap-card"><h3>Thao tác nhanh</h3><div class="ap-actions">
- ${btn("Cấu hình khoản lương","AP.tab('policy')","ap-btn primary")}
- ${btn("Thêm nhân viên","AP.tab('employees')")}
- ${btn("Tính bảng lương","AP.tab('engine')")}
- </div></div>`;
-}
-function company(){
- const c=current();
- return `<div class="ap-card"><h3>Thông tin doanh nghiệp</h3><div class="ap-grid">
- ${field("Tên doanh nghiệp","co-name",c.name)}
- ${field("Ngành nghề","co-industry",c.industry)}
- </div><div class="ap-actions">
- ${btn("Lưu thông tin","AP.saveCompany()","ap-btn primary")}
- ${btn("Tạo doanh nghiệp mới","AP.addCompany()")}
- ${btn("Nhân bản cấu hình hiện tại","AP.cloneCompany()")}
- ${btn("Xóa doanh nghiệp này","AP.deleteCompany()","ap-btn ap-danger")}
- </div></div>
- <div class="ap-card"><h3>Nguyên tắc quản trị nhiều doanh nghiệp</h3>
- <p>Mỗi doanh nghiệp có bộ cấu trúc lương, quy chế, thang lương, tham số tính toán và nhân viên độc lập.</p>
- <p class="ap-muted">Không tự động chia sẻ dữ liệu lương giữa các doanh nghiệp.</p></div>`;
-}
-function structure(){
- const c=current();
- const rows=c.grades.map((g,i)=>`<tr>
- <td>${g.code}</td><td><input id="gr-min-${i}" type="number" value="${g.min}"></td>
- <td><input id="gr-max-${i}" type="number" value="${g.max}"></td>
- <td><span class="ap-tag">Job Grade</span></td></tr>`).join("");
- return `<div class="ap-card"><h3>Salary Structure Builder</h3>
- <p>Quản lý lương theo nhóm chức danh, cấp bậc, khoảng lương và cơ sở trả lương.</p>
- <div class="ap-grid">
- <div class="ap-field"><label>Cơ sở Salary Range</label><select id="sr-basis"><option>Base Salary</option><option>Gross Salary</option><option>Total Cash Compensation</option></select></div>
- <div class="ap-field"><label>Phương pháp xây dựng</label><select id="sr-method"><option>Hybrid</option><option>Fixed range</option><option>Market-based</option><option>Company-defined</option></select></div>
- <div class="ap-field"><label>Nguồn tham chiếu</label><select id="sr-source"><option>Kết hợp: lương tối thiểu vùng + thị trường + nội bộ</option><option>Thị trường</option><option>Nội bộ doanh nghiệp</option><option>Khung pháp luật</option></select></div>
- </div></div>
- <div class="ap-card"><h3>Salary Range · G1–G15</h3>
- ${table(["Job Grade","Minimum (VND)","Maximum (VND)","Phân loại"],rows)}
- <div class="ap-actions">${btn("Lưu thang lương","AP.saveGrades()","ap-btn primary")}</div>
- <p class="ap-muted">G1–G15 là khung tham chiếu ban đầu, doanh nghiệp có thể điều chỉnh khoảng lương theo chức danh và thị trường.</p></div>
- <div class="ap-card"><h3>Nguyên tắc sử dụng</h3>
- <p>Base Salary, Gross Salary và Total Cash Compensation là ba cơ sở khác nhau. Không cộng trùng phụ cấp hoặc khoản thưởng khi so sánh khoảng lương.</p></div>`;
-}
-function policy(){
- const c=current();
- const rows=c.components.map((x,i)=>`<tr>
- <td><input id="pc-code-${i}" value="${esc(x.code)}"></td>
- <td><input id="pc-name-${i}" value="${esc(x.name)}"></td>
- <td><select id="pc-type-${i}">${["fixed","variable","benefit","deduction","employer"].map(v=>`<option value="${v}" ${x.type===v?"selected":""}>${v}</option>`).join("")}</select></td>
- <td><select id="pc-method-${i}">${["monthly","daily","attendance","hourly","manual","percentage"].map(v=>`<option ${x.method===v?"selected":""}>${v}</option>`).join("")}</select></td>
- <td><input id="pc-amount-${i}" type="number" value="${num(x.amount)}"></td>
- <td><input id="pc-tax-${i}" type="checkbox" ${x.taxable?"checked":""}></td>
- <td><input id="pc-si-${i}" type="checkbox" ${x.insurance?"checked":""}></td>
- <td><input id="pc-active-${i}" type="checkbox" ${x.active?"checked":""}></td>
- <td><input id="pc-policy-${i}" value="${esc(x.policy)}"></td>
- </tr>`).join("");
- return `<div class="ap-card"><h3>Quy chế cho các biến lương</h3>
- <p>Mỗi khoản có thể do doanh nghiệp tự thiết lập. Quy chế phải mô tả đối tượng hưởng, điều kiện, cách tính, thời điểm trả và cách xử lý khi nghỉ việc hoặc không đủ công.</p>
- ${table(["Mã","Tên khoản","Nhóm","Phương pháp","Giá trị mặc định","Chịu PIT","Tính BHXH","Đang dùng","Quy chế/điều kiện"],rows)}
- <div class="ap-actions">
- ${btn("Lưu toàn bộ quy chế","AP.savePolicies()","ap-btn primary")}
- ${btn("Thêm khoản lương","AP.addComponent()")}
- </div></div>
- <div class="ap-card"><h3>Phân loại khoản lương</h3>
- <p><b>Fixed:</b> khoản cố định theo thỏa thuận.</p>
- <p><b>Variable:</b> khoản biến động như KPI, doanh số, sản phẩm, tăng ca.</p>
- <p><b>Benefit:</b> khoản phúc lợi hoặc hỗ trợ.</p>
- <p><b>Deduction:</b> khoản khấu trừ có căn cứ.</p>
- <p><b>Employer:</b> khoản chi phí thuộc trách nhiệm doanh nghiệp.</p>
- <p class="ap-muted">Cờ chịu thuế và tính BHXH là cấu hình nghiệp vụ. Cần xác định theo bản chất khoản chi và quy định pháp luật hiện hành, không chỉ dựa vào tên khoản.</p></div>`;
-}
-function employees(){
- const c=current();
- const rows=c.employees.map((e,i)=>`<tr>
- <td><input id="e-code-${i}" value="${esc(e.code)}"></td>
- <td><input id="e-name-${i}" value="${esc(e.name)}"></td>
- <td><input id="e-dept-${i}" value="${esc(e.department)}"></td>
- <td><input id="e-title-${i}" value="${esc(e.title)}"></td>
- <td><select id="e-grade-${i}">${c.grades.map(g=>`<option ${e.grade===g.code?"selected":""}>${g.code}</option>`).join("")}</select></td>
- <td><input id="e-standard-${i}" type="number" value="${e.standardDays}"></td>
- <td><input id="e-paid-${i}" type="number" value="${e.paidDays}"></td>
- <td><input id="e-base-${i}" type="number" value="${e.insuranceBase}"></td>
- <td><input id="e-dep-${i}" type="number" value="${e.dependents}"></td>
- <td><select id="e-status-${i}"><option value="active" ${e.status==="active"?"selected":""}>Đang làm</option><option value="inactive" ${e.status==="inactive"?"selected":""}>Nghỉ</option></select></td>
- </tr>`).join("");
- return `<div class="ap-card"><h3>Dữ liệu đầu vào nhân viên</h3>
- ${table(["Mã NV","Họ tên","Phòng ban","Chức danh","Grade","Công chuẩn","Công hưởng lương","Lương đóng BH","Số NPT","Trạng thái"],rows)}
- <div class="ap-actions">${btn("Lưu nhân viên","AP.saveEmployees()","ap-btn primary")}${btn("Thêm nhân viên","AP.addEmployee()")}</div></div>
- <div class="ap-card"><h3>Dữ liệu biến động kỳ lương</h3>
- <p>Thưởng KPI, thưởng doanh số, lương sản phẩm, tăng ca, giờ đêm, hỗ trợ và khấu trừ được nhập trong hồ sơ nhân viên hoặc cập nhật tại bảng dữ liệu kỳ lương.</p></div>`;
-}
-function settings(){
- const s=current().settings;
- return `<div class="ap-card"><h3>Tham số bảo hiểm và thuế</h3>
- <p class="ap-muted">Các tham số dưới đây là giá trị khởi tạo để chạy thử. HR/Admin phải đối chiếu văn bản pháp luật và cấu hình ngày hiệu lực trước khi dùng chính thức.</p>
- <div class="ap-grid">
- ${field("Ngày công chuẩn/tháng","s-days",s.standardDays)}
- ${field("NLĐ BHXH (%)","s-si",s.siRate)}
- ${field("NLĐ BHYT (%)","s-hi",s.hiRate)}
- ${field("NLĐ BHTN (%)","s-ui",s.uiRate)}
- ${field("DN BHXH (%)","s-esi",s.employerSi)}
- ${field("DN BHYT (%)","s-ehi",s.employerHi)}
- ${field("DN BHTN (%)","s-eui",s.employerUi)}
- ${field("Tai nạn lao động (%)","s-acc",s.accident)}
- ${field("Kinh phí công đoàn (%)","s-union",s.union)}
- ${field("Trần BHXH/BHYT (bội số tham chiếu)","s-sicap",s.siHiCap)}
- ${field("Trần BHTN (bội số tham chiếu)","s-uicap",s.uiCap)}
- ${field("Giảm trừ bản thân","s-personal",s.personalDeduction)}
- ${field("Giảm trừ mỗi người phụ thuộc","s-dependent",s.dependentDeduction)}
- </div>
- <div class="ap-actions">${btn("Lưu tham số","AP.saveSettings()","ap-btn primary")}</div></div>
- <div class="ap-card"><h3>Biểu thuế lũy tiến</h3>
- <p class="ap-muted">Cấu hình ngưỡng thu nhập tháng và thuế suất. Ngưỡng cuối cùng để trống nghĩa là không giới hạn.</p>
- ${table(["Ngưỡng thu nhập đến (VND)","Thuế suất (%)"],s.pitBrackets.map((b,i)=>`<tr><td><input id="pit-limit-${i}" type="number" value="${b.limit??""}" placeholder="Không giới hạn"></td><td><input id="pit-rate-${i}" type="number" value="${b.rate}"></td></tr>`).join(""))}
- <div class="ap-actions">${btn("Lưu biểu thuế","AP.saveTax()","ap-btn primary")}</div></div>`;
-}
-function progressiveTax(taxable,brackets){
- let tax=0,lower=0,left=Math.max(0,taxable);
- for(const b of brackets){
-  if(left<=0)break;
-  const width=b.limit==null?left:Math.max(0,Math.min(left,b.limit-lower));
-  tax+=width*b.rate/100;left-=width;
-  if(b.limit!=null)lower=b.limit;
- }
- return Math.max(0,tax);
-}
-function calculate(e,c){
- const s=c.settings,standard=Math.max(1,num(e.standardDays)||s.standardDays);
- const paid=Math.max(0,num(e.paidDays));
- const ratio=Math.min(1.5,paid/standard);
- const comps=c.components.filter(x=>x.active);
- const get=(code)=>comps.find(x=>x.code===code);
- const base=num(get("BASE")?.amount);
- const position=num(get("POSITION")?.amount);
- const responsibility=num(get("RESP")?.amount);
- const otherFixed=num(get("OTHER_FIXED")?.amount);
- const fixed=base+position+responsibility+otherFixed;
- const prorated=fixed*ratio;
- const attendance=num(e.attendanceBonus);
- const kpi=num(e.kpi),product=num(e.product),sales=num(e.sales);
- const otherTax=num(e.otherTax),otherExempt=num(e.otherExempt);
- const night=num(e.nightHours),ot=num(e.otHours);
- const meal=num(e.meal),fuel=num(e.fuel),phone=num(e.phone);
- const variableTax=kpi+product+sales+otherTax;
- const totalVariable=attendance+kpi+product+sales+otherTax+otherExempt;
- const insuranceBase=Math.max(0,num(e.insuranceBase)||fixed);
- const siCap=s.siHiCap*2530000;
- const uiCap=s.uiCap*2530000;
- const siBase=Math.min(insuranceBase,siCap);
- const uiBase=Math.min(insuranceBase,uiCap);
- const si=siBase*s.siRate/100,hi=siBase*s.hiRate/100,ui=uiBase*s.uiRate/100;
- const empInsurance=si+hi+ui;
- const taxableIncome=prorated+variableTax+meal+fuel+phone;
- const dependentCount=Math.max(0,num(e.dependents));
- const personal=s.personalDeduction;
- const dependent=dependentCount*s.dependentDeduction;
- const pitBase=Math.max(0,taxableIncome-empInsurance-personal-dependent);
- const pit=progressiveTax(pitBase,s.pitBrackets);
- const deduction=num(e.deduction);
- const gross=prorated+totalVariable+meal+fuel+phone;
- const net=gross-empInsurance-pit-deduction;
- const esi=siBase*s.employerSi/100;
- const ehi=siBase*s.employerHi/100;
- const eui=uiBase*s.employerUi/100;
- const accident=siBase*s.accident/100;
- const union=siBase*s.union/100;
- const employerContrib=esi+ehi+eui+accident+union;
- const employerCost=gross+employerContrib;
- const fixedInsurable=comps.filter(x=>x.insurance).reduce((a,x)=>a+num(x.amount),0);
- const check=Math.abs(insuranceBase-fixedInsurable)<1? "Khớp cấu hình":"Cần đối chiếu";
- return {
-  code:e.code,name:e.name,department:e.department,title:e.title,
-  standard,paid,ratio,insuranceBase,position,responsibility,otherFixed,fixed,
-  prorated,attendance,kpi,product,sales,otherTax,otherExempt,night,ot,
-  si,hi,ui,empInsurance,taxableIncome,personal,dependentCount,dependent,
-  pitBase,pit,net,esi,ehi,eui,accident,union,employerContrib,employerCost,
-  check,meal,mealExempt:0,mealTaxable:meal,mealCheck:"Cần xác minh quy chế",
-  siHiCap:siCap,uiCap, status:e.status||"active",fuel,phone,deduction
- };
-}
-const columns=[
- ["Mã nhân viên","code"],["Họ tên","name"],["Phòng ban","department"],["Chức danh","title"],
- ["Công chuẩn","standard"],["Công hưởng lương","paid"],["Tỷ lệ công","ratio"],
- ["Lương hợp đồng","fixed"],["Lương đóng BHXH","insuranceBase"],["Phụ cấp chức vụ","position"],
- ["Phụ cấp trách nhiệm","responsibility"],["Phụ cấp cố định khác","otherFixed"],["Tổng lương cố định","fixed"],
- ["Lương theo công","prorated"],["Thưởng chuyên cần","attendance"],["Thưởng KPI","kpi"],
- ["Lương sản phẩm","product"],["Thưởng doanh số","sales"],["Thu nhập chịu thuế khác","otherTax"],
- ["Thu nhập miễn thuế khác","otherExempt"],["Giờ làm đêm","night"],["Giờ tăng ca","ot"],
- ["NLĐ BHXH","si"],["NLĐ BHYT","hi"],["NLĐ BHTN","ui"],["Tổng BH NLĐ","empInsurance"],
- ["Tổng thu nhập tính thuế","taxableIncome"],["Giảm trừ bản thân","personal"],
- ["Số người phụ thuộc","dependentCount"],["Giảm trừ người phụ thuộc","dependent"],
- ["Thu nhập tính thuế","pitBase"],["Thuế TNCN","pit"],["Thực lĩnh","net"],
- ["DN BHXH","esi"],["DN BHYT","ehi"],["DN BHTN","eui"],["Tai nạn lao động","accident"],
- ["Kinh phí công đoàn","union"],["Tổng khoản DN đóng","employerContrib"],["Tổng chi phí DN","employerCost"],
- ["Kiểm tra chi phí","check"],["Hỗ trợ ăn ca","meal"],["Ăn ca miễn thuế","mealExempt"],
- ["Ăn ca chịu thuế","mealTaxable"],["Kiểm tra ăn ca","mealCheck"],["Trần BHXH/BHYT","siHiCap"],
- ["Trần BHTN","uiCap"],["Trạng thái nhân viên","status"],["Hỗ trợ xăng xe","fuel"],["Hỗ trợ điện thoại","phone"],
- ["Khoản khấu trừ khác","deduction"]
-];
-function engine(){
- const c=current();
- results=c.employees.filter(e=>e.status!=="inactive").map(e=>calculate(e,c));
- const sum=k=>results.reduce((a,r)=>a+num(r[k]),0);
- const rows=results.map(r=>`<tr>${columns.map(([label,key])=>`<td>${typeof r[key]==="number"?money(r[key]):esc(r[key])}</td>`).join("")}</tr>`).join("");
- return `<div class="ap-card"><h3>Payroll Engine · Bảng lương ${esc(val("ap-period"))}</h3>
- <div class="ap-kpis">
- <div class="ap-kpi"><small>Tổng nhân viên</small><strong>${results.length}</strong></div>
- <div class="ap-kpi"><small>Tổng thực lĩnh</small><strong>${money(sum("net"))}</strong></div>
- <div class="ap-kpi"><small>Tổng chi phí DN</small><strong>${money(sum("employerCost"))}</strong></div>
- <div class="ap-kpi"><small>Tổng thuế TNCN</small><strong>${money(sum("pit"))}</strong></div>
- </div>
- <div class="ap-actions">
- ${btn("Tính lại bảng lương","AP.calculate()","ap-btn primary")}
- ${btn("Xuất CSV 51+ cột","AP.exportCSV()")}
- </div>
- <p class="ap-muted">Bảng kết quả được tính từ dữ liệu hiện tại của doanh nghiệp đang chọn. Cần kiểm tra quy chế, dữ liệu công, căn cứ bảo hiểm và thuế trước khi khóa kỳ.</p></div>
- <div class="ap-card"><h3>Chi tiết kết quả</h3>${table(columns.map(x=>x[0]),rows)}</div>`;
-}
-function download(name,content,type){
- const blob=new Blob([content],{type:type||"text/plain;charset=utf-8"});
- const url=URL.createObjectURL(blob);const a=document.createElement("a");
- a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
-}
-window.AP={
- open(){document.getElementById("ap-overlay").style.display="block";companyOptions();this.tab("overview")},
- close(){document.getElementById("ap-overlay").style.display="none"},
- tab(t){document.querySelectorAll("#ap-overlay .ap-nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));document.getElementById("ap-content").innerHTML=({overview,company,structure,policy,employees,engine,settings})[t]();},
- switchCompany(){db.active=val("ap-company");save();this.tab("overview")},
- saveCompany(){const c=current();c.name=val("co-name")||c.name;c.industry=val("co-industry");save();companyOptions();alert("Đã lưu doanh nghiệp.")},
- addCompany(){const c=defaultCompany();c.name="Doanh nghiệp "+(db.companies.length+1);db.companies.push(c);db.active=c.id;save();this.tab("company")},
- cloneCompany(){const copy=JSON.parse(JSON.stringify(current()));copy.id="company_"+Date.now();copy.name+=" - Bản sao";db.companies.push(copy);db.active=copy.id;save();this.tab("company")},
- deleteCompany(){if(db.companies.length<2)return alert("Phải giữ lại ít nhất một doanh nghiệp.");if(!confirm("Xóa doanh nghiệp và dữ liệu demo của doanh nghiệp này?"))return;db.companies=db.companies.filter(c=>c.id!==db.active);db.active=db.companies[0].id;save();this.tab("overview")},
- saveGrades(){const c=current();c.grades.forEach((g,i)=>{g.min=num(val("gr-min-"+i));g.max=num(val("gr-max-"+i));});save();alert("Đã lưu thang lương.")},
- addComponent(){current().components.push({code:"NEW_"+Date.now(),name:"Khoản lương mới",type:"variable",method:"manual",amount:0,taxable:true,insurance:false,active:true,policy:"Nhập điều kiện hưởng và căn cứ áp dụng"});save();this.tab("policy")},
- savePolicies(){const c=current();c.components.forEach((x,i)=>{x.code=val("pc-code-"+i);x.name=val("pc-name-"+i);x.type=val("pc-type-"+i);x.method=val("pc-method-"+i);x.amount=num(val("pc-amount-"+i));x.taxable=document.getElementById("pc-tax-"+i).checked;x.insurance=document.getElementById("pc-si-"+i).checked;x.active=document.getElementById("pc-active-"+i).checked;x.policy=val("pc-policy-"+i);});save();alert("Đã lưu quy chế khoản lương.")},
- addEmployee(){current().employees.push({code:"NV"+String(current().employees.length+1).padStart(3,"0"),name:"Nhân viên mới",department:"",title:"",grade:"G1",status:"active",standardDays:26,paidDays:26,dependents:0,nightHours:0,otHours:0,attendanceBonus:0,kpi:0,product:0,sales:0,otherTax:0,otherExempt:0,meal:0,fuel:0,phone:0,deduction:0,insuranceBase:0});save();this.tab("employees")},
- saveEmployees(){const c=current();c.employees.forEach((e,i)=>{e.code=val("e-code-"+i);e.name=val("e-name-"+i);e.department=val("e-dept-"+i);e.title=val("e-title-"+i);e.grade=val("e-grade-"+i);e.standardDays=num(val("e-standard-"+i));e.paidDays=num(val("e-paid-"+i));e.insuranceBase=num(val("e-base-"+i));e.dependents=num(val("e-dep-"+i));e.status=val("e-status-"+i);});save();alert("Đã lưu nhân viên.")},
- saveSettings(){const s=current().settings;Object.assign(s,{standardDays:num(val("s-days")),siRate:num(val("s-si")),hiRate:num(val("s-hi")),uiRate:num(val("s-ui")),employerSi:num(val("s-esi")),employerHi:num(val("s-ehi")),employerUi:num(val("s-eui")),accident:num(val("s-acc")),union:num(val("s-union")),siHiCap:num(val("s-sicap")),uiCap:num(val("s-uicap")),personalDeduction:num(val("s-personal")),dependentDeduction:num(val("s-dependent"))});save();alert("Đã lưu tham số.")},
- saveTax(){const s=current().settings;s.pitBrackets=s.pitBrackets.map((b,i)=>({limit:val("pit-limit-"+i)===""?null:num(val("pit-limit-"+i)),rate:num(val("pit-rate-"+i))}));save();alert("Đã lưu biểu thuế.")},
- calculate(){const c=current();results=c.employees.filter(e=>e.status!=="inactive").map(e=>calculate(e,c));this.tab("engine")},
- exportCSV(){const c=current();results=c.employees.filter(e=>e.status!=="inactive").map(e=>calculate(e,c));const rows=[columns.map(x=>x[0]),...results.map(r=>columns.map(x=>r[x[1]]))];const csv="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");download("Payroll_"+(val("ap-period")||"period")+".csv",csv,"text/csv;charset=utf-8")}
+ grades:[{code:'G1',min:6000000,mid:7500000,max:9000000},{code:'G2',min:7500000,mid:9500000,max:11500000},{code:'G3',min:9000000,mid:12000000,max:15000000},{code:'G4',min:11000000,mid:14500000,max:18000000},{code:'G5',min:14000000,mid:18000000,max:23000000},{code:'G6',min:17000000,mid:22000000,max:28000000},{code:'G7',min:21000000,mid:27000000,max:34000000},{code:'G8',min:26000000,mid:33000000,max:42000000},{code:'G9',min:32000000,mid:41000000,max:52000000},{code:'G10',min:39000000,mid:50000000,max:64000000},{code:'G11',min:47000000,mid:60000000,max:77000000},{code:'G12',min:56000000,mid:72000000,max:92000000},{code:'G13',min:67000000,mid:86000000,max:110000000},{code:'G14',min:80000000,mid:103000000,max:132000000},{code:'G15',min:95000000,mid:122000000,max:160000000}],
+ employees:[
+  {id:1,code:'NV001',name:'Nguyễn Minh Anh',dept:'Kinh doanh',title:'Chuyên viên kinh doanh',grade:'G3',standard:26,paid:26,insuranceBase:14000000,dependents:1,kpi:92,attendanceBonus:500000,product:0,sales:1200000,otherTax:0,otherExempt:0,otHours:8,nightHours:0,meal:730000,fuel:300000,phone:300000,status:'Đang làm'},
+  {id:2,code:'NV002',name:'Trần Quốc Bảo',dept:'Nhân sự',title:'Chuyên viên C&B',grade:'G3',standard:26,paid:25,insuranceBase:14000000,dependents:0,kpi:86,attendanceBonus:300000,product:0,sales:0,otherTax:0,otherExempt:0,otHours:4,nightHours:0,meal:700000,fuel:0,phone:300000,status:'Đang làm'},
+  {id:3,code:'NV003',name:'Lê Thu Hà',dept:'Sản xuất',title:'Tổ trưởng sản xuất',grade:'G5',standard:26,paid:24,insuranceBase:18000000,dependents:2,kpi:96,attendanceBonus:500000,product:1800000,sales:0,otherTax:200000,otherExempt:0,otHours:12,nightHours:6,meal:730000,fuel:200000,phone:0,status:'Đang làm'}
+ ],
+ kpis:[
+  {id:1,scope:'Cá nhân',name:'Doanh số / sản lượng',weight:40,target:100,actual:96,method:'Tăng càng tốt'},
+  {id:2,scope:'Cá nhân',name:'Chất lượng công việc',weight:25,target:100,actual:95,method:'Tăng càng tốt'},
+  {id:3,scope:'Cá nhân',name:'Tiến độ hoàn thành',weight:20,target:100,actual:90,method:'Tăng càng tốt'},
+  {id:4,scope:'Cá nhân',name:'Tuân thủ quy trình',weight:15,target:100,actual:85,method:'Tăng càng tốt'}
+ ],
+ taxBrackets:[{limit:10000000,rate:5},{limit:30000000,rate:10},{limit:60000000,rate:20},{limit:100000000,rate:30},{limit:Infinity,rate:35}],
+ payrollRuns:[]
 };
-document.getElementById("ap-period").value=new Date().toISOString().slice(0,7);
-document.getElementById("ap-date").value=today;
-companyOptions();
-})();
+let state=loadState(),page='dashboard',payrollResults=[],selectedTab='overview';
+function loadState(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return structuredClone(defaultState)}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('companyLabel').textContent=state.company}
+function money(n){return new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND',maximumFractionDigits:0}).format(Number(n)||0)}
+function num(n){return new Intl.NumberFormat('vi-VN').format(Number(n)||0)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function setPage(p){page=p;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));render()}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page)));
+function toggleMobileNav(){let s=document.querySelector('.sidebar');s.style.display=s.style.display==='flex'?'none':'flex';s.style.position='fixed';s.style.zIndex=10;s.style.inset='0 auto 0 0';s.style.width='250px'}
+function render(){const names={dashboard:'Tổng quan',employees:'Quản lý nhân sự',structure:'Cấu trúc & thang lương',payroll:'Payroll Engine',kpi:'Đánh giá KPI',policies:'Quy chế & pháp lý',reports:'Báo cáo'};document.getElementById('crumb').textContent=names[page];document.getElementById('companyLabel').textContent=state.company;({dashboard:dashboardPage,employees:employeesPage,structure:structurePage,payroll:payrollPage,kpi:kpiPage,policies:policiesPage,reports:reportsPage}[page]||dashboardPage)()}
+function head(eyebrow,title,sub,actions=''){return `<div class="pagehead"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`}
+function stat(label,value,foot,icon){return `<div class="card"><div class="statlabel">${icon||'•'} &nbsp;${label}</div><div class="statvalue mono">${value}</div><div class="statfoot">${foot||''}</div></div>`}
+function dashboardPage(){let avg=state.employees.reduce((a,e)=>a+scoreForEmployee(e),0)/(state.employees.length||1);let total=state.employees.reduce((a,e)=>a+calcEmployee(e).net,0);document.getElementById('content').innerHTML=head('PEOPLE ANALYTICS','Tổng quan nhân sự & đãi ngộ','Theo dõi dữ liệu nhân sự, hiệu suất và chi phí lương trong cùng một không gian.','<button class="secondary" onclick="setPage(\'policies\')">⚙ Cấu hình quy chế</button><button onclick="setPage(\'payroll\')">Mở Payroll Engine →</button>')+`<div class="grid stats">${stat('Nhân sự đang làm',state.employees.length,'Dữ liệu demo','♙')}${stat('Điểm KPI bình quân',avg.toFixed(1)+'/100','Theo bộ KPI mẫu','◎')}${stat('Thực nhận dự kiến',money(total),'Tổng net mẫu','₫')}${stat('Cấu phần lương',state.components.length,'Đang cấu hình','▤')}</div><div class="grid twocol"><div class="card"><div class="cardhead"><h3>Nhân sự & hiệu suất</h3><button class="ghost" onclick="setPage('kpi')">Xem KPI</button></div><div class="tablewrap"><table><thead><tr><th>Nhân viên</th><th>Phòng ban</th><th>KPI</th><th>Đánh giá</th></tr></thead><tbody>${state.employees.map(e=>`<tr><td><b>${esc(e.name)}</b><div class="muted small">${e.code}</div></td><td>${esc(e.dept)}</td><td><b>${scoreForEmployee(e).toFixed(1)}</b></td><td><span class="pill ${scoreForEmployee(e)>=90?'green':scoreForEmployee(e)>=80?'':'amber'}">${rating(scoreForEmployee(e))}</span></td></tr>`).join('')}</tbody></table></div></div><div class="card"><div class="cardhead"><h3>Phân bổ cấu phần lương</h3><span class="tag">Mẫu</span></div>${state.components.slice(0,5).map(c=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)"><span>${esc(c.name)}</span><b>${c.type==='fixed'?'Cố định':c.type==='variable'?'Biến đổi':'Phúc lợi'}</b></div>`).join('')}<p class="footnote">Có thể thêm cấu phần và đặt thuộc tính thuế / bảo hiểm riêng.</p></div></div><div class="notice warn">Dữ liệu trên là dữ liệu giả lập để kiểm tra luồng nghiệp vụ. Chưa phải bảng lương pháp lý hoặc dữ liệu nhân viên thật.</div>`}
+function employeesPage(){document.getElementById('content').innerHTML=head('HR CORE','Hồ sơ nhân sự','Dữ liệu nhân viên được dùng chung cho KPI và Payroll.','<button onclick="employeeModal()">＋ Thêm nhân viên</button>')+`<div class="card"><div class="cardhead"><h3>Danh sách nhân viên</h3><span class="pill">${state.employees.length} nhân viên</span></div><div class="tablewrap"><table><thead><tr><th>Mã NV</th><th>Họ tên</th><th>Phòng ban</th><th>Chức danh</th><th>Grade</th><th>Lương đóng BH</th><th>Trạng thái</th><th></th></tr></thead><tbody>${state.employees.map(e=>`<tr><td><b>${esc(e.code)}</b></td><td>${esc(e.name)}</td><td>${esc(e.dept)}</td><td>${esc(e.title)}</td><td><span class="tag">${e.grade}</span></td><td>${money(e.insuranceBase)}</td><td><span class="pill green">${e.status}</span></td><td><button class="ghost" onclick="employeeModal(${e.id})">Sửa</button></td></tr>`).join('')}</tbody></table></div></div>`}
+function employeeModal(id){let e=id?state.employees.find(x=>x.id===id):{code:'',name:'',dept:'',title:'',grade:'G3',standard:26,paid:26,insuranceBase:0,dependents:0,kpi:80,attendanceBonus:0,product:0,sales:0,otherTax:0,otherExempt:0,otHours:0,nightHours:0,meal:0,fuel:0,phone:0,status:'Đang làm'};openModal(id?'Sửa hồ sơ nhân viên':'Thêm nhân viên',`<div class="fieldgrid">${field('Mã nhân viên','code',e.code)}${field('Họ và tên','name',e.name)}${field('Phòng ban','dept',e.dept)}${field('Chức danh','title',e.title)}${selectField('Grade','grade',e.grade,state.grades.map(g=>g.code))}${field('Lương làm căn cứ BHXH','insuranceBase',e.insuranceBase,'number')}${field('Ngày công chuẩn','standard',e.standard,'number')}${field('Ngày công hưởng lương','paid',e.paid,'number')}${field('Số người phụ thuộc','dependents',e.dependents,'number')}${field('Điểm KPI tổng','kpi',e.kpi,'number')}${field('Thưởng chuyên cần','attendanceBonus',e.attendanceBonus,'number')}${field('Lương sản phẩm','product',e.product,'number')}${field('Thưởng doanh số','sales',e.sales,'number')}${field('Thu nhập khác chịu thuế','otherTax',e.otherTax,'number')}${field('Thu nhập khác miễn thuế','otherExempt',e.otherExempt,'number')}${field('Giờ OT','otHours',e.otHours,'number')}${field('Giờ làm đêm','nightHours',e.nightHours,'number')}${field('Hỗ trợ ăn ca','meal',e.meal,'number')}${field('Xăng xe','fuel',e.fuel,'number')}${field('Điện thoại','phone',e.phone,'number')}</div><div class="formactions"><button class="secondary" onclick="closeModal()">Hủy</button><button onclick="saveEmployee(${id||0})">Lưu nhân viên</button></div>`)}
+function field(label,key,value,type='text'){return `<div class="field"><label>${label}</label><input data-field="${key}" type="${type}" value="${esc(value)}"></div>`}
+function selectField(label,key,value,options){return `<div class="field"><label>${label}</label><select data-field="${key}">${options.map(x=>`<option ${x===value?'selected':''}>${x}</option>`).join('')}</select></div>`}
+function saveEmployee(id){let obj={};document.querySelectorAll('#modalBody [data-field]').forEach(x=>obj[x.dataset.field]=x.type==='number'?Number(x.value):x.value);if(!obj.code||!obj.name){alert('Vui lòng nhập mã và tên nhân viên.');return}if(id){Object.assign(state.employees.find(x=>x.id===id),obj)}else{obj.id=Math.max(0,...state.employees.map(x=>x.id))+1;obj.status='Đang làm';state.employees.push(obj)}save();closeModal();render()}
+function structurePage(){document.getElementById('content').innerHTML=head('COMPENSATION DESIGN','Cấu trúc & thang lương','Tách cấu phần lương, căn cứ đóng, grade và dải lương để phù hợp từng doanh nghiệp.','<button onclick="componentModal()">＋ Thêm cấu phần</button>')+`<div class="tabs"><button class="${selectedTab==='overview'?'active':''}" onclick="selectedTab='overview';render()">Cấu phần lương</button><button class="${selectedTab==='grades'?'active':''}" onclick="selectedTab='grades';render()">Salary Range G1–G15</button></div>${selectedTab==='grades'?gradeTable():componentTable()}`}
+function componentTable(){return `<div class="card"><div class="cardhead"><h3>Salary Structure Builder</h3><span class="pill green">Có thể tùy chỉnh</span></div><div class="tablewrap"><table><thead><tr><th>Mã</th><th>Tên cấu phần</th><th>Loại</th><th>Số tiền mặc định</th><th>Chịu thuế</th><th>Tính đóng BH</th><th>Trạng thái</th><th></th></tr></thead><tbody>${state.components.map((c,i)=>`<tr><td><b>${esc(c.code)}</b></td><td>${esc(c.name)}</td><td>${c.type}</td><td>${money(c.amount)}</td><td>${c.taxable?'Có':'Không'}</td><td>${c.insurable?'Có':'Không'}</td><td><span class="pill ${c.active?'green':'red'}">${c.active?'Đang dùng':'Tắt'}</span></td><td><button class="ghost" onclick="componentModal(${i})">Sửa</button></td></tr>`).join('')}</tbody></table></div><p class="footnote">Demo đang áp dụng cấu phần cố định / biến đổi / phúc lợi. Bản production cần bổ sung điều kiện, công thức, hiệu lực và lịch sử phiên bản.</p></div>`}
+function componentModal(i){let c=i>=0?state.components[i]:{code:'',name:'',type:'fixed',amount:0,taxable:true,insurable:false,active:true};openModal(i>=0?'Sửa cấu phần lương':'Thêm cấu phần lương',`<div class="fieldgrid">${field('Mã cấu phần','code',c.code)}${field('Tên cấu phần','name',c.name)}${selectField('Loại','type',c.type,['fixed','variable','benefit','deduction'])}${field('Số tiền mặc định','amount',c.amount,'number')}<div class="field"><label>Chịu thuế TNCN</label><select data-field="taxable"><option value="true" ${c.taxable?'selected':''}>Có</option><option value="false" ${!c.taxable?'selected':''}>Không</option></select></div><div class="field"><label>Tính vào căn cứ BH</label><select data-field="insurable"><option value="true" ${c.insurable?'selected':''}>Có</option><option value="false" ${!c.insurable?'selected':''}>Không</option></select></div></div><div class="formactions"><button class="secondary" onclick="closeModal()">Hủy</button><button onclick="saveComponent(${i})">Lưu cấu phần</button></div>`)}
+function saveComponent(i){let o={};document.querySelectorAll('#modalBody [data-field]').forEach(x=>o[x.dataset.field]=x.type==='number'?Number(x.value):x.value);o.taxable=o.taxable==='true';o.insurable=o.insurable==='true';o.active=true;if(!o.code||!o.name){alert('Nhập mã và tên cấu phần');return}if(i>=0)Object.assign(state.components[i],o);else state.components.push(o);save();closeModal();render()}
+function gradeTable(){return `<div class="card"><div class="cardhead"><h3>Salary Range — G1 đến G15</h3><button class="secondary" onclick="saveGrades()">Lưu thay đổi</button></div><div class="tablewrap"><table><thead><tr><th>Grade</th><th>Minimum (VND)</th><th>Midpoint (VND)</th><th>Maximum (VND)</th><th>Range spread</th></tr></thead><tbody>${state.grades.map((g,i)=>`<tr><td><b>${g.code}</b></td><td><input style="width:125px;padding:7px;border:1px solid var(--line);border-radius:7px" type="number" id="gmin${i}" value="${g.min}"></td><td><input style="width:125px;padding:7px;border:1px solid var(--line);border-radius:7px" type="number" id="gmid${i}" value="${g.mid}"></td><td><input style="width:125px;padding:7px;border:1px solid var(--line);border-radius:7px" type="number" id="gmax${i}" value="${g.max}"></td><td>${g.min?Math.round((g.max-g.min)/g.min*100)+'%':'—'}</td></tr>`).join('')}</tbody></table></div><div class="notice">Grade là khung tham chiếu quản trị nội bộ, không đồng nghĩa với mức lương đóng bảo hiểm hoặc mức lương tối thiểu pháp luật.</div></div>`}
+function saveGrades(){state.grades.forEach((g,i)=>{g.min=Number(document.getElementById('gmin'+i).value);g.mid=Number(document.getElementById('gmid'+i).value);g.max=Number(document.getElementById('gmax'+i).value)});save();alert('Đã lưu Salary Range trong demo.');render()}
+function scoreForEmployee(e){return Number(e.kpi)||state.kpis.reduce((a,k)=>a+k.actual*k.weight/100,0)}
+function rating(s){return s>=90?'Vượt kỳ vọng':s>=80?'Đạt tốt':s>=70?'Đạt một phần':'Cần cải thiện'}
+function kpiPage(){let totalWeight=state.kpis.reduce((a,k)=>a+k.weight,0),score=state.kpis.reduce((a,k)=>a+k.actual*k.weight/100,0);document.getElementById('content').innerHTML=head('PERFORMANCE MANAGEMENT','Đánh giá KPI','Thiết lập chỉ tiêu, trọng số, phương pháp đo lường và kết quả đánh giá theo kỳ.','<button onclick="kpiModal()">＋ Thêm chỉ tiêu</button><button class="secondary" onclick="setPage(\'payroll\')">Chuyển kết quả sang Payroll</button>')+`<div class="grid stats">${stat('Điểm KPI tổng',score.toFixed(1)+'/100',rating(score),'◎')}${stat('Tổng trọng số',totalWeight+'%',totalWeight===100?'Hợp lệ': 'Cần chuẩn hóa về 100%','⚖')}${stat('Số chỉ tiêu',state.kpis.length,'Bộ KPI đang dùng','▤')}${stat('Phạm vi','Multi','Công ty · Phòng ban · Cá nhân','♙')}</div><div class="card"><div class="cardhead"><h3>KPI Scorecard</h3><span class="pill ${totalWeight===100?'green':'amber'}">Trọng số ${totalWeight}%</span></div>${state.kpis.map((k,i)=>`<div class="kpirow"><div><b>${esc(k.name)}</b><div class="muted small">${k.scope} · ${k.method}</div></div><div><div class="bar"><span style="width:${Math.min(100,k.actual)}%"></span></div><div class="muted small">${k.actual} / ${k.target} · Trọng số ${k.weight}%</div></div><div class="score">${(k.actual*k.weight/100).toFixed(1)}</div><div style="grid-column:1/-1;text-align:right"><button class="ghost" onclick="kpiModal(${i})">Sửa chỉ tiêu</button></div></div>`).join('')}<div class="notice ${totalWeight===100?'':'warn'}">Công thức mẫu: Điểm KPI tổng = Σ (Điểm từng chỉ tiêu × Trọng số). Chỉ chốt đánh giá khi tổng trọng số đạt 100% và dữ liệu có người đánh giá / người duyệt.</div></div><div class="grid twocol" style="margin-top:15px"><div class="card"><h3>Phân loại kết quả</h3>${[['Vượt kỳ vọng','≥ 90'],['Đạt tốt','80–89'],['Đạt một phần','70–79'],['Cần cải thiện','< 70']].map(x=>`<div style="display:flex;justify-content:space-between;padding:9px;border-bottom:1px solid var(--line)"><b>${x[0]}</b><span class="muted">${x[1]}</span></div>`).join('')}</div><div class="card"><h3>Liên kết KPI Compensation</h3><p class="muted">Điểm KPI có thể đưa sang Payroll để tính thưởng theo hệ số, bậc thưởng hoặc công thức riêng của doanh nghiệp.</p><button onclick="setPage('payroll')">Mở cấu hình thưởng KPI →</button></div></div>`}
+function kpiModal(i){let k=i>=0?state.kpis[i]:{scope:'Cá nhân',name:'',weight:10,target:100,actual:80,method:'Tăng càng tốt'};openModal(i>=0?'Sửa chỉ tiêu KPI':'Thêm chỉ tiêu KPI',`<div class="fieldgrid">${field('Tên chỉ tiêu','name',k.name)}${selectField('Phạm vi','scope',k.scope,['Công ty','Phòng ban','Nhóm','Cá nhân'])}${field('Trọng số (%)','weight',k.weight,'number')}${field('Mục tiêu','target',k.target,'number')}${field('Kết quả thực tế','actual',k.actual,'number')}${selectField('Phương pháp','method',k.method,['Tăng càng tốt','Giảm càng tốt','Đạt / Không đạt'])}</div><div class="formactions"><button class="secondary" onclick="closeModal()">Hủy</button><button onclick="saveKpi(${i})">Lưu KPI</button></div>`)}
+function saveKpi(i){let o={};document.querySelectorAll('#modalBody [data-field]').forEach(x=>o[x.dataset.field]=['weight','target','actual'].includes(x.dataset.field)?Number(x.value):x.value);if(!o.name){alert('Nhập tên chỉ tiêu');return}if(i>=0)Object.assign(state.kpis[i],o);else{ o.id=Date.now();state.kpis.push(o)}save();closeModal();render()}
+function calcTax(taxable){let remaining=Math.max(0,taxable),prev=0,tax=0;for(let b of state.taxBrackets){let width=Math.max(0,Math.min(remaining,b.limit-prev));tax+=width*b.rate/100;remaining-=width;prev=b.limit;if(remaining<=0)break}return Math.max(0,tax)}
+function calcEmployee(e){let r=state.rules,ratio=e.standard?Math.min(1,e.paid/e.standard):0;let fixed=state.components.filter(c=>c.active&&c.type==='fixed').reduce((a,c)=>a+c.amount,0);let fixedProrated=fixed*ratio;let pos=state.components.find(c=>c.code==='POS')?.amount||0;let resp=state.components.find(c=>c.code==='RESP')?.amount||0;let base=state.components.find(c=>c.code==='BASE')?.amount||0;let meal=Number(e.meal)||0,phone=Number(e.phone)||0,fuel=Number(e.fuel)||0;let otRate=(base+pos+resp)/(e.standard||26)/8;let otPay=e.otHours*otRate*r.otWeekday/100;let nightPay=e.nightHours*otRate*30/100;let kpiBonus=3000000*scoreForEmployee(e)/100;let variable=Number(e.attendanceBonus)+Number(e.product)+Number(e.sales)+Number(e.otherTax)+Number(e.otherExempt)+otPay+nightPay+kpiBonus;let gross=fixedProrated+variable+meal+phone+fuel;let insuranceBase=Number(e.insuranceBase)||0;let siBase=Math.min(insuranceBase,r.referenceBase*r.siCapMultiplier);let uiBase=Math.min(insuranceBase,r.referenceBase*r.uiCapMultiplier);let empSI=siBase*r.siEmployee/100,empHI=siBase*r.hiEmployee/100,empUI=uiBase*r.uiEmployee/100;let employerSI=siBase*r.siEmployer/100,employerHI=siBase*r.hiEmployer/100,employerUI=uiBase*r.uiEmployer/100,accident=siBase*r.accident/100;let taxable=fixedProrated+variable+phone+fuel;let pitBase=Math.max(0,taxable-empSI-empHI-empUI-r.personalDeduction-e.dependents*r.dependentDeduction);let pit=calcTax(pitBase);let net=gross-empSI-empHI-empUI-pit;let employerCost=gross+employerSI+employerHI+employerUI+accident;return {ratio,fixedProrated,variable,meal,phone,fuel,otPay,nightPay,kpiBonus,gross,insuranceBase,empSI,empHI,empUI,employerSI,employerHI,employerUI,accident,taxable,pitBase,pit,net,employerCost}}
+function payrollPage(){if(!payrollResults.length)payrollResults=state.employees.map(e=>({e,...calcEmployee(e)}));let total=payrollResults.reduce((a,x)=>a+x.net,0);document.getElementById('content').innerHTML=head('PAYROLL OPERATIONS','Payroll Engine','Tính thử bảng lương từ cấu trúc lương, chấm công, KPI và quy chế đang cấu hình.','<button class="secondary" onclick="setPage(\'policies\')">⚙ Tham số tính</button><button onclick="runPayroll()">↻ Tính lại bảng lương</button>')+`<div class="grid stats">${stat('Nhân viên tính lương',payrollResults.length,'Kỳ '+state.period,'♙')}${stat('Tổng thực nhận',money(total),'Tổng net mô phỏng','₫')}${stat('Tổng chi phí DN',money(payrollResults.reduce((a,x)=>a+x.employerCost,0)),'Gross + phần DN đóng','▤')}${stat('Thưởng KPI',money(payrollResults.reduce((a,x)=>a+x.kpiBonus,0)),'Theo điểm KPI','◎')}</div><div class="notice warn">Mô phỏng công thức để kiểm thử sản phẩm. Biểu thuế, căn cứ bảo hiểm, khoản miễn/ chịu thuế, tỷ lệ và điều kiện phải được đối chiếu văn bản pháp luật có hiệu lực trước khi dùng thật. OT / làm đêm hiện là công thức minh họa.</div><div class="card"><div class="cardhead"><h3>Bảng lương tổng hợp</h3><div class="actions"><button class="ghost" onclick="exportCSV()">Xuất CSV</button><button class="ghost" onclick="show51()">Xem 51 cột</button></div></div><div class="tablewrap"><table><thead><tr><th>Mã NV</th><th>Họ tên</th><th>Phòng ban</th><th>Ngày công</th><th>Gross</th><th>BH NLĐ</th><th>Thuế TNCN</th><th>Thưởng KPI</th><th>Net</th><th>Chi phí DN</th></tr></thead><tbody>${payrollResults.map(x=>`<tr><td>${x.e.code}</td><td><b>${esc(x.e.name)}</b></td><td>${esc(x.e.dept)}</td><td>${x.e.paid}/${x.e.standard}</td><td>${money(x.gross)}</td><td>${money(x.empSI+x.empHI+x.empUI)}</td><td>${money(x.pit)}</td><td>${money(x.kpiBonus)}</td><td><b>${money(x.net)}</b></td><td>${money(x.employerCost)}</td></tr>`).join('')}</tbody></table></div><p class="footnote">Kết quả chỉ thay đổi sau khi nhấn “Tính lại bảng lương”. Đây chưa phải quy trình chốt lương / khóa kỳ.</p></div>`}
+function runPayroll(){payrollResults=state.employees.map(e=>({e,...calcEmployee(e)}));render()}
+const col51=['Mã NV','Họ và tên','Bộ phận','Chức danh','Ngày công chuẩn','Ngày công hưởng lương','Tỷ lệ công','Lương làm căn cứ BH','Phụ cấp chức vụ','Phụ cấp trách nhiệm','Phụ cấp cố định khác','Tổng lương cố định','Lương theo công thực tế','Thưởng chuyên cần','Thưởng KPI','Lương sản phẩm','Thưởng doanh số','Thu nhập khác chịu thuế','Thu nhập khác miễn thuế','Giờ làm đêm','Giờ OT','BHXH NLĐ','BHYT NLĐ','BHTN NLĐ','Tổng BH NLĐ','Tổng thu nhập chịu thuế','Giảm trừ bản thân','Số người phụ thuộc','Giảm trừ người phụ thuộc','Thu nhập tính thuế','Thuế TNCN','Thực nhận','BHXH DN','BHYT DN','BHTN DN','TNLĐ-BNN DN','Kinh phí công đoàn','Tổng đóng góp DN','Tổng chi phí DN','Kiểm tra chi phí','Tiền ăn','Ăn ca miễn thuế','Ăn ca chịu thuế','Kiểm tra tiền ăn','Trần căn cứ BHXH/BHYT','Trần căn cứ BHTN','Trạng thái nhân viên','Xăng xe','Điện thoại','Tiền OT','Tiền làm đêm'];
+function row51(x){let e=x.e,r=state.rules;let base=state.components.find(c=>c.code==='BASE')?.amount||0,pos=state.components.find(c=>c.code==='POS')?.amount||0,resp=state.components.find(c=>c.code==='RESP')?.amount||0;return [e.code,e.name,e.dept,e.title,e.standard,e.paid,x.ratio,x.insuranceBase,pos,resp,0,x.fixedProrated,x.fixedProrated,x.e.attendanceBonus,x.kpiBonus,e.product,e.sales,e.otherTax,e.otherExempt,e.nightHours,e.otHours,x.empSI,x.empHI,x.empUI,x.empSI+x.empHI+x.empUI,x.taxable,r.personalDeduction,e.dependents,e.dependents*r.dependentDeduction,x.pitBase,x.pit,x.net,x.employerSI,x.employerHI,x.employerUI,x.accident,x.insuranceBase*r.union/100,x.employerSI+x.employerHI+x.employerUI+x.accident,x.employerCost,'Đã tính',e.meal,Math.min(e.meal,r.mealTaxFree),Math.max(0,e.meal-r.mealTaxFree),'Kiểm tra theo quy chế',r.referenceBase*r.siCapMultiplier,r.referenceBase*r.uiCapMultiplier,e.status,e.fuel,e.phone,x.otPay,x.nightPay]}
+function show51(){let rows=payrollResults.map(row51);openModal('Bảng lương tham chiếu 51 cột',`<p class="muted small">Đây là cấu trúc mẫu để mở rộng. Cần rà soát cách phân loại từng khoản và công thức pháp lý trước khi vận hành.</p><div class="tablewrap" style="max-height:55vh"><table><thead><tr>${col51.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="formactions"><button onclick="exportCSV(true)">Xuất đủ 51 cột CSV</button></div>`)}
+function exportCSV(full=false){let rows=full?payrollResults.map(row51):payrollResults.map(x=>[x.e.code,x.e.name,x.e.dept,x.e.paid,x.gross,x.empSI+x.empHI+x.empUI,x.pit,x.kpiBonus,x.net,x.employerCost]);let headers=full?col51:['Mã NV','Họ tên','Phòng ban','Ngày công','Gross','BH NLĐ','Thuế TNCN','Thưởng KPI','Net','Chi phí DN'];let csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`payroll-${state.period}${full?'-51-columns':''}.csv`;a.click();URL.revokeObjectURL(a.href)}
+function policiesPage(){let r=state.rules;document.getElementById('content').innerHTML=head('RULES & COMPLIANCE','Quy chế & tham số tính','Thay đổi tham số trong demo mà không sửa mã nguồn. Khi vận hành thật, mọi thay đổi cần nguồn pháp lý, ngày hiệu lực, kiểm thử và phê duyệt.','<button onclick="resetDemo()">Khôi phục demo</button><button onclick="saveRules()">Lưu tham số</button>')+`<div class="notice warn">Các giá trị hiện tại chỉ là giá trị mẫu để thử luồng cấu hình, không xác nhận là mức pháp luật hiện hành. Không dùng kết quả này để trả lương hoặc kê khai.</div><div class="card"><h3>Thuế & giảm trừ</h3><div class="fieldgrid">${field('Giảm trừ bản thân (VND)','personalDeduction',r.personalDeduction,'number')}${field('Giảm trừ mỗi người phụ thuộc (VND)','dependentDeduction',r.dependentDeduction,'number')}</div><h3 style="margin-top:22px">Tỷ lệ bảo hiểm & đóng góp (%)</h3><div class="fieldgrid">${['siEmployee','hiEmployee','uiEmployee','siEmployer','hiEmployer','uiEmployer','accident','union'].map(k=>field(ruleLabel(k),k,r[k],'number')).join('')}</div><h3 style="margin-top:22px">Căn cứ và giới hạn</h3><div class="fieldgrid">${field('Mức tham chiếu cấu hình (VND)','referenceBase',r.referenceBase,'number')}${field('Hệ số trần BHXH/BHYT','siCapMultiplier',r.siCapMultiplier,'number')}${field('Hệ số trần BHTN','uiCapMultiplier',r.uiCapMultiplier,'number')}${field('Ngày công chuẩn','standardDays',r.standardDays,'number')}${field('Mức tiền ăn miễn thuế tham chiếu','mealTaxFree',r.mealTaxFree,'number')}</div><h3 style="margin-top:22px">Hệ số OT minh họa (%)</h3><div class="fieldgrid">${field('OT ngày thường','otWeekday',r.otWeekday,'number')}${field('OT ngày nghỉ','otWeekend',r.otWeekend,'number')}${field('OT ngày lễ','otHoliday',r.otHoliday,'number')}</div><div class="notice">Trong phiên bản hoàn chỉnh, tham số phải được lưu theo phiên bản và ngày hiệu lực; các biểu thuế lũy tiến và quy tắc phân loại thu nhập cần quản lý bằng bộ quy tắc riêng, không chỉ bằng một con số.</div></div>`}
+function ruleLabel(k){return ({siEmployee:'BHXH NLĐ',hiEmployee:'BHYT NLĐ',uiEmployee:'BHTN NLĐ',siEmployer:'BHXH doanh nghiệp',hiEmployer:'BHYT doanh nghiệp',uiEmployer:'BHTN doanh nghiệp',accident:'TNLĐ-BNN',union:'Kinh phí công đoàn'})[k]||k}
+function saveRules(){document.querySelectorAll('#content [data-field]').forEach(x=>{let k=x.dataset.field;if(k in state.rules)state.rules[k]=Number(x.value)});save();payrollResults=[];alert('Đã lưu tham số demo. Hãy chạy lại Payroll để xem ảnh hưởng.');render()}
+function reportsPage(){let results=state.employees.map(e=>({e,...calcEmployee(e)}));let totalGross=results.reduce((a,x)=>a+x.gross,0),totalCost=results.reduce((a,x)=>a+x.employerCost,0);document.getElementById('content').innerHTML=head('PEOPLE ANALYTICS','Báo cáo & phân tích','Tổng hợp quỹ lương, chi phí doanh nghiệp và hiệu suất theo dữ liệu demo.','<button onclick="exportCSV()">Xuất dữ liệu Payroll</button>')+`<div class="grid stats">${stat('Tổng Gross',money(totalGross),'Trước khấu trừ','₫')}${stat('Tổng chi phí DN',money(totalCost),'Gross + khoản DN đóng','▤')}${stat('Tổng thuế TNCN',money(results.reduce((a,x)=>a+x.pit,0)),'Mô phỏng','▥')}${stat('Điểm KPI bình quân',(state.employees.reduce((a,e)=>a+scoreForEmployee(e),0)/(state.employees.length||1)).toFixed(1),'Trên 100 điểm','◎')}</div><div class="card"><h3>Chi phí theo phòng ban</h3><div class="tablewrap"><table><thead><tr><th>Phòng ban</th><th>Số nhân viên</th><th>Gross</th><th>Chi phí DN</th></tr></thead><tbody>${[...new Set(state.employees.map(e=>e.dept))].map(d=>{let a=results.filter(x=>x.e.dept===d);return `<tr><td><b>${esc(d)}</b></td><td>${a.length}</td><td>${money(a.reduce((s,x)=>s+x.gross,0))}</td><td>${money(a.reduce((s,x)=>s+x.employerCost,0))}</td></tr>`}).join('')}</tbody></table></div></div>`}
+function openModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalback').classList.add('show')}
+function closeModal(){document.getElementById('modalback').classList.remove('show')}
+function resetDemo(){if(confirm('Khôi phục toàn bộ dữ liệu demo ban đầu?')){localStorage.removeItem(KEY);state=structuredClone(defaultState);payrollResults=[];save();render()}}
+save();render();
 </script>
+</body>
+</html>
